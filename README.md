@@ -105,6 +105,36 @@ python3 build_bos_excel_v3.4.py
 - **`BOS_Development_Context.md`** - Project history, decisions, constraints
 - **`Current_Architecture_v3.4.md`** - Technical implementation reference
 - **`BOS_Excel_Quick_Start.md`** - Immediate session startup guide
+- **`Session_Handoff_Process.md`** - Instructions for creating development continuity packages
+
+## 🔄 Development Continuity
+
+### Session Handoff Process
+This project supports **iterative development across multiple AI sessions** using a standardized handoff process:
+
+**End of Session:**
+```bash
+"Claude, create handoff package per Session_Handoff_Process.md"
+```
+
+**Creates 5 updated files:**
+- Updated build script with version increment
+- Refreshed development context with recent decisions
+- Updated architecture reference with new patterns  
+- Revised quick start guide with current capabilities
+- Updated README.md reflecting current state
+
+**Next Session:**
+```bash
+"Continue BOS Excel development from handoff files"
+```
+
+### Benefits
+- ✅ **Zero context loss** between development sessions
+- ✅ **Immediate productivity** - new sessions start working in minutes
+- ✅ **Professional documentation** maintained automatically
+- ✅ **Decision preservation** - architectural choices never re-litigated
+- ✅ **Consistent quality** across multiple AI development iterations
 
 ## 🔧 Development
 
@@ -187,11 +217,17 @@ python3 build_bos_excel_v3.4.py
 ## 🤝 Contributing
 
 ### Development Workflow
-1. **Copy current build script** to working directory
-2. **Read development context** for understanding constraints
-3. **Reference architecture guide** for implementation patterns  
-4. **Make incremental changes** with testing
-5. **Update documentation** for next contributor
+1. **Start session** with existing handoff files for immediate context
+2. **Make incremental changes** with testing using established patterns
+3. **Document decisions** and constraints as development progresses
+4. **Create handoff package** using `Session_Handoff_Process.md` before ending session
+5. **Update repository** with new handoff files for next contributor
+
+### Session Continuity
+- **Copy current build script** to working directory
+- **Read development context** for understanding constraints
+- **Reference architecture guide** for implementation patterns  
+- **End with handoff creation** for seamless next session transition
 
 ### Extension Points
 - **Entry form dynamic population**: Add service selection to forms
