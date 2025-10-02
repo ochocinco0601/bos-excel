@@ -11,11 +11,8 @@
 # If your Splunk lookup tables use different names, update lines 13, 16, and 38.
 # ============================================
 
-| inputlookup bos_services.csv
-| fields service_id l4_product_line
-| join type=left service_id
-    [| inputlookup bos_signal_status.csv
-     | fields service_id status]
+| inputlookup bos_signal_status.csv
+| lookup bos_services.csv service_id OUTPUT l4_product_line
 | eval health_score=case(
     status=="Green", 100,
     status=="Amber", 50,
@@ -29,8 +26,19 @@
 | stats
     avg(health_score) as service_health
     min(status_value) as service_min_status
-    count(status) as signal_count
+    count as signal_count
     by l4_product_line, service_id
+| append
+    [| inputlookup bos_services.csv
+     | fields service_id l4_product_line]
+| stats
+    values(service_health) as service_health
+    values(service_min_status) as service_min_status
+    values(signal_count) as signal_count
+    by l4_product_line, service_id
+| eval service_health=mvindex(service_health,0)
+| eval service_min_status=mvindex(service_min_status,0)
+| eval signal_count=coalesce(mvindex(signal_count,0),0)
 | stats
     dc(service_id) as service_count
     sum(eval(signal_count > 0)) as services_with_signals
