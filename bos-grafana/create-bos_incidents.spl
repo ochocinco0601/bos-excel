@@ -1,0 +1,32 @@
+# Create bos_incidents.csv lookup table
+# Generated from incidents.csv
+# Total records: 9
+
+| makeresults count=1
+     | eval incident_id="INC001", severity="Sev1", status="Open", started="2h ago", summary="Document upload batch stuck", service_id="SVC001", l4_product_line="Home Lending", l3_product="Originations"
+| append
+    [| makeresults count=1
+     | eval incident_id="INC002", severity="Sev2", status="Open", started="30m ago", summary="Elevated latency on validation service", service_id="SVC002", l4_product_line="Home Lending", l3_product="Originations"]
+| append
+    [| makeresults count=1
+     | eval incident_id="INC003", severity="Sev2", status="Acknowledged", started="4h ago", summary="Payment processing degraded performance", service_id="SVC003", l4_product_line="Home Lending", l3_product="Servicing"]
+| append
+    [| makeresults count=1
+     | eval incident_id="INC004", severity="Sev3", status="Open", started="1d ago", summary="Credit check API intermittent failures", service_id="", l4_product_line="Home Lending", l3_product="Originations"]
+| append
+    [| makeresults count=1
+     | eval incident_id="INC005", severity="Sev1", status="Resolved", started="3h ago", summary="Wire transfer system outage", service_id="SVC001", l4_product_line="Home Lending", l3_product="Originations"]
+| append
+    [| makeresults count=1
+     | eval incident_id="INC006", severity="Sev2", status="Open", started="45m ago", summary="Loan servicing batch job delayed", service_id="", l4_product_line="Home Lending", l3_product="Servicing"]
+| append
+    [| makeresults count=1
+     | eval incident_id="INC007", severity="Sev3", status="Open", started="6h ago", summary="Document retrieval slow response", service_id="", l4_product_line="Personal Lending", l3_product="Originations"]
+| append
+    [| makeresults count=1
+     | eval incident_id="INC008", severity="Sev2", status="Open", started="1h ago", summary="Auto loan payment gateway issues", service_id="", l4_product_line="Auto Lending", l3_product="Servicing"]
+| append
+    [| makeresults count=1
+     | eval incident_id="INC009", severity="Sev4", status="Open", started="2d ago", summary="Reporting dashboard unavailable", service_id="", l4_product_line="Small Business Lending", l3_product="Capital Markets"]
+| fields - _time
+| outputlookup bos_incidents.csv

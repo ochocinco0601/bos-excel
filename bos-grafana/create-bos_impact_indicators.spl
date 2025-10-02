@@ -1,0 +1,17 @@
+# Create bos_impact_indicators.csv lookup table
+# Generated from impact_indicators.csv
+# Total records: 4
+
+| makeresults count=1
+     | eval service_id="SVC002", indicator_id="IMP001", indicatorName="customers-blocked", indicatorDisplayName="Customers Blocked", indicatorType="countMetric", impactDescription_PO="Loan applicants unable to proceed due to missing credit scores", queryImplementation_Dev="COUNT(DISTINCT applicant_id) WHERE credit_score IS NULL", unit="customers", impactCategory="customer_experience", dataSource="sql", dataSourceDetails="{\"database\":\"lending\",\"table\":\"credit_checks\"}", signal_id="SIG023", technicalOwner="platform-engineering-team", implementationNotes="Real-time customer impact measurement"
+| append
+    [| makeresults count=1
+     | eval service_id="SVC002", indicator_id="IMP002", indicatorName="revenue-at-risk", indicatorDisplayName="Loan Revenue at Risk", indicatorType="sumMetric", impactDescription_PO="Loan origination revenue opportunity lost to failed credit checks", queryImplementation_Dev="SUM(loan_amount) WHERE credit_check_status='FAILED'", unit="dollars", impactCategory="financial", dataSource="sql", dataSourceDetails="{\"database\":\"lending\",\"table\":\"credit_checks\"}", signal_id="SIG024", technicalOwner="platform-engineering-team", implementationNotes="Sum of blocked loan amounts"]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC002", indicator_id="IMP003", indicatorName="fcra-violations", indicatorDisplayName="FCRA Timing Violations", indicatorType="countMetric", impactDescription_PO="Credit checks exceeding 30-day FCRA requirement", queryImplementation_Dev="COUNT(*) WHERE response_time_days > 30", unit="violations", impactCategory="legal_risk", dataSource="sql", dataSourceDetails="{\"database\":\"lending\",\"table\":\"credit_checks\"}", signal_id="SIG025", technicalOwner="platform-engineering-team", implementationNotes="Regulatory compliance tracking"]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC002", indicator_id="IMP004", indicatorName="manual-interventions", indicatorDisplayName="Manual Interventions Required", indicatorType="countMetric", impactDescription_PO="Credit check failures requiring manual processor intervention", queryImplementation_Dev="COUNT(*) WHERE requires_manual_review='TRUE'", unit="interventions", impactCategory="operational", dataSource="sql", dataSourceDetails="{\"database\":\"lending\",\"table\":\"credit_checks\"}", signal_id="SIG026", technicalOwner="platform-engineering-team", implementationNotes="Operational overhead measure"]
+| fields - _time
+| outputlookup bos_impact_indicators.csv

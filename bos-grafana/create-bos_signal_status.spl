@@ -1,0 +1,71 @@
+# Create bos_signal_status.csv lookup table
+# Generated from signal_status.csv
+# Total records: 22
+
+| makeresults count=1
+     | eval signal_id="SIG001", signal_name="Document Upload Success %", signal_type="Business", status="Amber", current_value="", service_id="SVC001", timestamp="2025-09-25T10:00:00Z"
+| append
+    [| makeresults count=1
+     | eval signal_id="SIG002", signal_name="Borrower Document Match %", signal_type="Business", status="Green", current_value="", service_id="SVC001", timestamp="2025-09-25T10:00:00Z"]
+| append
+    [| makeresults count=1
+     | eval signal_id="SIG003", signal_name="Batch Ingestion On-Time %", signal_type="Process", status="Red", current_value="", service_id="SVC001", timestamp="2025-09-25T10:00:00Z"]
+| append
+    [| makeresults count=1
+     | eval signal_id="SIG004", signal_name="Validation Throughput Rate", signal_type="Process", status="Amber", current_value="", service_id="SVC001", timestamp="2025-09-25T10:00:00Z"]
+| append
+    [| makeresults count=1
+     | eval signal_id="SIG005", signal_name="API Response Time (p95)", signal_type="System", status="Amber", current_value="", service_id="SVC001", timestamp="2025-09-25T10:00:00Z"]
+| append
+    [| makeresults count=1
+     | eval signal_id="SIG006", signal_name="Database Latency", signal_type="System", status="Green", current_value="", service_id="SVC001", timestamp="2025-09-25T10:00:00Z"]
+| append
+    [| makeresults count=1
+     | eval signal_id="SIG007", signal_name="Memory Usage", signal_type="System", status="Green", current_value="", service_id="SVC001", timestamp="2025-09-25T10:00:00Z"]
+| append
+    [| makeresults count=1
+     | eval signal_id="SIG008", signal_name="CPU Utilization", signal_type="System", status="Green", current_value="", service_id="SVC001", timestamp="2025-09-25T10:00:00Z"]
+| append
+    [| makeresults count=1
+     | eval signal_id="SIG009", signal_name="Queue Depth", signal_type="System", status="Green", current_value="", service_id="SVC001", timestamp="2025-09-25T10:00:00Z"]
+| append
+    [| makeresults count=1
+     | eval signal_id="SIG010", signal_name="Credit Score Retrieval %", signal_type="Business", status="Green", current_value="", service_id="SVC002", timestamp="2025-09-25T10:00:00Z"]
+| append
+    [| makeresults count=1
+     | eval signal_id="SIG011", signal_name="Valid Score Return Rate", signal_type="Business", status="Green", current_value="", service_id="SVC002", timestamp="2025-09-25T10:00:00Z"]
+| append
+    [| makeresults count=1
+     | eval signal_id="SIG012", signal_name="Credit Check Response Time", signal_type="Process", status="Green", current_value="", service_id="SVC002", timestamp="2025-09-25T10:00:00Z"]
+| append
+    [| makeresults count=1
+     | eval signal_id="SIG013", signal_name="Bureau Connection Health", signal_type="System", status="Green", current_value="", service_id="SVC002", timestamp="2025-09-25T10:00:00Z"]
+| append
+    [| makeresults count=1
+     | eval signal_id="SIG014", signal_name="Payment Success Rate", signal_type="Business", status="Green", current_value="", service_id="SVC003", timestamp="2025-09-25T10:00:00Z"]
+| append
+    [| makeresults count=1
+     | eval signal_id="SIG015", signal_name="Balance Update Accuracy", signal_type="Business", status="Green", current_value="", service_id="SVC003", timestamp="2025-09-25T10:00:00Z"]
+| append
+    [| makeresults count=1
+     | eval signal_id="SIG016", signal_name="Transaction Processing Time", signal_type="Process", status="Amber", current_value="", service_id="SVC003", timestamp="2025-09-25T10:00:00Z"]
+| append
+    [| makeresults count=1
+     | eval signal_id="SIG017", signal_name="Payment Gateway Health", signal_type="System", status="Green", current_value="", service_id="SVC003", timestamp="2025-09-25T10:00:00Z"]
+| append
+    [| makeresults count=1
+     | eval signal_id="SIG018", signal_name="Database Connection Pool", signal_type="System", status="Green", current_value="", service_id="SVC003", timestamp="2025-09-25T10:00:00Z"]
+| append
+    [| makeresults count=1
+     | eval signal_id="SIG023", signal_name="Customers Blocked", signal_type="BusinessImpact", status="Amber", current_value="10", service_id="SVC002", timestamp="2025-10-01T03:00:00Z"]
+| append
+    [| makeresults count=1
+     | eval signal_id="SIG024", signal_name="Revenue at Risk", signal_type="BusinessImpact", status="Red", current_value="4888777", service_id="SVC002", timestamp="2025-10-01T03:00:00Z"]
+| append
+    [| makeresults count=1
+     | eval signal_id="SIG025", signal_name="FCRA Violations", signal_type="BusinessImpact", status="Amber", current_value="5", service_id="SVC002", timestamp="2025-10-01T03:00:00Z"]
+| append
+    [| makeresults count=1
+     | eval signal_id="SIG026", signal_name="Manual Interventions", signal_type="BusinessImpact", status="Green", current_value="3", service_id="SVC002", timestamp="2025-10-01T03:00:00Z"]
+| fields - _time
+| outputlookup bos_signal_status.csv

@@ -1,0 +1,65 @@
+# Create bos_services.csv lookup table
+# Generated from services.csv
+# Total records: 20
+
+| makeresults count=1
+     | eval service_id="SVC001", serviceName="treasury-order-funding-service", displayName="Treasury Order Funding Service", businessPurpose="Execute wire transfers to complete home purchase transactions", serviceType="customer-facing", tierLevel="1", businessUnit="Home Lending", performanceQuestion="Are all scheduled closings funded by 8:00 AM deadline?", tags="mortgage", productOwner="sarah.chen@example.com", l4_product_line="Home Lending", l3_product="Home Originations", l3_description="Automate loan application processing and decisioning to deliver fast accurate customer outcomes through scalable manufacturing processes with strong controls."
+| append
+    [| makeresults count=1
+     | eval service_id="SVC002", serviceName="credit-check-service", displayName="Credit Check Service", businessPurpose="Validate borrower creditworthiness for loan approval decisions", serviceType="internal", tierLevel="2", businessUnit="Home Lending", performanceQuestion="What percentage of credit checks return valid scores within 30 seconds?", tags="lending;credit;validation", productOwner="michael.torres@example.com", l4_product_line="Home Lending", l3_product="Home Originations", l3_description="Automate loan application processing and decisioning to deliver fast accurate customer outcomes through scalable manufacturing processes with strong controls."]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC003", serviceName="payment-processing-api", displayName="Payment Processing API", businessPurpose="Process mortgage payment transactions and update loan balances", serviceType="internal", tierLevel="2", businessUnit="Home Lending", performanceQuestion="Are payment authorizations responding within 100ms?", tags="payment;api;performance", productOwner="alex.kim@example.com", l4_product_line="Home Lending", l3_product="Home Servicing", l3_description="Simplify account management and customer support to enable self-service transactions and optimize operational efficiency throughout the loan lifecycle."]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC004", serviceName="escrow-management-service", displayName="Escrow Management Service", businessPurpose="Manage property tax and insurance payments from escrow accounts", serviceType="internal", tierLevel="2", businessUnit="Home Lending", performanceQuestion="Are escrow payments disbursed on time to avoid penalties?", tags="escrow;servicing", productOwner="jennifer.wu@example.com", l4_product_line="Home Lending", l3_product="Home Servicing", l3_description="Simplify account management and customer support to enable self-service transactions and optimize operational efficiency throughout the loan lifecycle."]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC005", serviceName="auto-loan-application-api", displayName="Auto Loan Application API", businessPurpose="Process auto loan applications from dealer network", serviceType="customer-facing", tierLevel="1", businessUnit="Auto Lending", performanceQuestion="Are dealer credit decisions returned within 2 minutes?", tags="auto;lending;application", productOwner="david.miller@example.com", l4_product_line="Auto Lending", l3_product="Auto Originations", l3_description="description tbd..."]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC006", serviceName="vehicle-valuation-service", displayName="Vehicle Valuation Service", businessPurpose="Determine fair market value for vehicle loan collateral", serviceType="internal", tierLevel="2", businessUnit="Auto Lending", performanceQuestion="Are vehicle valuations returned within SLA timeframe?", tags="auto;valuation", productOwner="lisa.johnson@example.com", l4_product_line="Auto Lending", l3_product="Auto Originations", l3_description="description tbd..."]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC007", serviceName="auto-payment-processor", displayName="Auto Payment Processor", businessPurpose="Process monthly auto loan payments and apply to principal/interest", serviceType="internal", tierLevel="1", businessUnit="Auto Lending", performanceQuestion="Do auto payments post to accounts within 24 hours?", tags="auto;payment", productOwner="robert.garcia@example.com", l4_product_line="Auto Lending", l3_product="Auto Servicing", l3_description="description tbd..."]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC008", serviceName="repossession-tracking-service", displayName="Repossession Tracking Service", businessPurpose="Track and manage vehicle repossession workflow for defaulted loans", serviceType="internal", tierLevel="3", businessUnit="Auto Lending", performanceQuestion="Are repossession orders processed within regulatory timeframes?", tags="auto;collections", productOwner="maria.rodriguez@example.com", l4_product_line="Auto Lending", l3_product="Auto Servicing", l3_description="description tbd..."]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC009", serviceName="card-authorization-engine", displayName="Card Authorization Engine", businessPurpose="Real-time authorization of credit card transactions at point of sale", serviceType="customer-facing", tierLevel="1", businessUnit="Credit Cards", performanceQuestion="What percentage of valid transactions are approved in under 100ms?", tags="cards;authorization;realtime", productOwner="james.smith@example.com", l4_product_line="Credit Cards", l3_product="Card Acquisitions", l3_description="description tbd..."]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC010", serviceName="rewards-calculation-service", displayName="Rewards Calculation Service", businessPurpose="Calculate and apply rewards points for credit card purchases", serviceType="internal", tierLevel="2", businessUnit="Credit Cards", performanceQuestion="Are rewards points accurately calculated and posted within 48 hours?", tags="cards;rewards", productOwner="patricia.brown@example.com", l4_product_line="Credit Cards", l3_product="Card Management", l3_description="description tbd..."]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC011", serviceName="fraud-detection-api", displayName="Fraud Detection API", businessPurpose="Identify and block potentially fraudulent credit card transactions", serviceType="customer-facing", tierLevel="1", businessUnit="Credit Cards", performanceQuestion="What percentage of fraud attempts are successfully blocked?", tags="cards;fraud;security", productOwner="william.davis@example.com", l4_product_line="Credit Cards", l3_product="Card Management", l3_description="description tbd..."]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC012", serviceName="statement-generation-service", displayName="Statement Generation Service", businessPurpose="Generate monthly credit card statements with transaction details", serviceType="internal", tierLevel="2", businessUnit="Credit Cards", performanceQuestion="Are statements generated and delivered by the 5th of each month?", tags="cards;statements", productOwner="elizabeth.wilson@example.com", l4_product_line="Credit Cards", l3_product="Card Management", l3_description="description tbd..."]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC013", serviceName="personal-loan-decisioning", displayName="Personal Loan Decisioning", businessPurpose="Evaluate and approve personal loan applications using credit criteria", serviceType="customer-facing", tierLevel="1", businessUnit="Personal Loans", performanceQuestion="What percentage of loan decisions are delivered same-day?", tags="personal;lending;decisioning", productOwner="christopher.martinez@example.com", l4_product_line="Personal Loans", l3_product="Personal Underwriting", l3_description="description tbd..."]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC014", serviceName="income-verification-service", displayName="Income Verification Service", businessPurpose="Verify applicant income through third-party data sources", serviceType="internal", tierLevel="2", businessUnit="Personal Loans", performanceQuestion="Can income be verified for 95% of applications?", tags="personal;verification", productOwner="amanda.anderson@example.com", l4_product_line="Personal Loans", l3_product="Personal Underwriting", l3_description="description tbd..."]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC015", serviceName="collections-dialer-system", displayName="Collections Dialer System", businessPurpose="Automated system for contacting delinquent personal loan borrowers", serviceType="internal", tierLevel="2", businessUnit="Personal Loans", performanceQuestion="What percentage of collection calls successfully connect with borrowers?", tags="personal;collections", productOwner="daniel.taylor@example.com", l4_product_line="Personal Loans", l3_product="Personal Collections", l3_description="description tbd..."]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC016", serviceName="debt-settlement-processor", displayName="Debt Settlement Processor", businessPurpose="Process negotiated settlements for defaulted personal loans", serviceType="internal", tierLevel="3", businessUnit="Personal Loans", performanceQuestion="Are settlement agreements processed within 72 hours of approval?", tags="personal;settlement", productOwner="michelle.thomas@example.com", l4_product_line="Personal Loans", l3_product="Personal Collections", l3_description="description tbd..."]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC017", serviceName="payment-application-monitor", displayName="Payment Application Monitor", businessPurpose="Monitor payment posting accuracy to prevent misapplication", serviceType="internal", tierLevel="1", businessUnit="Loan Servicing", performanceQuestion="Is payment exception queue below 5% threshold?", tags="payment;accuracy;monitoring", productOwner="monitor.team@example.com", l4_product_line="Home Lending", l3_product="Home Servicing", l3_description="Simplify account management and customer support to enable self-service transactions and optimize operational efficiency throughout the loan lifecycle."]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC018", serviceName="fee-assessment-validator", displayName="Fee Assessment Validator", businessPurpose="Validate late fees are correctly withheld from deferred accounts", serviceType="internal", tierLevel="1", businessUnit="Loan Servicing", performanceQuestion="Are late fees correctly withheld from deferred accounts?", tags="fees;compliance;validation", productOwner="validator.team@example.com", l4_product_line="Auto Lending", l3_product="Auto Servicing", l3_description="description tbd..."]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC019", serviceName="refund-process-tracker", displayName="Refund Process Tracker", businessPurpose="Track GAP insurance refunds on early loan terminations", serviceType="internal", tierLevel="2", businessUnit="Loan Servicing", performanceQuestion="Are GAP refunds processed for all early terminations?", tags="refunds;gap;compliance", productOwner="refund.team@example.com", l4_product_line="Auto Lending", l3_product="Auto Servicing", l3_description="description tbd..."]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC020", serviceName="modification-denial-analyzer", displayName="Modification Denial Analyzer", businessPurpose="Monitor loan modification denial rates for anomalies", serviceType="internal", tierLevel="2", businessUnit="Loan Servicing", performanceQuestion="Are modification denial rates within normal range?", tags="modifications;analytics;compliance", productOwner="analytics.team@example.com", l4_product_line="Home Lending", l3_product="Home Servicing", l3_description="Simplify account management and customer support to enable self-service transactions and optimize operational efficiency throughout the loan lifecycle."]
+| fields - _time
+| outputlookup bos_services.csv

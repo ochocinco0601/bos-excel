@@ -1,0 +1,23 @@
+# Create bos_stakeholder_expectations.csv lookup table
+# Generated from stakeholder_expectations.csv
+# Total records: 6
+
+| makeresults count=1
+     | eval service_id="SVC001", expectation_id="EXP001", stakeholderType="mixed", stakeholderGroup="all stakeholders", expectationStatement="Wire transfers complete successfully on scheduled closing date", measurementQuestion="What percentage of wire transfers complete successfully on scheduled closing date?", sli_ref="funding-success-rate", target="99.5", targetUnit="%", targetRationale="Industry standard for critical financial transactions", priority="HIGH", impactWhenBroken="financial", created="2025-09-23T00:00:00Z", modifiedBy="migration-script"
+| append
+    [| makeresults count=1
+     | eval service_id="SVC002", expectation_id="EXP001", stakeholderType="mixed", stakeholderGroup="all stakeholders", expectationStatement="Credit checks return valid scores within acceptable time", measurementQuestion="What percentage of credit checks return valid scores within acceptable time?", sli_ref="credit-check-success-rate", target="99.5", targetUnit="%", targetRationale="Credit checks block loan approval; brief outages tolerable", priority="HIGH", impactWhenBroken="customer_experience", created="2025-09-23T00:00:00Z", modifiedBy="migration-script"]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC003", expectation_id="EXP001", stakeholderType="customer", stakeholderGroup="mortgage borrowers", expectationStatement="Payment processing completes quickly", measurementQuestion="Do payment processing requests complete within 2 seconds?", sli_ref="payment-response-time", target="95", targetUnit="%", targetRationale="Fast payment processing maintains customer satisfaction", priority="HIGH", impactWhenBroken="customer_experience", created="2025-09-23T00:00:00Z", modifiedBy="migration-script"]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC003", expectation_id="EXP002", stakeholderType="internal", stakeholderGroup="finance team", expectationStatement="Process target daily payment volume", measurementQuestion="Are we processing $10M daily volume?", sli_ref="payment-volume", target="10000000", targetUnit="dollars", targetRationale="Revenue targets require high transaction volume", priority="HIGH", impactWhenBroken="financial", created="2025-09-23T00:00:00Z", modifiedBy="alex.kim@example.com"]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC003", expectation_id="EXP003", stakeholderType="internal", stakeholderGroup="customer service", expectationStatement="Keep escalations manageable", measurementQuestion="Are escalations within support capacity?", sli_ref="payment-escalations", target="50", targetUnit="count", targetRationale="Team can handle maximum 50 escalations per day", priority="MEDIUM", impactWhenBroken="operational", created="2025-09-23T00:00:00Z", modifiedBy="alex.kim@example.com"]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC003", expectation_id="EXP004", stakeholderType="compliance", stakeholderGroup="regulatory", expectationStatement="Maintain PCI compliance", measurementQuestion="Are all transactions PCI compliant?", sli_ref="payment-compliance", target="100", targetUnit="%", targetRationale="Regulatory requirement - zero tolerance", priority="CRITICAL", impactWhenBroken="legal_risk", created="2025-09-23T00:00:00Z", modifiedBy="alex.kim@example.com"]
+| fields - _time
+| outputlookup bos_stakeholder_expectations.csv

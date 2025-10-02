@@ -2,19 +2,55 @@
 
 Mock data demonstrating Business Observability System (BOS) methodology for correlating technical signals with business outcomes.
 
+## 🚀 Quick Start: SPL Deployment Method (Recommended)
+
+**No file uploads needed!** Deploy BOS dashboards by copy-pasting SPL scripts directly into Splunk.
+
+**See:** `SPLUNK-DEPLOYMENT.md` for complete step-by-step instructions.
+
+**Quick workflow:**
+1. Copy-paste 8 SPL scripts into Splunk (creates lookup tables automatically)
+2. Update dashboard JSON datasource UIDs
+3. Import 4 dashboard JSON files into Grafana
+4. Done! (~15-20 minutes total)
+
+**Benefits:**
+- ✅ No CSV file uploads
+- ✅ Air-gap friendly (plain text transfer)
+- ✅ Repeatable data refresh
+- ✅ Self-documenting
+
 ## Files
 
+### SPL Data Generation Scripts (Recommended Method)
+- `create-bos_services.spl` - Creates bos_services.csv lookup (20 services)
+- `create-bos_signal_status.spl` - Creates bos_signal_status.csv lookup (22 signals)
+- `create-bos_incidents.spl` - Creates bos_incidents.csv lookup (9 incidents)
+- `create-bos_sli_definitions.spl` - Creates bos_sli_definitions.csv lookup (12 SLIs)
+- `create-bos_slo_configurations.spl` - Creates bos_slo_configurations.csv lookup (9 SLOs)
+- `create-bos_sli_metrics.spl` - Creates bos_sli_metrics.csv lookup (1000 data points)
+- `create-bos_stakeholder_expectations.spl` - Creates bos_stakeholder_expectations.csv lookup (6 expectations)
+- `create-bos_impact_indicators.spl` - Creates bos_impact_indicators.csv lookup (4 indicators)
+
+### Dashboard JSON Files
+- `l4-minimalist-splunk-v1.json` - Grafana L4 dashboard JSON (Grafana v11+ flat structure)
+- `l3-minimalist-splunk-v1.json` - Grafana L3 dashboard JSON (Grafana v11+ flat structure)
+- `l3-product-services-splunk-v1.json` - Grafana Services dashboard JSON (Grafana v11+ flat structure)
+- `l3-service-detail-splunk-v1.json` - Grafana Service Detail dashboard JSON (Grafana v11+ flat structure)
+
+### Dashboard Query Reference Files
+- `l4-dashboard-splunk-query.spl` - Complete SPL query for L4 dashboard (Splunk datasource)
+- `l3-dashboard-splunk-query.spl` - Complete SPL query for L3 dashboard (Splunk datasource)
+- `services-dashboard-splunk-query.spl` - Complete SPL queries for Services dashboard (Splunk datasource)
+- `service-detail-dashboard-splunk-query.spl` - Complete SPL queries for Service Detail dashboard (Splunk datasource)
+
+### CSV Files (Optional - Use SPL Scripts Instead)
 - `services.csv` - Service catalog with L4/L3 hierarchy
 - `signal_status.csv` - Service health signals (Green/Amber/Red)
 - `incidents.csv` - Sample incident data
-- `l4-dashboard-splunk-query.spl` - Complete SPL query for L4 dashboard (Splunk datasource)
-- `l4-minimalist-splunk-v1.json` - Grafana L4 dashboard JSON (Grafana v11+ flat structure)
-- `l3-dashboard-splunk-query.spl` - Complete SPL query for L3 dashboard (Splunk datasource)
-- `l3-minimalist-splunk-v1.json` - Grafana L3 dashboard JSON (Grafana v11+ flat structure)
-- `services-dashboard-splunk-query.spl` - Complete SPL queries for Services dashboard (Splunk datasource)
-- `l3-product-services-splunk-v1.json` - Grafana Services dashboard JSON (Grafana v11+ flat structure)
-- `service-detail-dashboard-splunk-query.spl` - Complete SPL queries for Service Detail dashboard (Splunk datasource)
-- `l3-service-detail-splunk-v1.json` - Grafana Service Detail dashboard JSON (Grafana v11+ flat structure)
+
+### Documentation
+- `SPLUNK-DEPLOYMENT.md` - **Complete step-by-step deployment guide using SPL scripts**
 - `SPLUNK-SQL-TRANSLATION-LESSONS.md` - **Critical lessons learned translating SQL to SPL**
 - `SPLUNK-TROUBLESHOOTING.md` - **Step-by-step diagnostic guide for "no results" issues**
 
@@ -26,9 +62,16 @@ Generic banking industry services synthesized from publicly available informatio
 
 ## Usage
 
-Import into Grafana datasources (SQLite, Splunk lookups, etc.) for BOS dashboard development.
+### Recommended: SPL Script Deployment (Splunk)
 
-### SQLite Example
+**No file uploads needed!** See `SPLUNK-DEPLOYMENT.md` for complete instructions.
+
+1. Copy-paste 8 SPL scripts into Splunk Search & Reporting
+2. Each script creates a lookup table automatically
+3. Import 4 dashboard JSON files into Grafana
+4. Done!
+
+### Alternative: SQLite Example
 
 ```bash
 # Convert CSVs to SQLite database
@@ -37,12 +80,15 @@ python3 csv_to_sqlite.py
 # Use with Grafana SQLite datasource
 ```
 
-### Splunk Lookup Tables
+### Alternative: Manual CSV Upload (Splunk)
 
-**Setup:**
+**⚠️ Not recommended** - Use SPL scripts instead (see above)
+
+If you must upload CSVs manually:
 1. Upload CSVs to Splunk: Settings → Lookups → Lookup table files → Add new
-   - Upload as: `bos_services.csv`, `bos_signal_status.csv`, `bos_incidents.csv`
-   - Or rename lookups after upload
+   - Upload as: `bos_services.csv`, `bos_signal_status.csv`, `bos_incidents.csv`, etc.
+   - ⚠️ **Important:** CSV files contain `#` comment lines that Splunk does NOT ignore
+   - You must remove all lines starting with `#` before uploading
 2. Create lookup definitions for each CSV file
 3. Test: `| inputlookup bos_services.csv | head 5`
 

@@ -1,0 +1,32 @@
+# Create bos_slo_configurations.csv lookup table
+# Generated from slo_configurations.csv
+# Total records: 9
+
+| makeresults count=1
+     | eval service_id="SVC001", sloTarget="95.0", sloTargetRationale="8 AM funding deadline requires high reliability with buffer for processing issues", timeWindow="1d", timeWindowType="rolling", budgetingMethod="Occurrences", timeSliceTarget="", timeSliceWindow="", alertingThreshold="93.0", pageThreshold="90.0"
+| append
+    [| makeresults count=1
+     | eval service_id="SVC002", sloTarget="85.0", sloTargetRationale="Credit bureau connectivity issues expected; focus on rapid recovery", timeWindow="1h", timeWindowType="rolling", budgetingMethod="Occurrences", timeSliceTarget="", timeSliceWindow="", alertingThreshold="80.0", pageThreshold="75.0"]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC003", sloTarget="99.9", sloTargetRationale="High-volume payment service requires sub-second response times", timeWindow="5m", timeWindowType="rolling", budgetingMethod="Timeslices", timeSliceTarget="0.99", timeSliceWindow="1m", alertingThreshold="99.5", pageThreshold="99.0"]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC005", sloTarget="98.0", sloTargetRationale="Dealer network expects rapid decisions to close sales", timeWindow="1h", timeWindowType="rolling", budgetingMethod="Occurrences", timeSliceTarget="", timeSliceWindow="", alertingThreshold="96.0", pageThreshold="95.0"]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC013", sloTarget="95.0", sloTargetRationale="Same-day decision commitment for competitive advantage", timeWindow="1d", timeWindowType="rolling", budgetingMethod="Occurrences", timeSliceTarget="", timeSliceWindow="", alertingThreshold="93.0", pageThreshold="90.0"]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC017", sloTarget="95.0", sloTargetRationale="Payment posting accuracy critical for account integrity", timeWindow="1h", timeWindowType="rolling", budgetingMethod="Occurrences", timeSliceTarget="", timeSliceWindow="", alertingThreshold="93.0", pageThreshold="90.0"]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC018", sloTarget="100.0", sloTargetRationale="Zero tolerance for erroneous fee assessment on deferred accounts", timeWindow="1d", timeWindowType="rolling", budgetingMethod="Occurrences", timeSliceTarget="", timeSliceWindow="", alertingThreshold="99.5", pageThreshold="99.0"]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC019", sloTarget="99.0", sloTargetRationale="GAP refund processing required for compliance", timeWindow="1d", timeWindowType="rolling", budgetingMethod="Occurrences", timeSliceTarget="", timeSliceWindow="", alertingThreshold="97.0", pageThreshold="95.0"]
+| append
+    [| makeresults count=1
+     | eval service_id="SVC020", sloTarget="90.0", sloTargetRationale="Modification denial rate stability indicates algorithm health", timeWindow="7d", timeWindowType="rolling", budgetingMethod="RatioTimeslices", timeSliceTarget="0.9", timeSliceWindow="1d", alertingThreshold="85.0", pageThreshold="80.0"]
+| fields - _time
+| outputlookup bos_slo_configurations.csv
