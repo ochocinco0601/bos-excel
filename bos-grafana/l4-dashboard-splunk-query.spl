@@ -1,0 +1,77 @@
+# L4 Product Lines Dashboard - Splunk Query
+# ============================================
+# This SPL query replaces the SQL query in the L4 minimalist dashboard
+# for use with Splunk datasource in Grafana.
+#
+# IMPORTANT: Lookup table names use 'bos_' prefix
+# - bos_services.csv
+# - bos_signal_status.csv
+# - bos_incidents.csv
+#
+# If your Splunk lookup tables use different names, update lines 13, 16, and 38.
+# ============================================
+
+| inputlookup bos_services.csv
+| fields service_id l4_product_line
+| join type=left service_id
+    [| inputlookup bos_signal_status.csv
+     | fields service_id status]
+| fillnull value="NoSignal" status
+| eval has_signal=if(status!="NoSignal", 1, 0)
+| eval health_score=case(
+    status=="Green", 100,
+    status=="Amber", 50,
+    status=="Red", 0,
+    1=1, 0)
+| stats
+    dc(service_id) as service_count
+    sum(has_signal) as services_with_signals
+    avg(health_score) as health
+    by l4_product_line, service_id
+| eventstats
+    sum(service_count) as total_services
+    sum(services_with_signals) as total_with_signals
+    avg(health) as avg_health
+    min(health) as min_health
+    by l4_product_line
+| eval coverage=round((total_with_signals/total_services)*100, 1)
+| eval health=round(avg_health, 1)
+| eval health_status=case(
+    min_health >= 95, "Green",
+    min_health >= 75, "Amber",
+    1=1, "Red")
+| dedup l4_product_line
+| join type=left l4_product_line
+    [| inputlookup bos_incidents.csv
+     | where status="Open" AND (severity="Sev1" OR severity="Sev2")
+     | stats count as incident_count by l4_product_line]
+| fillnull value=0 incident_count
+| table l4_product_line total_services total_with_signals coverage health health_status incident_count
+| rename total_services as service_count, total_with_signals as services_with_signals
+| sort l4_product_line
+
+# ============================================
+# Expected Output Fields
+# ============================================
+# l4_product_line     - Product line name (string)
+# service_count       - Total services (number)
+# services_with_signals - Services with health signals (number)
+# coverage            - % with signals, rounded to 1 decimal (number)
+# health              - Average health score, rounded to 1 decimal (number)
+# health_status       - Green/Amber/Red (string)
+# incident_count      - Open Sev1/Sev2 incidents (number)
+#
+# Expected output: 4 rows (Auto Lending, Credit Cards, Home Lending, Personal Loans)
+#
+# ============================================
+# Testing in Splunk
+# ============================================
+# Before using in Grafana, test this query in Splunk Search:
+# 1. Copy entire query (lines 13-47)
+# 2. Paste into Splunk Search
+# 3. Verify 4 rows appear with correct data
+#
+# Troubleshooting:
+# - No results? Check lookup tables exist: | inputlookup bos_services.csv | head 5
+# - Wrong data? Verify field names are case-sensitive and match CSV headers exactly
+# - Join failures? Ensure service_id field exists in all 3 CSVs

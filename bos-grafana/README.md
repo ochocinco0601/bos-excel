@@ -7,6 +7,7 @@ Mock data demonstrating Business Observability System (BOS) methodology for corr
 - `services.csv` - Service catalog with L4/L3 hierarchy
 - `signal_status.csv` - Service health signals (Green/Amber/Red)
 - `incidents.csv` - Sample incident data
+- `l4-dashboard-splunk-query.spl` - Complete SPL query for L4 dashboard (Splunk datasource)
 
 ## Data Source
 
@@ -27,16 +28,27 @@ python3 csv_to_sqlite.py
 
 ### Splunk Lookup Tables
 
-```
+**Setup:**
 1. Upload CSVs to Splunk: Settings → Lookups → Lookup table files → Add new
+   - Upload as: `bos_services.csv`, `bos_signal_status.csv`, `bos_incidents.csv`
+   - Or rename lookups after upload
 2. Create lookup definitions for each CSV file
-3. Use in Grafana with Splunk datasource
+3. Test: `| inputlookup bos_services.csv | head 5`
 
-Example SPL:
-| inputlookup services.csv
-| join service_id [| inputlookup signal_status.csv]
-| stats count by l4_product_line, status
-```
+**L4 Dashboard Query:**
+
+Use the complete SPL query in `l4-dashboard-splunk-query.spl` for the L4 Product Lines dashboard.
+
+**Key points:**
+- Query expects lookup tables prefixed with `bos_` (e.g., `bos_services.csv`)
+- Modify lines 13, 16, 38 if using different names
+- Test in Splunk Search before using in Grafana
+- Returns 4 rows: Auto Lending, Credit Cards, Home Lending, Personal Loans
+
+**Grafana Integration:**
+1. Replace SQL `rawQueryText` in dashboard JSON with SPL query
+2. Change datasource type to `grafana-splunk-datasource`
+3. Update datasource UID to your Splunk datasource
 
 ## Schema
 
