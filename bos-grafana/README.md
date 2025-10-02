@@ -93,25 +93,27 @@ These lessons prevent hours of debugging!
 - Grafana Enterprise/OSS v11.1.3+ (flat JSON format required)
 - HTML Graphics panel plugin installed (`gapit-htmlgraphics-panel`)
 - Splunk datasource plugin v5.6.1+ installed
-- Splunk datasource configured with UID: `d4c682f8-fd9b-46b2-9b89-e15410aa52dc`
+- Splunk datasource configured in your Grafana instance
 - Lookup tables uploaded (bos_services.csv, bos_signal_status.csv, bos_incidents.csv)
 
 **Deployment Steps**:
 
-1. **Download dashboard JSON**
-   - Download `l4-minimalist-splunk-v1.json` from this directory
+1. **Configure datasource UID**
+   - Before importing, update the datasource UID in the JSON file to match your Splunk datasource
+   - Find your datasource UID: Settings → Data sources → [Your Splunk datasource] → Copy UID from URL
+   - Replace all instances of the placeholder UID in the JSON file with your actual UID
 
 2. **Import to Grafana**
    - Go to Dashboards → Import
-   - Upload JSON file or paste content
-   - Dashboard imports fully configured with datasource and queries
-   - **That's it!** Dashboard is ready to use.
+   - Upload modified JSON file or paste content
+   - Dashboard imports with queries and variables pre-configured
+   - Select your Splunk datasource if prompted
 
-**Zero-Step Import**:
-- ✅ Datasource pre-configured (UID: d4c682f8-fd9b-46b2-9b89-e15410aa52dc)
-- ✅ SPL queries embedded in dashboard JSON (auto-import)
+**What's Pre-configured**:
+- ✅ SPL queries embedded in dashboard JSON
 - ✅ Variables pre-configured (if applicable)
-- ✅ No manual configuration required
+- ✅ Grafana v11+ flat structure format
+- ⚠️ **Datasource UID must be updated** before import to match your environment
 
 **Grafana v11 + Splunk v5.6.1 Requirements**:
 - ✅ Flat JSON structure (no "dashboard" wrapper key)
@@ -132,25 +134,27 @@ These lessons prevent hours of debugging!
 - Grafana Enterprise/OSS v11.1.3+ (flat JSON format required)
 - HTML Graphics panel plugin installed (`gapit-htmlgraphics-panel`)
 - Splunk datasource plugin v5.6.1+ installed
-- Splunk datasource configured with UID: `d4c682f8-fd9b-46b2-9b89-e15410aa52dc`
+- Splunk datasource configured in your Grafana instance
 - Lookup tables uploaded (bos_services.csv, bos_signal_status.csv, bos_incidents.csv)
 
 **Deployment Steps**:
 
-1. **Download dashboard JSON**
-   - Download `l3-minimalist-splunk-v1.json` from this directory
+1. **Configure datasource UID**
+   - Before importing, update the datasource UID in the JSON file to match your Splunk datasource
+   - Find your datasource UID: Settings → Data sources → [Your Splunk datasource] → Copy UID from URL
+   - Replace all instances of the placeholder UID in the JSON file with your actual UID
 
 2. **Import to Grafana**
    - Go to Dashboards → Import
-   - Upload JSON file or paste content
-   - Dashboard imports fully configured with datasource, queries, and variables
-   - **That's it!** Dashboard is ready to use.
+   - Upload modified JSON file or paste content
+   - Dashboard imports with queries and variables pre-configured
+   - Select your Splunk datasource if prompted
 
-**Zero-Step Import**:
-- ✅ Datasource pre-configured (UID: d4c682f8-fd9b-46b2-9b89-e15410aa52dc)
-- ✅ SPL queries embedded in dashboard JSON (auto-import)
+**What's Pre-configured**:
+- ✅ SPL queries embedded in dashboard JSON
 - ✅ Variable `l4_product_line` pre-configured with SPL query
-- ✅ No manual configuration required
+- ✅ Grafana v11+ flat structure format
+- ⚠️ **Datasource UID must be updated** before import to match your environment
 
 **Expected Results (Home Lending example)**:
 - 3 rows: Mortgage Origination, Home Equity, Refinancing
@@ -164,27 +168,29 @@ These lessons prevent hours of debugging!
 - Grafana Enterprise/OSS v11.1.3+ (flat JSON format required)
 - HTML Graphics panel plugin installed (`gapit-htmlgraphics-panel`)
 - Splunk datasource plugin v5.6.1+ installed
-- Splunk datasource configured with UID: `d4c682f8-fd9b-46b2-9b89-e15410aa52dc`
+- Splunk datasource configured in your Grafana instance
 - Lookup tables uploaded (bos_services.csv, bos_signal_status.csv, bos_incidents.csv)
 
 **Deployment Steps**:
 
-1. **Download dashboard JSON**
-   - Download `l3-product-services-splunk-v1.json` from this directory
+1. **Configure datasource UID**
+   - Before importing, update the datasource UID in the JSON file to match your Splunk datasource
+   - Find your datasource UID: Settings → Data sources → [Your Splunk datasource] → Copy UID from URL
+   - Replace all instances of the placeholder UID in the JSON file with your actual UID
 
 2. **Import to Grafana**
    - Go to Dashboards → Import
-   - Upload JSON file or paste content
-   - Dashboard imports fully configured with datasource, 2 queries, and 2 variables
-   - **That's it!** Dashboard is ready to use.
+   - Upload modified JSON file or paste content
+   - Dashboard imports with queries and variables pre-configured
+   - Select your Splunk datasource if prompted
 
-**Zero-Step Import**:
-- ✅ Datasource pre-configured (UID: d4c682f8-fd9b-46b2-9b89-e15410aa52dc)
+**What's Pre-configured**:
 - ✅ SPL Query A (service list) embedded in dashboard JSON
 - ✅ SPL Query B (summary stats) embedded in dashboard JSON
 - ✅ Variable `l4_product_line` pre-configured with SPL query
 - ✅ Variable `l3_product` pre-configured with SPL query (depends on l4_product_line)
-- ✅ No manual configuration required
+- ✅ Grafana v11+ flat structure format
+- ⚠️ **Datasource UID must be updated** before import to match your environment
 
 **Expected Results (Home Lending / Mortgage Origination example)**:
 - Shows services within the selected L3 product
@@ -205,22 +211,23 @@ These lessons prevent hours of debugging!
 - Grafana Enterprise/OSS v11.1.3+ (flat JSON format required)
 - HTML Graphics panel plugin installed (`gapit-htmlgraphics-panel`)
 - Splunk datasource plugin v5.6.1+ installed
-- Splunk datasource configured with UID: `d4c682f8-fd9b-46b2-9b89-e15410aa52dc`
+- Splunk datasource configured in your Grafana instance
 - Lookup tables uploaded (bos_services.csv, bos_signal_status.csv, bos_incidents.csv, bos_sli_definitions.csv, bos_slo_configurations.csv, bos_sli_metrics.csv, bos_stakeholder_expectations.csv, bos_impact_indicators.csv)
 
 **Deployment Steps**:
 
-1. **Download dashboard JSON**
-   - Download `l3-service-detail-splunk-v1.json` from this directory
+1. **Configure datasource UID**
+   - Before importing, update the datasource UID in the JSON file to match your Splunk datasource
+   - Find your datasource UID: Settings → Data sources → [Your Splunk datasource] → Copy UID from URL
+   - Replace all instances of the placeholder UID in the JSON file with your actual UID
 
 2. **Import to Grafana**
    - Go to Dashboards → Import
-   - Upload JSON file or paste content
-   - Dashboard imports fully configured with datasource, 6 queries, and 3 variables
-   - **That's it!** Dashboard is ready to use.
+   - Upload modified JSON file or paste content
+   - Dashboard imports with queries and variables pre-configured
+   - Select your Splunk datasource if prompted
 
-**Zero-Step Import**:
-- ✅ Datasource pre-configured (UID: d4c682f8-fd9b-46b2-9b89-e15410aa52dc)
+**What's Pre-configured**:
 - ✅ SPL Query A (service info + health) embedded in dashboard JSON
 - ✅ SPL Query B (operational signals) embedded in dashboard JSON
 - ✅ SPL Query C (open incidents) embedded in dashboard JSON
@@ -230,7 +237,8 @@ These lessons prevent hours of debugging!
 - ✅ Variable `l4_product_line` pre-configured with SPL query
 - ✅ Variable `l3_product` pre-configured with SPL query (depends on l4_product_line)
 - ✅ Variable `service_id` pre-configured with SPL query (depends on l4_product_line and l3_product)
-- ✅ No manual configuration required
+- ✅ Grafana v11+ flat structure format
+- ⚠️ **Datasource UID must be updated** before import to match your environment
 
 **Dashboard Sections**:
 1. **Service Header**: Service name, business purpose, breadcrumb navigation
