@@ -64,21 +64,47 @@ Key insights:
 
 These lessons prevent hours of debugging!
 
-## Grafana Dashboard Deployment
+## Grafana Dashboard Deployment (Grafana v11+)
 
-**Dashboard JSON**: `l4-minimalist-splunk-v1.json`
+**Dashboard JSON**: `l4-minimalist-splunk-v1.json` (Grafana v11+ flat structure)
+
+**Prerequisites**:
+- Grafana Enterprise/OSS v11.1.3+ (flat JSON format required)
+- HTML Graphics panel plugin installed (`gapit-htmlgraphics-panel`)
+- Splunk datasource configured
+- Lookup tables uploaded (bos_services.csv, bos_signal_status.csv, bos_incidents.csv)
 
 **Deployment Steps**:
-1. Download `l4-minimalist-splunk-v1.json` from this directory
-2. In Grafana, go to Dashboards → Import
-3. Upload JSON file or paste JSON content
-4. Update datasource UID to match your Splunk datasource
-5. Verify lookup tables are configured (bos_services.csv, bos_signal_status.csv, bos_incidents.csv)
-6. Save dashboard
 
-**Important**: Before importing, update the datasource UID in the JSON file:
-- Find: `"uid": "YOUR-SPLUNK-DATASOURCE-UID"`
-- Replace with your actual Splunk datasource UID from Grafana
+1. **Download dashboard JSON**
+   - Download `l4-minimalist-splunk-v1.json` from this directory
+
+2. **Import to Grafana**
+   - Go to Dashboards → Import
+   - Upload JSON file or paste content
+   - Dashboard will import with null datasource
+
+3. **Configure panel datasource**
+   - Edit the imported dashboard
+   - Click panel title → Edit
+   - Set datasource to your Splunk datasource
+
+4. **Add SPL query (manual step required)**
+   - HTML Graphics panels don't auto-import queries
+   - Open `l4-dashboard-splunk-query.spl` in a text editor
+   - Copy lines 14-61 (the main query)
+   - Paste into the panel query editor in Grafana
+   - Set query format to "Table"
+
+5. **Test and save**
+   - Click "Run query" to test
+   - Verify 4 rows appear with correct data
+   - Save dashboard
+
+**Grafana v11 Requirements**:
+- ✅ Flat JSON structure (no "dashboard" wrapper key)
+- ✅ Manual query paste for HTML Graphics panels
+- ✅ Datasource set to null for import compatibility
 
 **Expected Results**:
 - 4 rows: Auto Lending, Credit Cards, Home Lending, Personal Loans
