@@ -9,12 +9,12 @@
 # - bos_incidents.csv
 #
 # This query filters by L4 Product Line and shows L3 product breakdown.
-# The dashboard variable $l4_product_line$ must be set in Grafana.
+# The dashboard variable $l4_product_line must be set in Grafana.
 # ============================================
 
 | inputlookup bos_signal_status.csv
 | lookup bos_services.csv service_id OUTPUT l3_product l3_description l4_product_line
-| where l4_product_line="$l4_product_line$"
+| where l4_product_line="$l4_product_line"
 | eval health_score=case(
     status=="Green", 100,
     status=="Amber", 50,
@@ -32,7 +32,7 @@
     by l3_product, l3_description, service_id
 | append
     [| inputlookup bos_services.csv
-     | where l4_product_line="$l4_product_line$"
+     | where l4_product_line="$l4_product_line"
      | fields service_id l3_product l3_description]
 | stats
     values(service_health) as service_health
@@ -96,7 +96,7 @@
 # Testing in Splunk
 # ============================================
 # Before using in Grafana, test this query in Splunk Search:
-# 1. Replace "$l4_product_line$" with actual value like "Home Lending"
+# 1. Replace "$l4_product_line" with actual value like "Home Lending"
 # 2. Copy entire query
 # 3. Paste into Splunk Search
 # 4. Verify rows appear with correct data
