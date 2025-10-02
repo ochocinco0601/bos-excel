@@ -12,10 +12,13 @@ Mock data demonstrating Business Observability System (BOS) methodology for corr
 - `l3-dashboard-splunk-query.spl` - Complete SPL query for L3 dashboard (Splunk datasource)
 - `l3-minimalist-splunk-v1.json` - Grafana L3 dashboard JSON (Grafana v11+ flat structure)
 - `SPLUNK-SQL-TRANSLATION-LESSONS.md` - **Critical lessons learned translating SQL to SPL**
+- `SPLUNK-TROUBLESHOOTING.md` - **Step-by-step diagnostic guide for "no results" issues**
 
 ## Data Source
 
 Generic banking industry services synthesized from publicly available information. Educational/demonstration use only.
+
+**⚠️ Limited Sample Data**: Only 3 services (SVC001, SVC002, SVC003) have signals, all in **Home Lending** L4 product line. Other product lines will show 0% coverage. See `SPLUNK-TROUBLESHOOTING.md` for testing guidance.
 
 ## Usage
 
@@ -174,6 +177,14 @@ These lessons prevent hours of debugging!
 **Expected Results (Home Lending example)**:
 - 3 rows: Mortgage Origination, Home Equity, Refinancing
 - Each row shows: business_purpose, coverage, health status, incidents
+
+**⚠️ Troubleshooting "No Results"?**
+
+See `SPLUNK-TROUBLESHOOTING.md` for:
+- Step-by-step diagnostic queries
+- Common field name mismatches
+- Variable configuration verification
+- Minimal test queries to isolate issues
 
 ## Schema
 
