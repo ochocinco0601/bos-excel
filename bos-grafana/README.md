@@ -178,6 +178,13 @@ These lessons prevent hours of debugging!
 - 3 rows: Mortgage Origination, Home Equity, Refinancing
 - Each row shows: business_purpose, coverage, health status, incidents
 
+**Navigation:**
+- L4 → L3 drill-down: ✅ Working (clickable L4 product lines)
+- L3 → Services drill-down: ❌ Not available (L3 products display as plain text)
+- Breadcrumb navigation: ✅ Working (L3 back to L4)
+
+**Note:** Additional dashboard variants (Services, Service Detail, Signal Detail) need to be created for complete drill-down navigation within Splunk environment.
+
 **⚠️ Troubleshooting "No Results"?**
 
 See `SPLUNK-TROUBLESHOOTING.md` for:
