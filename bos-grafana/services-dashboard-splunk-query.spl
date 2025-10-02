@@ -1,0 +1,129 @@
+# Services Dashboard - Splunk Queries
+# ============================================
+# This file contains TWO SPL queries for the Services dashboard:
+# - Query A: Service list with health and incidents
+# - Query B: Summary statistics
+#
+# IMPORTANT: Both queries must be pasted separately into Grafana
+# Each query goes in its own "Query" tab (A and B)
+# ============================================
+
+# ============================================
+# QUERY A: Service List
+# ============================================
+# Shows all services within a specific L3 product
+# Variables: $l4_product_line and $l3_product
+# ============================================
+
+| inputlookup bos_services.csv
+| where l4_product_line="$l4_product_line" AND l3_product="$l3_product"
+| fields service_id serviceName displayName businessPurpose
+| rename displayName as service_name
+| join type=left service_id
+    [| inputlookup bos_signal_status.csv
+     | eval health_score=case(
+         status=="Green", 100,
+         status=="Amber", 50,
+         status=="Red", 0,
+         1=1, null())
+     | stats avg(health_score) as health by service_id
+     | eval health=round(health, 1)]
+| join type=left service_id
+    [| inputlookup bos_incidents.csv
+     | where status="Open"
+     | stats count as open_incidents by service_id]
+| fillnull value=0 health open_incidents
+| sort displayName
+| table service_id service_name businessPurpose health open_incidents
+
+# Expected Output Fields:
+# - service_id: Service identifier (e.g., SVC001)
+# - service_name: Display name
+# - businessPurpose: Service description
+# - health: Average health % (0-100)
+# - open_incidents: Count of open incidents
+
+# ============================================
+# QUERY B: Summary Statistics
+# ============================================
+# Provides aggregate stats for the stats cards
+# Variables: $l4_product_line and $l3_product
+# ============================================
+
+| inputlookup bos_services.csv
+| where l4_product_line="$l4_product_line" AND l3_product="$l3_product"
+| fields service_id
+| join type=left service_id
+    [| inputlookup bos_signal_status.csv
+     | eval health_score=case(
+         status=="Green", 100,
+         status=="Amber", 50,
+         status=="Red", 0,
+         1=1, null())
+     | stats avg(health_score) as service_health by service_id
+     | eval service_health=round(service_health, 1)]
+| join type=left service_id
+    [| inputlookup bos_incidents.csv
+     | where status="Open"
+     | stats count as service_incidents by service_id]
+| fillnull value=0 service_health service_incidents
+| stats
+    dc(service_id) as total_services
+    min(service_health) as min_health
+    sum(service_incidents) as total_incidents
+
+# Expected Output Fields:
+# - total_services: Total count of services
+# - min_health: Worst (minimum) health %
+# - total_incidents: Total open incidents across all services
+
+# ============================================
+# Dashboard Variable Setup in Grafana
+# ============================================
+# This dashboard requires TWO variables:
+#
+# Variable 1: l4_product_line
+# - Type: Query
+# - Data Source: Your Splunk datasource
+# - Query: | inputlookup bos_services.csv | stats count by l4_product_line | fields l4_product_line | sort l4_product_line
+# - Refresh: On Dashboard Load
+#
+# Variable 2: l3_product
+# - Type: Query
+# - Data Source: Your Splunk datasource
+# - Query: | inputlookup bos_services.csv | where l4_product_line="$l4_product_line" | stats count by l3_product | fields l3_product | sort l3_product
+# - Refresh: On Time Range Change
+# - Depends on: l4_product_line
+#
+# ============================================
+# Testing in Splunk
+# ============================================
+# Test Query A:
+# 1. Replace "$l4_product_line" with "Home Lending"
+# 2. Replace "$l3_product" with "Home Originations"
+# 3. Paste modified query into Splunk Search
+# 4. Verify services appear
+#
+# Expected results for Home Lending / Home Originations:
+# - 2 services: Treasury Order Funding Service, Credit Check Service
+# - Each should have health % and incident count
+#
+# Test Query B:
+# 1. Replace variables same as Query A
+# 2. Paste modified query into Splunk Search
+# 3. Verify single row with summary stats
+#
+# ============================================
+# Troubleshooting
+# ============================================
+# - No results? Verify lookup tables loaded and field names match
+# - Wrong service count? Check filter values are exact matches (case-sensitive)
+# - Missing health values? Verify bos_signal_status.csv has data for those services
+# - Join failures? Ensure service_id field exists in all 3 CSVs
+#
+# Diagnostic query to check available L3 products:
+# | inputlookup bos_services.csv
+# | where l4_product_line="Home Lending"
+# | stats count by l3_product
+#
+# Expected output: Home Originations, Home Equity, Home Servicing, etc.
