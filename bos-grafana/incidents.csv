@@ -1,0 +1,31 @@
+# ============================================================================
+# GENERIC BANKING BOS EXAMPLE - EDUCATIONAL/DEMONSTRATION PURPOSES ONLY
+# ============================================================================
+# This is mock data representing typical banking industry services and
+# observability patterns. All data is synthesized from publicly available
+# knowledge about financial services operations and does not represent
+# any specific organization's actual systems, services, or architecture.
+#
+# Use case: Demonstrating Business Observability System (BOS) methodology
+# for enterprise monitoring and service management.
+# ============================================================================
+#
+# incidents.csv - Active incidents affecting services
+# incident_id: Unique identifier (e.g., INC001)
+# severity: Incident severity (Sev1, Sev2, Sev3, Sev4)
+# status: Current status (Open, Acknowledged, Resolved)
+# started: When incident began (relative time or timestamp)
+# summary: Brief description of the incident
+# service_id: Foreign key to services.csv (optional, can be blank for org-level)
+# l4_product_line: L4 organizational level affected
+# l3_product: L3 organizational level affected
+incident_id,severity,status,started,summary,service_id,l4_product_line,l3_product
+INC001,Sev1,Open,2h ago,Document upload batch stuck,SVC001,Home Lending,Originations
+INC002,Sev2,Open,30m ago,Elevated latency on validation service,SVC002,Home Lending,Originations
+INC003,Sev2,Acknowledged,4h ago,Payment processing degraded performance,SVC003,Home Lending,Servicing
+INC004,Sev3,Open,1d ago,Credit check API intermittent failures,,Home Lending,Originations
+INC005,Sev1,Resolved,3h ago,Wire transfer system outage,SVC001,Home Lending,Originations
+INC006,Sev2,Open,45m ago,Loan servicing batch job delayed,,Home Lending,Servicing
+INC007,Sev3,Open,6h ago,Document retrieval slow response,,Personal Lending,Originations
+INC008,Sev2,Open,1h ago,Auto loan payment gateway issues,,Auto Lending,Servicing
+INC009,Sev4,Open,2d ago,Reporting dashboard unavailable,,Small Business Lending,Capital Markets

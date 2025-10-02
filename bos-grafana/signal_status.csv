@@ -1,0 +1,43 @@
+# ============================================================================
+# GENERIC BANKING BOS EXAMPLE - EDUCATIONAL/DEMONSTRATION PURPOSES ONLY
+# ============================================================================
+# This is mock data representing typical banking industry services and
+# observability patterns. All data is synthesized from publicly available
+# knowledge about financial services operations and does not represent
+# any specific organization's actual systems, services, or architecture.
+#
+# Use case: Demonstrating Business Observability System (BOS) methodology
+# for enterprise monitoring and service management.
+# ============================================================================
+#
+# signal_status.csv - Real-time status of signals for services (simulated)
+# signal_id: Unique identifier (e.g., SIG001)
+# signal_name: Human-readable signal name
+# signal_type: Category (Business, Process, System, BusinessImpact)
+# status: Current state (Green, Amber, Red)
+# current_value: Numeric value for signal (optional, used for BusinessImpact and metrics)
+# service_id: Foreign key to services.csv
+# timestamp: When status was recorded
+signal_id,signal_name,signal_type,status,current_value,service_id,timestamp
+SIG001,Document Upload Success %,Business,Amber,,SVC001,2025-09-25T10:00:00Z
+SIG002,Borrower Document Match %,Business,Green,,SVC001,2025-09-25T10:00:00Z
+SIG003,Batch Ingestion On-Time %,Process,Red,,SVC001,2025-09-25T10:00:00Z
+SIG004,Validation Throughput Rate,Process,Amber,,SVC001,2025-09-25T10:00:00Z
+SIG005,API Response Time (p95),System,Amber,,SVC001,2025-09-25T10:00:00Z
+SIG006,Database Latency,System,Green,,SVC001,2025-09-25T10:00:00Z
+SIG007,Memory Usage,System,Green,,SVC001,2025-09-25T10:00:00Z
+SIG008,CPU Utilization,System,Green,,SVC001,2025-09-25T10:00:00Z
+SIG009,Queue Depth,System,Green,,SVC001,2025-09-25T10:00:00Z
+SIG010,Credit Score Retrieval %,Business,Green,,SVC002,2025-09-25T10:00:00Z
+SIG011,Valid Score Return Rate,Business,Green,,SVC002,2025-09-25T10:00:00Z
+SIG012,Credit Check Response Time,Process,Green,,SVC002,2025-09-25T10:00:00Z
+SIG013,Bureau Connection Health,System,Green,,SVC002,2025-09-25T10:00:00Z
+SIG014,Payment Success Rate,Business,Green,,SVC003,2025-09-25T10:00:00Z
+SIG015,Balance Update Accuracy,Business,Green,,SVC003,2025-09-25T10:00:00Z
+SIG016,Transaction Processing Time,Process,Amber,,SVC003,2025-09-25T10:00:00Z
+SIG017,Payment Gateway Health,System,Green,,SVC003,2025-09-25T10:00:00Z
+SIG018,Database Connection Pool,System,Green,,SVC003,2025-09-25T10:00:00Z
+SIG023,Customers Blocked,BusinessImpact,Amber,10,SVC002,2025-10-01T03:00:00Z
+SIG024,Revenue at Risk,BusinessImpact,Red,4888777,SVC002,2025-10-01T03:00:00Z
+SIG025,FCRA Violations,BusinessImpact,Amber,5,SVC002,2025-10-01T03:00:00Z
+SIG026,Manual Interventions,BusinessImpact,Green,3,SVC002,2025-10-01T03:00:00Z

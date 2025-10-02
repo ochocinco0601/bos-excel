@@ -1,0 +1,47 @@
+# ============================================================================
+# GENERIC BANKING BOS EXAMPLE - EDUCATIONAL/DEMONSTRATION PURPOSES ONLY
+# ============================================================================
+# This is mock data representing typical banking industry services and
+# observability patterns. All data is synthesized from publicly available
+# knowledge about financial services operations and does not represent
+# any specific organization's actual systems, services, or architecture.
+#
+# Use case: Demonstrating Business Observability System (BOS) methodology
+# for enterprise monitoring and service management.
+# ============================================================================
+#
+# services.csv - Core service information owned by Product Owner
+# service_id: Unique identifier for the service (e.g., SVC001)
+# serviceName: Technical name used in systems (e.g., treasury-order-funding-service)
+# displayName: Human-readable name for dashboards (e.g., Treasury Order Funding Service)
+# businessPurpose: What the service does for the business in plain language
+# serviceType: One of [customer-facing, internal, infrastructure]
+# tierLevel: Criticality from 1 (most critical) to 6 (least critical)
+# businessUnit: Owning business organization
+# performanceQuestion: The key question this service's SLO answers
+# tags: Comma-separated categorization labels (optional)
+# productOwner: Email of the responsible Product Owner
+# l4_product_line: L4 organizational level (e.g., Home Lending, Personal Lending)
+# l3_product: L3 organizational level (e.g., Originations, Servicing, Capital Markets)
+# l3_description: Business purpose description for the L3 organizational level
+service_id,serviceName,displayName,businessPurpose,serviceType,tierLevel,businessUnit,performanceQuestion,tags,productOwner,l4_product_line,l3_product,l3_description
+SVC001,treasury-order-funding-service,Treasury Order Funding Service,Execute wire transfers to complete home purchase transactions,customer-facing,1,Home Lending,Are all scheduled closings funded by 8:00 AM deadline?,mortgage,sarah.chen@example.com,Home Lending,Home Originations,Automate loan application processing and decisioning to deliver fast accurate customer outcomes through scalable manufacturing processes with strong controls.
+SVC002,credit-check-service,Credit Check Service,Validate borrower creditworthiness for loan approval decisions,internal,2,Home Lending,What percentage of credit checks return valid scores within 30 seconds?,lending;credit;validation,michael.torres@example.com,Home Lending,Home Originations,Automate loan application processing and decisioning to deliver fast accurate customer outcomes through scalable manufacturing processes with strong controls.
+SVC003,payment-processing-api,Payment Processing API,Process mortgage payment transactions and update loan balances,internal,2,Home Lending,Are payment authorizations responding within 100ms?,payment;api;performance,alex.kim@example.com,Home Lending,Home Servicing,Simplify account management and customer support to enable self-service transactions and optimize operational efficiency throughout the loan lifecycle.
+SVC004,escrow-management-service,Escrow Management Service,Manage property tax and insurance payments from escrow accounts,internal,2,Home Lending,Are escrow payments disbursed on time to avoid penalties?,escrow;servicing,jennifer.wu@example.com,Home Lending,Home Servicing,Simplify account management and customer support to enable self-service transactions and optimize operational efficiency throughout the loan lifecycle.
+SVC005,auto-loan-application-api,Auto Loan Application API,Process auto loan applications from dealer network,customer-facing,1,Auto Lending,Are dealer credit decisions returned within 2 minutes?,auto;lending;application,david.miller@example.com,Auto Lending,Auto Originations,description tbd...
+SVC006,vehicle-valuation-service,Vehicle Valuation Service,Determine fair market value for vehicle loan collateral,internal,2,Auto Lending,Are vehicle valuations returned within SLA timeframe?,auto;valuation,lisa.johnson@example.com,Auto Lending,Auto Originations,description tbd...
+SVC007,auto-payment-processor,Auto Payment Processor,Process monthly auto loan payments and apply to principal/interest,internal,1,Auto Lending,Do auto payments post to accounts within 24 hours?,auto;payment,robert.garcia@example.com,Auto Lending,Auto Servicing,description tbd...
+SVC008,repossession-tracking-service,Repossession Tracking Service,Track and manage vehicle repossession workflow for defaulted loans,internal,3,Auto Lending,Are repossession orders processed within regulatory timeframes?,auto;collections,maria.rodriguez@example.com,Auto Lending,Auto Servicing,description tbd...
+SVC009,card-authorization-engine,Card Authorization Engine,Real-time authorization of credit card transactions at point of sale,customer-facing,1,Credit Cards,What percentage of valid transactions are approved in under 100ms?,cards;authorization;realtime,james.smith@example.com,Credit Cards,Card Acquisitions,description tbd...
+SVC010,rewards-calculation-service,Rewards Calculation Service,Calculate and apply rewards points for credit card purchases,internal,2,Credit Cards,Are rewards points accurately calculated and posted within 48 hours?,cards;rewards,patricia.brown@example.com,Credit Cards,Card Management,description tbd...
+SVC011,fraud-detection-api,Fraud Detection API,Identify and block potentially fraudulent credit card transactions,customer-facing,1,Credit Cards,What percentage of fraud attempts are successfully blocked?,cards;fraud;security,william.davis@example.com,Credit Cards,Card Management,description tbd...
+SVC012,statement-generation-service,Statement Generation Service,Generate monthly credit card statements with transaction details,internal,2,Credit Cards,Are statements generated and delivered by the 5th of each month?,cards;statements,elizabeth.wilson@example.com,Credit Cards,Card Management,description tbd...
+SVC013,personal-loan-decisioning,Personal Loan Decisioning,Evaluate and approve personal loan applications using credit criteria,customer-facing,1,Personal Loans,What percentage of loan decisions are delivered same-day?,personal;lending;decisioning,christopher.martinez@example.com,Personal Loans,Personal Underwriting,description tbd...
+SVC014,income-verification-service,Income Verification Service,Verify applicant income through third-party data sources,internal,2,Personal Loans,Can income be verified for 95% of applications?,personal;verification,amanda.anderson@example.com,Personal Loans,Personal Underwriting,description tbd...
+SVC015,collections-dialer-system,Collections Dialer System,Automated system for contacting delinquent personal loan borrowers,internal,2,Personal Loans,What percentage of collection calls successfully connect with borrowers?,personal;collections,daniel.taylor@example.com,Personal Loans,Personal Collections,description tbd...
+SVC016,debt-settlement-processor,Debt Settlement Processor,Process negotiated settlements for defaulted personal loans,internal,3,Personal Loans,Are settlement agreements processed within 72 hours of approval?,personal;settlement,michelle.thomas@example.com,Personal Loans,Personal Collections,description tbd...
+SVC017,payment-application-monitor,Payment Application Monitor,Monitor payment posting accuracy to prevent misapplication,internal,1,Loan Servicing,Is payment exception queue below 5% threshold?,payment;accuracy;monitoring,monitor.team@example.com,Home Lending,Home Servicing,Simplify account management and customer support to enable self-service transactions and optimize operational efficiency throughout the loan lifecycle.
+SVC018,fee-assessment-validator,Fee Assessment Validator,Validate late fees are correctly withheld from deferred accounts,internal,1,Loan Servicing,Are late fees correctly withheld from deferred accounts?,fees;compliance;validation,validator.team@example.com,Auto Lending,Auto Servicing,description tbd...
+SVC019,refund-process-tracker,Refund Process Tracker,Track GAP insurance refunds on early loan terminations,internal,2,Loan Servicing,Are GAP refunds processed for all early terminations?,refunds;gap;compliance,refund.team@example.com,Auto Lending,Auto Servicing,description tbd...
+SVC020,modification-denial-analyzer,Modification Denial Analyzer,Monitor loan modification denial rates for anomalies,internal,2,Loan Servicing,Are modification denial rates within normal range?,modifications;analytics;compliance,analytics.team@example.com,Home Lending,Home Servicing,Simplify account management and customer support to enable self-service transactions and optimize operational efficiency throughout the loan lifecycle.
