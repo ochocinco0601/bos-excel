@@ -32,10 +32,16 @@
         "x": 0,
         "y": 0
       },
-      "datasource": null,
+      "datasource": {
+        "type": "grafana-splunk-datasource",
+        "uid": "d4c682f8-fd9b-46b2-9b89-e15410aa52dc"
+      },
       "targets": [
         {
-          "datasource": null,
+          "datasource": {
+            "type": "grafana-splunk-datasource",
+            "uid": "d4c682f8-fd9b-46b2-9b89-e15410aa52dc"
+          },
           "queryText": "\n                    SELECT\n                        s.l3_product,\n                        MAX(s.l3_description) as business_purpose,\n                        COUNT(DISTINCT s.service_id) as service_count,\n                        COUNT(DISTINCT CASE WHEN EXISTS(\n                            SELECT 1 FROM signal_status ss WHERE ss.service_id = s.service_id\n                        ) THEN s.service_id END) as services_with_signals,\n                        ROUND(\n                            (COUNT(DISTINCT CASE WHEN EXISTS(\n                                SELECT 1 FROM signal_status ss WHERE ss.service_id = s.service_id\n                            ) THEN s.service_id END) * 100.0) / COUNT(DISTINCT s.service_id),\n                            1\n                        ) as coverage,\n                        ROUND(AVG(\n                            (SELECT\n                                (SUM(CASE WHEN status='Green' THEN 100\n                                     WHEN status='Amber' THEN 50\n                                     ELSE 0 END) * 1.0) / COUNT(*)\n                             FROM signal_status ss\n                             WHERE ss.service_id = s.service_id)\n                        ), 1) as health,\n                        CASE MIN(\n                            (SELECT MIN(\n                                CASE status\n                                    WHEN 'Green' THEN 3\n                                    WHEN 'Amber' THEN 2\n                                    WHEN 'Red' THEN 1\n                                END\n                            )\n                             FROM signal_status ss\n                             WHERE ss.service_id = s.service_id)\n                        )\n                            WHEN 1 THEN 'Red'\n                            WHEN 2 THEN 'Amber'\n                            WHEN 3 THEN 'Green'\n                            ELSE 'Unknown'\n                        END as health_status,\n                        COALESCE(\n                            (SELECT COUNT(*) FROM incidents i\n                             JOIN services s2 ON i.service_id = s2.service_id\n                             WHERE s2.l3_product = s.l3_product\n                               AND i.severity IN ('Sev1', 'Sev2')\n                               AND i.status = 'Open'),\n                            0\n                        ) as incident_count\n                    FROM services s\n                    WHERE s.l4_product_line = '$l4_product_line'\n                    GROUP BY s.l3_product\n                    ORDER BY s.l3_product\n                ",
           "rawQueryText": "\n                    SELECT\n                        s.l3_product,\n                        MAX(s.l3_description) as business_purpose,\n                        COUNT(DISTINCT s.service_id) as service_count,\n                        COUNT(DISTINCT CASE WHEN EXISTS(\n                            SELECT 1 FROM signal_status ss WHERE ss.service_id = s.service_id\n                        ) THEN s.service_id END) as services_with_signals,\n                        ROUND(\n                            (COUNT(DISTINCT CASE WHEN EXISTS(\n                                SELECT 1 FROM signal_status ss WHERE ss.service_id = s.service_id\n                            ) THEN s.service_id END) * 100.0) / COUNT(DISTINCT s.service_id),\n                            1\n                        ) as coverage,\n                        ROUND(AVG(\n                            (SELECT\n                                (SUM(CASE WHEN status='Green' THEN 100\n                                     WHEN status='Amber' THEN 50\n                                     ELSE 0 END) * 1.0) / COUNT(*)\n                             FROM signal_status ss\n                             WHERE ss.service_id = s.service_id)\n                        ), 1) as health,\n                        CASE MIN(\n                            (SELECT MIN(\n                                CASE status\n                                    WHEN 'Green' THEN 3\n                                    WHEN 'Amber' THEN 2\n                                    WHEN 'Red' THEN 1\n                                END\n                            )\n                             FROM signal_status ss\n                             WHERE ss.service_id = s.service_id)\n                        )\n                            WHEN 1 THEN 'Red'\n                            WHEN 2 THEN 'Amber'\n                            WHEN 3 THEN 'Green'\n                            ELSE 'Unknown'\n                        END as health_status,\n                        COALESCE(\n                            (SELECT COUNT(*) FROM incidents i\n                             JOIN services s2 ON i.service_id = s2.service_id\n                             WHERE s2.l3_product = s.l3_product\n                               AND i.severity IN ('Sev1', 'Sev2')\n                               AND i.status = 'Open'),\n                            0\n                        ) as incident_count\n                    FROM services s\n                    WHERE s.l4_product_line = '$l4_product_line'\n                    GROUP BY s.l3_product\n                    ORDER BY s.l3_product\n                ",
           "refId": "A",
@@ -74,7 +80,27 @@
     "splunk"
   ],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "datasource": {
+          "type": "grafana-splunk-datasource",
+          "uid": "d4c682f8-fd9b-46b2-9b89-e15410aa52dc"
+        },
+        "definition": "",
+        "hide": 0,
+        "includeAll": false,
+        "label": "L4 Product Line",
+        "multi": false,
+        "name": "l4_product_line",
+        "options": [],
+        "query": "| inputlookup bos_services.csv | stats count by l4_product_line | fields l4_product_line | sort l4_product_line",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
   },
   "time": {
     "from": "now-2h",
