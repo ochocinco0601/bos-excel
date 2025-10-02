@@ -8,7 +8,9 @@ Mock data demonstrating Business Observability System (BOS) methodology for corr
 - `signal_status.csv` - Service health signals (Green/Amber/Red)
 - `incidents.csv` - Sample incident data
 - `l4-dashboard-splunk-query.spl` - Complete SPL query for L4 dashboard (Splunk datasource)
-- `l4-minimalist-splunk-v1.json` - Grafana dashboard JSON with embedded SPL query
+- `l4-minimalist-splunk-v1.json` - Grafana L4 dashboard JSON (Grafana v11+ flat structure)
+- `l3-dashboard-splunk-query.spl` - Complete SPL query for L3 dashboard (Splunk datasource)
+- `l3-minimalist-splunk-v1.json` - Grafana L3 dashboard JSON (Grafana v11+ flat structure)
 - `SPLUNK-SQL-TRANSLATION-LESSONS.md` - **Critical lessons learned translating SQL to SPL**
 
 ## Data Source
@@ -46,6 +48,17 @@ Use the complete SPL query in `l4-dashboard-splunk-query.spl` for the L4 Product
 - Modify lines 13, 16, 38 if using different names
 - Test in Splunk Search before using in Grafana
 - Returns 4 rows: Auto Lending, Credit Cards, Home Lending, Personal Loans
+
+**L3 Dashboard Query:**
+
+Use the complete SPL query in `l3-dashboard-splunk-query.spl` for the L3 Products dashboard.
+
+**Key points:**
+- Query expects lookup tables prefixed with `bos_` (e.g., `bos_services.csv`)
+- Filters by L4 Product Line using dashboard variable `$l4_product_line$`
+- Includes business_purpose field (l3_description from services.csv)
+- Test in Splunk Search before using in Grafana (replace variable with actual value)
+- Returns variable rows depending on L4 Product Line selected
 
 **Grafana Integration:**
 1. Replace SQL `rawQueryText` in dashboard JSON with SPL query
@@ -110,6 +123,57 @@ These lessons prevent hours of debugging!
 - 4 rows: Auto Lending, Credit Cards, Home Lending, Personal Loans
 - Home Lending: health=79.1%, status=Red
 - Other 3: services_with_signals=0, coverage=0.0, health=null, status=Unknown
+
+### L3 Dashboard Deployment (Grafana v11+)
+
+**Dashboard JSON**: `l3-minimalist-splunk-v1.json` (Grafana v11+ flat structure)
+
+**Prerequisites**:
+- Grafana Enterprise/OSS v11.1.3+ (flat JSON format required)
+- HTML Graphics panel plugin installed (`gapit-htmlgraphics-panel`)
+- Splunk datasource configured
+- Lookup tables uploaded (bos_services.csv, bos_signal_status.csv, bos_incidents.csv)
+
+**Deployment Steps**:
+
+1. **Download dashboard JSON**
+   - Download `l3-minimalist-splunk-v1.json` from this directory
+
+2. **Import to Grafana**
+   - Go to Dashboards → Import
+   - Upload JSON file or paste content
+   - Dashboard will import with null datasource
+
+3. **Configure panel datasource**
+   - Edit the imported dashboard
+   - Click panel title → Edit
+   - Set datasource to your Splunk datasource
+
+4. **Add SPL query (manual step required)**
+   - HTML Graphics panels don't auto-import queries
+   - Open `l3-dashboard-splunk-query.spl` in a text editor
+   - Copy the main query (lines 14-73)
+   - Paste into the panel query editor in Grafana
+   - Set query format to "Table"
+
+5. **Configure dashboard variable**
+   - Go to Dashboard Settings → Variables
+   - Add new variable:
+     - Name: `l4_product_line`
+     - Type: Query
+     - Data source: Your Splunk datasource
+     - Query: `| inputlookup bos_services.csv | stats count by l4_product_line | fields l4_product_line | sort l4_product_line`
+     - Refresh: On Dashboard Load
+
+6. **Test and save**
+   - Select an L4 Product Line from the dropdown (e.g., "Home Lending")
+   - Click "Run query" to test
+   - Verify rows appear with correct data
+   - Save dashboard
+
+**Expected Results (Home Lending example)**:
+- 3 rows: Mortgage Origination, Home Equity, Refinancing
+- Each row shows: business_purpose, coverage, health status, incidents
 
 ## Schema
 

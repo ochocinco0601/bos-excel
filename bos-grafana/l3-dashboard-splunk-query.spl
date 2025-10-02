@@ -1,0 +1,108 @@
+# L3 Products Dashboard - Splunk Query
+# ============================================
+# This SPL query replaces the SQL query in the L3 minimalist dashboard
+# for use with Splunk datasource in Grafana.
+#
+# IMPORTANT: Lookup table names use 'bos_' prefix
+# - bos_services.csv
+# - bos_signal_status.csv
+# - bos_incidents.csv
+#
+# This query filters by L4 Product Line and shows L3 product breakdown.
+# The dashboard variable $l4_product_line$ must be set in Grafana.
+# ============================================
+
+| inputlookup bos_signal_status.csv
+| lookup bos_services.csv service_id OUTPUT l3_product l3_description l4_product_line
+| where l4_product_line="$l4_product_line$"
+| eval health_score=case(
+    status=="Green", 100,
+    status=="Amber", 50,
+    status=="Red", 0,
+    1=1, null())
+| eval status_value=case(
+    status=="Green", 3,
+    status=="Amber", 2,
+    status=="Red", 1,
+    1=1, null())
+| stats
+    avg(health_score) as service_health
+    min(status_value) as service_min_status
+    count as signal_count
+    by l3_product, l3_description, service_id
+| append
+    [| inputlookup bos_services.csv
+     | where l4_product_line="$l4_product_line$"
+     | fields service_id l3_product l3_description]
+| stats
+    values(service_health) as service_health
+    values(service_min_status) as service_min_status
+    values(signal_count) as signal_count
+    values(l3_description) as business_purpose
+    by l3_product, service_id
+| eval service_health=mvindex(service_health,0)
+| eval service_min_status=mvindex(service_min_status,0)
+| eval signal_count=coalesce(mvindex(signal_count,0),0)
+| eval business_purpose=mvindex(business_purpose,0)
+| stats
+    dc(service_id) as service_count
+    sum(eval(signal_count > 0)) as services_with_signals
+    avg(service_health) as health
+    min(service_min_status) as overall_min_status
+    values(business_purpose) as business_purpose
+    by l3_product
+| eval business_purpose=mvindex(business_purpose,0)
+| eval coverage=round((services_with_signals/service_count)*100, 1)
+| eval health=if(isnotnull(health), round(health, 1), null())
+| eval health_status=case(
+    overall_min_status==3, "Green",
+    overall_min_status==2, "Amber",
+    overall_min_status==1, "Red",
+    1=1, "Unknown")
+| join type=left l3_product
+    [| inputlookup bos_incidents.csv
+     | lookup bos_services.csv service_id OUTPUT l3_product
+     | where status="Open" AND (severity="Sev1" OR severity="Sev2")
+     | stats count as incident_count by l3_product]
+| fillnull value=0 incident_count services_with_signals coverage
+| table l3_product business_purpose service_count services_with_signals coverage health health_status incident_count
+| sort l3_product
+
+# ============================================
+# Expected Output Fields
+# ============================================
+# l3_product          - Product name (string)
+# business_purpose    - L3 description (string)
+# service_count       - Total services (number)
+# services_with_signals - Services with health signals (number)
+# coverage            - % with signals, rounded to 1 decimal (number)
+# health              - Average health score, rounded to 1 decimal (number)
+# health_status       - Green/Amber/Red (string)
+# incident_count      - Open Sev1/Sev2 incidents (number)
+#
+# Expected output: Variable number of rows depending on L4 Product Line
+# Example: Home Lending has 3 L3 products (Mortgage Origination, Home Equity, Refinancing)
+#
+# ============================================
+# Dashboard Variable Setup in Grafana
+# ============================================
+# Variable Name: l4_product_line
+# Type: Query
+# Data Source: Your Splunk datasource
+# Query: | inputlookup bos_services.csv | stats count by l4_product_line | fields l4_product_line | sort l4_product_line
+# Refresh: On Dashboard Load
+#
+# ============================================
+# Testing in Splunk
+# ============================================
+# Before using in Grafana, test this query in Splunk Search:
+# 1. Replace "$l4_product_line$" with actual value like "Home Lending"
+# 2. Copy entire query
+# 3. Paste into Splunk Search
+# 4. Verify rows appear with correct data
+#
+# Troubleshooting:
+# - No results? Check lookup tables exist: | inputlookup bos_services.csv | head 5
+# - Wrong data? Verify field names are case-sensitive and match CSV headers exactly
+# - Join failures? Ensure service_id field exists in all 3 CSVs
+# - Missing l3_description? Verify bos_services.csv has l3_description column
