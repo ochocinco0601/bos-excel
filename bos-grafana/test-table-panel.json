@@ -1,0 +1,21 @@
+{
+  "dashboard": {
+    "title": "L4 Test - Table Panel",
+    "panels": [
+      {
+        "id": 1,
+        "type": "table",
+        "title": "L4 Product Lines",
+        "datasource": null,
+        "targets": [
+          {
+            "datasource": null,
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 24, "x": 0, "y": 0}
+      }
+    ],
+    "schemaVersion": 39
+  }
+}
