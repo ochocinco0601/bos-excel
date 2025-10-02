@@ -77,3 +77,30 @@
 # - No results? Check lookup tables exist: | inputlookup bos_services.csv | head 5
 # - Wrong data? Verify field names are case-sensitive and match CSV headers exactly
 # - Join failures? Ensure service_id field exists in all 3 CSVs
+
+# ============================================
+# DIAGNOSTIC QUERY - Test Home Lending per-service health
+# ============================================
+# Use this query to verify per-service health calculations before testing full query
+# Expected results for Home Lending:
+# SVC001: service_health=72.2, signal_count=3 (Green/Amber/Red signals)
+# SVC002: service_health=75.0, signal_count=3
+# SVC003: service_health=90.0, signal_count=2
+# SVC004/SVC017/SVC020: service_health=null, signal_count=0
+#
+# Then avg(72.2, 75.0, 90.0) should equal 79.1%
+# ============================================
+
+| inputlookup bos_services.csv
+| fields service_id l4_product_line
+| where l4_product_line="Home Lending"
+| join type=left service_id
+    [| inputlookup bos_signal_status.csv
+     | fields service_id status]
+| eval health_score=case(
+    status=="Green", 100,
+    status=="Amber", 50,
+    status=="Red", 0,
+    1=1, null())
+| stats avg(health_score) as service_health dc(status) as signal_count by service_id
+| sort service_id
