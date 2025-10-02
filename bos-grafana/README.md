@@ -8,6 +8,7 @@ Mock data demonstrating Business Observability System (BOS) methodology for corr
 - `signal_status.csv` - Service health signals (Green/Amber/Red)
 - `incidents.csv` - Sample incident data
 - `l4-dashboard-splunk-query.spl` - Complete SPL query for L4 dashboard (Splunk datasource)
+- `SPLUNK-SQL-TRANSLATION-LESSONS.md` - **Critical lessons learned translating SQL to SPL**
 
 ## Data Source
 
@@ -49,6 +50,18 @@ Use the complete SPL query in `l4-dashboard-splunk-query.spl` for the L4 Product
 1. Replace SQL `rawQueryText` in dashboard JSON with SPL query
 2. Change datasource type to `grafana-splunk-datasource`
 3. Update datasource UID to your Splunk datasource
+
+**⚠️ Important for SQL → SPL Translation:**
+
+If translating additional SQL queries to SPL, **read `SPLUNK-SQL-TRANSLATION-LESSONS.md` first**.
+
+Key insights:
+- Splunk `join` is 1-to-1 (not 1-to-many like SQL LEFT JOIN) - use `lookup` instead
+- Multi-level aggregations require multiple `stats` commands
+- Always handle null values explicitly (coalesce, fillnull)
+- Multi-value fields need mvindex() extraction
+
+These lessons prevent hours of debugging!
 
 ## Schema
 
