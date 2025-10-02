@@ -16,26 +16,29 @@
 | join type=left service_id
     [| inputlookup bos_signal_status.csv
      | fields service_id status]
-| eval has_signal=if(isnotnull(status), 1, 0)
+| eval health_score=case(
+    status=="Green", 100,
+    status=="Amber", 50,
+    status=="Red", 0,
+    1=1, null())
 | eval status_value=case(
     status=="Green", 3,
     status=="Amber", 2,
     status=="Red", 1,
     1=1, null())
 | stats
-    dc(service_id) as service_count
-    sum(has_signal) as services_with_signals
-    min(status_value) as min_status_value
+    avg(health_score) as service_health
+    min(status_value) as service_min_status
+    count(eval(isnotnull(status))) as signal_count
     by l4_product_line, service_id
-| eventstats
-    sum(service_count) as total_services
-    sum(services_with_signals) as total_with_signals
-    min(min_status_value) as overall_min_status
+| stats
+    count as service_count
+    sum(eval(signal_count > 0)) as services_with_signals
+    avg(service_health) as avg_health
+    min(service_min_status) as overall_min_status
     by l4_product_line
-| eval coverage=round((total_with_signals/total_services)*100, 1)
-| eval health=case(
-    isnotnull(overall_min_status), round((overall_min_status/3)*100, 1),
-    1=1, null())
+| eval coverage=round((services_with_signals/service_count)*100, 1)
+| eval health=if(isnotnull(avg_health), round(avg_health, 1), null())
 | eval health_status=case(
     overall_min_status==3, "Green",
     overall_min_status==2, "Amber",
