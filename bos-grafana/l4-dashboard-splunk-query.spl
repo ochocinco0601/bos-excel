@@ -56,7 +56,7 @@
     [| inputlookup bos_incidents.csv
      | where status="Open" AND (severity="Sev1" OR severity="Sev2")
      | stats count as incident_count by l4_product_line]
-| fillnull value=0 incident_count
+| fillnull value=0 incident_count services_with_signals coverage
 | table l4_product_line service_count services_with_signals coverage health health_status incident_count
 | sort l4_product_line
 
