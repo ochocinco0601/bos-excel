@@ -8,6 +8,7 @@ Mock data demonstrating Business Observability System (BOS) methodology for corr
 - `signal_status.csv` - Service health signals (Green/Amber/Red)
 - `incidents.csv` - Sample incident data
 - `l4-dashboard-splunk-query.spl` - Complete SPL query for L4 dashboard (Splunk datasource)
+- `l4-minimalist-splunk-v1.json` - Grafana dashboard JSON with embedded SPL query
 - `SPLUNK-SQL-TRANSLATION-LESSONS.md` - **Critical lessons learned translating SQL to SPL**
 
 ## Data Source
@@ -62,6 +63,27 @@ Key insights:
 - Multi-value fields need mvindex() extraction
 
 These lessons prevent hours of debugging!
+
+## Grafana Dashboard Deployment
+
+**Dashboard JSON**: `l4-minimalist-splunk-v1.json`
+
+**Deployment Steps**:
+1. Download `l4-minimalist-splunk-v1.json` from this directory
+2. In Grafana, go to Dashboards → Import
+3. Upload JSON file or paste JSON content
+4. Update datasource UID to match your Splunk datasource
+5. Verify lookup tables are configured (bos_services.csv, bos_signal_status.csv, bos_incidents.csv)
+6. Save dashboard
+
+**Important**: Before importing, update the datasource UID in the JSON file:
+- Find: `"uid": "YOUR-SPLUNK-DATASOURCE-UID"`
+- Replace with your actual Splunk datasource UID from Grafana
+
+**Expected Results**:
+- 4 rows: Auto Lending, Credit Cards, Home Lending, Personal Loans
+- Home Lending: health=79.1%, status=Red
+- Other 3: services_with_signals=0, coverage=0.0, health=null, status=Unknown
 
 ## Schema
 
