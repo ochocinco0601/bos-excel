@@ -1,0 +1,35 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "test-table-v11",
+    "title": "L4 Test Table v11",
+    "tags": [],
+    "timezone": "browser",
+    "schemaVersion": 39,
+    "version": 0,
+    "refresh": "",
+    "panels": [
+      {
+        "id": 1,
+        "type": "table",
+        "title": "L4 Product Lines",
+        "datasource": null,
+        "targets": [
+          {
+            "datasource": null,
+            "refId": "A"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        }
+      }
+    ]
+  },
+  "overwrite": false,
+  "inputs": [],
+  "folderId": 0
+}
