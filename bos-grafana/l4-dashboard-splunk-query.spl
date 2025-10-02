@@ -16,30 +16,31 @@
 | join type=left service_id
     [| inputlookup bos_signal_status.csv
      | fields service_id status]
-| fillnull value="NoSignal" status
-| eval has_signal=if(status!="NoSignal", 1, 0)
-| eval health_score=case(
-    status=="Green", 100,
-    status=="Amber", 50,
-    status=="Red", 0,
-    1=1, 0)
+| eval has_signal=if(isnotnull(status), 1, 0)
+| eval status_value=case(
+    status=="Green", 3,
+    status=="Amber", 2,
+    status=="Red", 1,
+    1=1, null())
 | stats
     dc(service_id) as service_count
     sum(has_signal) as services_with_signals
-    avg(health_score) as health
+    min(status_value) as min_status_value
     by l4_product_line, service_id
 | eventstats
     sum(service_count) as total_services
     sum(services_with_signals) as total_with_signals
-    avg(health) as avg_health
-    min(health) as min_health
+    min(min_status_value) as overall_min_status
     by l4_product_line
 | eval coverage=round((total_with_signals/total_services)*100, 1)
-| eval health=round(avg_health, 1)
+| eval health=case(
+    isnotnull(overall_min_status), round((overall_min_status/3)*100, 1),
+    1=1, null())
 | eval health_status=case(
-    min_health >= 95, "Green",
-    min_health >= 75, "Amber",
-    1=1, "Red")
+    overall_min_status==3, "Green",
+    overall_min_status==2, "Amber",
+    overall_min_status==1, "Red",
+    1=1, "Unknown")
 | dedup l4_product_line
 | join type=left l4_product_line
     [| inputlookup bos_incidents.csv
