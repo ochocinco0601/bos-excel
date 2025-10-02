@@ -64,9 +64,10 @@ Use the complete SPL query in `l3-dashboard-splunk-query.spl` for the L3 Product
 - Returns variable rows depending on L4 Product Line selected
 
 **Grafana Integration:**
-1. Replace SQL `rawQueryText` in dashboard JSON with SPL query
+1. Replace SQL query in dashboard JSON with SPL query
 2. Change datasource type to `grafana-splunk-datasource`
 3. Update datasource UID to your Splunk datasource
+4. Use Splunk v5.6.1 format: `query` field with `rawQuery: true` (NOT `queryText` or `format`)
 
 **⚠️ Important for SQL → SPL Translation:**
 
@@ -87,7 +88,8 @@ These lessons prevent hours of debugging!
 **Prerequisites**:
 - Grafana Enterprise/OSS v11.1.3+ (flat JSON format required)
 - HTML Graphics panel plugin installed (`gapit-htmlgraphics-panel`)
-- Splunk datasource configured
+- Splunk datasource plugin v5.6.1+ installed
+- Splunk datasource configured with UID: `d4c682f8-fd9b-46b2-9b89-e15410aa52dc`
 - Lookup tables uploaded (bos_services.csv, bos_signal_status.csv, bos_incidents.csv)
 
 **Deployment Steps**:
@@ -98,29 +100,20 @@ These lessons prevent hours of debugging!
 2. **Import to Grafana**
    - Go to Dashboards → Import
    - Upload JSON file or paste content
-   - Dashboard will import with null datasource
+   - Dashboard imports fully configured with datasource and queries
+   - **That's it!** Dashboard is ready to use.
 
-3. **Configure panel datasource**
-   - Edit the imported dashboard
-   - Click panel title → Edit
-   - Set datasource to your Splunk datasource
+**Zero-Step Import**:
+- ✅ Datasource pre-configured (UID: d4c682f8-fd9b-46b2-9b89-e15410aa52dc)
+- ✅ SPL queries embedded in dashboard JSON (auto-import)
+- ✅ Variables pre-configured (if applicable)
+- ✅ No manual configuration required
 
-4. **Add SPL query (manual step required)**
-   - HTML Graphics panels don't auto-import queries
-   - Open `l4-dashboard-splunk-query.spl` in a text editor
-   - Copy lines 14-61 (the main query)
-   - Paste into the panel query editor in Grafana
-   - Set query format to "Table"
-
-5. **Test and save**
-   - Click "Run query" to test
-   - Verify 4 rows appear with correct data
-   - Save dashboard
-
-**Grafana v11 Requirements**:
+**Grafana v11 + Splunk v5.6.1 Requirements**:
 - ✅ Flat JSON structure (no "dashboard" wrapper key)
-- ✅ Manual query paste for HTML Graphics panels
-- ✅ Datasource set to null for import compatibility
+- ✅ Embedded datasource UID in targets
+- ✅ Splunk v5.6.1 query format: `query` field with `rawQuery: true`
+- ✅ No `queryText`/`rawQueryText` or `format` fields (deprecated)
 
 **Expected Results**:
 - 4 rows: Auto Lending, Credit Cards, Home Lending, Personal Loans
@@ -134,7 +127,8 @@ These lessons prevent hours of debugging!
 **Prerequisites**:
 - Grafana Enterprise/OSS v11.1.3+ (flat JSON format required)
 - HTML Graphics panel plugin installed (`gapit-htmlgraphics-panel`)
-- Splunk datasource configured
+- Splunk datasource plugin v5.6.1+ installed
+- Splunk datasource configured with UID: `d4c682f8-fd9b-46b2-9b89-e15410aa52dc`
 - Lookup tables uploaded (bos_services.csv, bos_signal_status.csv, bos_incidents.csv)
 
 **Deployment Steps**:
@@ -145,45 +139,60 @@ These lessons prevent hours of debugging!
 2. **Import to Grafana**
    - Go to Dashboards → Import
    - Upload JSON file or paste content
-   - Dashboard will import with null datasource
+   - Dashboard imports fully configured with datasource, queries, and variables
+   - **That's it!** Dashboard is ready to use.
 
-3. **Configure panel datasource**
-   - Edit the imported dashboard
-   - Click panel title → Edit
-   - Set datasource to your Splunk datasource
-
-4. **Add SPL query (manual step required)**
-   - HTML Graphics panels don't auto-import queries
-   - Open `l3-dashboard-splunk-query.spl` in a text editor
-   - Copy the main query (lines 14-73)
-   - Paste into the panel query editor in Grafana
-   - Set query format to "Table"
-
-5. **Configure dashboard variable**
-   - Go to Dashboard Settings → Variables
-   - Add new variable:
-     - Name: `l4_product_line`
-     - Type: Query
-     - Data source: Your Splunk datasource
-     - Query: `| inputlookup bos_services.csv | stats count by l4_product_line | fields l4_product_line | sort l4_product_line`
-     - Refresh: On Dashboard Load
-
-6. **Test and save**
-   - Select an L4 Product Line from the dropdown (e.g., "Home Lending")
-   - Click "Run query" to test
-   - Verify rows appear with correct data
-   - Save dashboard
+**Zero-Step Import**:
+- ✅ Datasource pre-configured (UID: d4c682f8-fd9b-46b2-9b89-e15410aa52dc)
+- ✅ SPL queries embedded in dashboard JSON (auto-import)
+- ✅ Variable `l4_product_line` pre-configured with SPL query
+- ✅ No manual configuration required
 
 **Expected Results (Home Lending example)**:
 - 3 rows: Mortgage Origination, Home Equity, Refinancing
 - Each row shows: business_purpose, coverage, health status, incidents
 
-**Navigation:**
-- L4 → L3 drill-down: ✅ Working (clickable L4 product lines)
-- L3 → Services drill-down: ❌ Not available (L3 products display as plain text)
-- Breadcrumb navigation: ✅ Working (L3 back to L4)
+### Services Dashboard Deployment (Grafana v11+)
 
-**Note:** Additional dashboard variants (Services, Service Detail, Signal Detail) need to be created for complete drill-down navigation within Splunk environment.
+**Dashboard JSON**: `l3-product-services-splunk-v1.json` (Grafana v11+ flat structure)
+
+**Prerequisites**:
+- Grafana Enterprise/OSS v11.1.3+ (flat JSON format required)
+- HTML Graphics panel plugin installed (`gapit-htmlgraphics-panel`)
+- Splunk datasource plugin v5.6.1+ installed
+- Splunk datasource configured with UID: `d4c682f8-fd9b-46b2-9b89-e15410aa52dc`
+- Lookup tables uploaded (bos_services.csv, bos_signal_status.csv, bos_incidents.csv)
+
+**Deployment Steps**:
+
+1. **Download dashboard JSON**
+   - Download `l3-product-services-splunk-v1.json` from this directory
+
+2. **Import to Grafana**
+   - Go to Dashboards → Import
+   - Upload JSON file or paste content
+   - Dashboard imports fully configured with datasource, 2 queries, and 2 variables
+   - **That's it!** Dashboard is ready to use.
+
+**Zero-Step Import**:
+- ✅ Datasource pre-configured (UID: d4c682f8-fd9b-46b2-9b89-e15410aa52dc)
+- ✅ SPL Query A (service list) embedded in dashboard JSON
+- ✅ SPL Query B (summary stats) embedded in dashboard JSON
+- ✅ Variable `l4_product_line` pre-configured with SPL query
+- ✅ Variable `l3_product` pre-configured with SPL query (depends on l4_product_line)
+- ✅ No manual configuration required
+
+**Expected Results (Home Lending / Mortgage Origination example)**:
+- Shows services within the selected L3 product
+- Each row: service name, business purpose, health %, open incidents
+- Summary stats cards at top
+
+**Navigation Flow (Complete)**:
+- L4 → L3 drill-down: ✅ Working (clickable L4 product lines)
+- L3 → Services drill-down: ✅ Working (clickable L3 products)
+- Breadcrumb navigation: ✅ Working (Services → L3 → L4)
+
+**Note:** Additional dashboard variants (Service Detail, Signal Detail) can be created for complete drill-down navigation.
 
 **⚠️ Troubleshooting "No Results"?**
 
