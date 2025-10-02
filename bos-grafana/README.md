@@ -11,6 +11,10 @@ Mock data demonstrating Business Observability System (BOS) methodology for corr
 - `l4-minimalist-splunk-v1.json` - Grafana L4 dashboard JSON (Grafana v11+ flat structure)
 - `l3-dashboard-splunk-query.spl` - Complete SPL query for L3 dashboard (Splunk datasource)
 - `l3-minimalist-splunk-v1.json` - Grafana L3 dashboard JSON (Grafana v11+ flat structure)
+- `services-dashboard-splunk-query.spl` - Complete SPL queries for Services dashboard (Splunk datasource)
+- `l3-product-services-splunk-v1.json` - Grafana Services dashboard JSON (Grafana v11+ flat structure)
+- `service-detail-dashboard-splunk-query.spl` - Complete SPL queries for Service Detail dashboard (Splunk datasource)
+- `l3-service-detail-splunk-v1.json` - Grafana Service Detail dashboard JSON (Grafana v11+ flat structure)
 - `SPLUNK-SQL-TRANSLATION-LESSONS.md` - **Critical lessons learned translating SQL to SPL**
 - `SPLUNK-TROUBLESHOOTING.md` - **Step-by-step diagnostic guide for "no results" issues**
 
@@ -190,9 +194,59 @@ These lessons prevent hours of debugging!
 **Navigation Flow (Complete)**:
 - L4 → L3 drill-down: ✅ Working (clickable L4 product lines)
 - L3 → Services drill-down: ✅ Working (clickable L3 products)
-- Breadcrumb navigation: ✅ Working (Services → L3 → L4)
+- Services → Service Detail drill-down: ✅ Working (clickable service names)
+- Breadcrumb navigation: ✅ Working (Service Detail → Services → L3 → L4)
 
-**Note:** Additional dashboard variants (Service Detail, Signal Detail) can be created for complete drill-down navigation.
+### Service Detail Dashboard Deployment (Grafana v11+)
+
+**Dashboard JSON**: `l3-service-detail-splunk-v1.json` (Grafana v11+ flat structure)
+
+**Prerequisites**:
+- Grafana Enterprise/OSS v11.1.3+ (flat JSON format required)
+- HTML Graphics panel plugin installed (`gapit-htmlgraphics-panel`)
+- Splunk datasource plugin v5.6.1+ installed
+- Splunk datasource configured with UID: `d4c682f8-fd9b-46b2-9b89-e15410aa52dc`
+- Lookup tables uploaded (bos_services.csv, bos_signal_status.csv, bos_incidents.csv, bos_sli_definitions.csv, bos_slo_configurations.csv, bos_sli_metrics.csv, bos_stakeholder_expectations.csv, bos_impact_indicators.csv)
+
+**Deployment Steps**:
+
+1. **Download dashboard JSON**
+   - Download `l3-service-detail-splunk-v1.json` from this directory
+
+2. **Import to Grafana**
+   - Go to Dashboards → Import
+   - Upload JSON file or paste content
+   - Dashboard imports fully configured with datasource, 6 queries, and 3 variables
+   - **That's it!** Dashboard is ready to use.
+
+**Zero-Step Import**:
+- ✅ Datasource pre-configured (UID: d4c682f8-fd9b-46b2-9b89-e15410aa52dc)
+- ✅ SPL Query A (service info + health) embedded in dashboard JSON
+- ✅ SPL Query B (operational signals) embedded in dashboard JSON
+- ✅ SPL Query C (open incidents) embedded in dashboard JSON
+- ✅ SPL Query D (SLI metrics) embedded in dashboard JSON
+- ✅ SPL Query E (stakeholder expectations) embedded in dashboard JSON
+- ✅ SPL Query F (business impact indicators) embedded in dashboard JSON
+- ✅ Variable `l4_product_line` pre-configured with SPL query
+- ✅ Variable `l3_product` pre-configured with SPL query (depends on l4_product_line)
+- ✅ Variable `service_id` pre-configured with SPL query (depends on l4_product_line and l3_product)
+- ✅ No manual configuration required
+
+**Dashboard Sections**:
+1. **Service Header**: Service name, business purpose, breadcrumb navigation
+2. **Health Metrics**: Current health score (signal-based), open incidents count
+3. **Stakeholder Expectations**: Who cares about this service and what they expect
+4. **Operational Signals**: Technical signals (Business, Process, System) with current status
+5. **Business Impact**: Estimated impact on customer, financial, legal/risk, operational dimensions
+6. **SLI Table**: Service Level Indicators with current vs target values
+7. **Active Incidents**: Open incidents with severity and status
+
+**Expected Results (Service SVC001 example)**:
+- Service info: Display name, business purpose, health percentage
+- Signals table: Multiple rows showing Business/Process/System signals
+- SLI table: Performance metrics with current values and targets
+- Business impact cards: Customer, Financial, Legal/Risk, Operational impacts
+- Incidents table: Any open incidents for this service
 
 **⚠️ Troubleshooting "No Results"?**
 

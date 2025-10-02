@@ -1,0 +1,193 @@
+# Service Detail Dashboard - Splunk Queries
+# Dashboard UID: exec-l3-service-detail-splunk-v1
+# Purpose: Service detail view with health metrics, signals, SLIs, incidents, expectations, and business impact
+# Variables: $service_id, $l4_product_line, $l3_product
+
+# ========================================
+# Query A: Service Information + Health
+# ========================================
+# Purpose: Get service metadata, calculated health score, health status, and open incidents
+# Output fields: service_id, displayName, businessPurpose, current_health, health_status, slo_target, total_signals, open_incidents
+
+| inputlookup bos_services.csv
+| where service_id="$service_id"
+| lookup bos_slo_configurations.csv service_id OUTPUT sloTarget
+| eval slo_target=coalesce(sloTarget, 99.5)
+| join type=left service_id
+    [| inputlookup bos_signal_status.csv
+     | stats count as total_signals by service_id]
+| join type=left service_id
+    [| inputlookup bos_signal_status.csv
+     | eval health_score=case(
+         status=="Green", 100,
+         status=="Amber", 50,
+         status=="Red", 0,
+         1=1, null())
+     | stats avg(health_score) as current_health by service_id
+     | eval current_health=round(current_health, 1)]
+| join type=left service_id
+    [| inputlookup bos_signal_status.csv
+     | eval status_value=case(
+         status=="Green", 3,
+         status=="Amber", 2,
+         status=="Red", 1,
+         1=1, null())
+     | stats min(status_value) as min_status by service_id
+     | eval health_status=case(
+         min_status==1, "Red",
+         min_status==2, "Amber",
+         min_status==3, "Green",
+         1=1, "Unknown")]
+| join type=left service_id
+    [| inputlookup bos_incidents.csv
+     | where status="Open"
+     | stats count as open_incidents by service_id]
+| fillnull value=0 current_health total_signals open_incidents
+| eval health_status=coalesce(health_status, "Unknown")
+| fields service_id displayName businessPurpose current_health health_status slo_target total_signals open_incidents
+
+# ========================================
+# Query B: Operational Signals
+# ========================================
+# Purpose: List all operational signals (Business, Process, System types) with current status
+# Sort: Status (Red, Amber, Green), then Type (Business, Process, System), then Name
+# Output fields: signal_id, signal_type, signal_name, status, timestamp
+
+| inputlookup bos_signal_status.csv
+| where service_id="$service_id" AND (signal_type="Business" OR signal_type="Process" OR signal_type="System")
+| eval sort_status=case(
+    status=="Red", 1,
+    status=="Amber", 2,
+    status=="Green", 3,
+    1=1, 4)
+| eval sort_type=case(
+    signal_type=="Business", 1,
+    signal_type=="Process", 2,
+    signal_type=="System", 3,
+    1=1, 4)
+| sort sort_status sort_type signal_name
+| fields signal_id signal_type signal_name status timestamp
+
+# ========================================
+# Query C: Open Incidents
+# ========================================
+# Purpose: List all open incidents for this service
+# Sort: Severity (Sev1, Sev2, Sev3, Sev4), then Started (most recent first)
+# Output fields: incident_id, severity, status, started, summary
+
+| inputlookup bos_incidents.csv
+| where service_id="$service_id" AND status="Open"
+| eval sort_severity=case(
+    severity=="Sev1", 1,
+    severity=="Sev2", 2,
+    severity=="Sev3", 3,
+    severity=="Sev4", 4,
+    1=1, 5)
+| sort sort_severity -started
+| fields incident_id severity status started summary
+
+# ========================================
+# Query D: Service Level Indicators
+# ========================================
+# Purpose: Show SLI metrics with current values (last 1 hour average) and targets
+# Output fields: sliName, sli_display_name, sliType, target, current_value, last_updated
+
+| inputlookup bos_sli_definitions.csv
+| where service_id="$service_id"
+| lookup bos_slo_configurations.csv service_id OUTPUT sloTarget as target
+| eval sli_display_name=coalesce(sliDisplayName, sliName)
+| join type=left service_id sliName
+    [| inputlookup bos_sli_metrics.csv
+     | eval current_time=now()
+     | eval one_hour_ago=relative_time(current_time, "-1h")
+     | where timestamp >= one_hour_ago
+     | eval current_value=(good_events * 100.0) / total_events
+     | stats avg(current_value) as current_value by service_id sliName
+     | eval current_value=round(current_value, 1)]
+| join type=left service_id sliName
+    [| inputlookup bos_sli_metrics.csv
+     | stats max(timestamp) as last_updated by service_id sliName]
+| fillnull value=0 current_value
+| sort sliName
+| fields sliName sli_display_name sliType target current_value last_updated
+
+# ========================================
+# Query E: Stakeholder Expectations
+# ========================================
+# Purpose: List stakeholder expectations for this service
+# Sort: Priority (CRITICAL, HIGH, MEDIUM, LOW), then Stakeholder Group
+# Output fields: stakeholderGroup, stakeholderType, expectationStatement, priority
+
+| inputlookup bos_stakeholder_expectations.csv
+| where service_id="$service_id"
+| eval sort_priority=case(
+    priority=="CRITICAL", 1,
+    priority=="HIGH", 2,
+    priority=="MEDIUM", 3,
+    priority=="LOW", 4,
+    1=1, 5)
+| sort sort_priority stakeholderGroup
+| fields stakeholderGroup stakeholderType expectationStatement priority
+
+# ========================================
+# Query F: Business Impact Indicators
+# ========================================
+# Purpose: Show business impact indicators with current values from signal_status
+# Sort: Impact Category (customer_experience, financial, legal_risk, operational)
+# Output fields: indicatorDisplayName, unit, impactCategory, current_value, status, signal_id
+
+| inputlookup bos_impact_indicators.csv
+| where service_id="$service_id"
+| lookup bos_signal_status.csv signal_id OUTPUT current_value status
+| eval sort_category=case(
+    impactCategory=="customer_experience", 1,
+    impactCategory=="financial", 2,
+    impactCategory=="legal_risk", 3,
+    impactCategory=="operational", 4,
+    1=1, 5)
+| sort sort_category
+| fields indicatorDisplayName unit impactCategory current_value status signal_id
+
+# ========================================
+# Notes on SQL to SPL Translation
+# ========================================
+#
+# 1. Complex Subqueries → Multiple Joins
+#    - SQL uses COALESCE with nested SELECT subqueries
+#    - SPL breaks these into separate joins with pre-calculated values
+#
+# 2. CASE WHEN → case()
+#    - SQL: CASE status WHEN 'Green' THEN 100 ...
+#    - SPL: case(status=="Green", 100, ...)
+#
+# 3. COALESCE → coalesce() or fillnull
+#    - SQL: COALESCE(field, 0)
+#    - SPL: coalesce(field, 0) OR fillnull value=0 field
+#
+# 4. Time Filtering
+#    - SQL: WHERE timestamp >= datetime('now', '-1 hour')
+#    - SPL: eval one_hour_ago=relative_time(now(), "-1h") | where timestamp >= one_hour_ago
+#
+# 5. Aggregation with Calculation
+#    - SQL: AVG((good_events * 100.0) / total_events)
+#    - SPL: eval current_value=(good_events * 100.0) / total_events | stats avg(current_value)
+#
+# 6. ORDER BY with CASE
+#    - SQL: ORDER BY CASE status WHEN 'Red' THEN 1 ... END
+#    - SPL: eval sort_status=case(...) | sort sort_status
+#
+# ========================================
+# CSV File Requirements
+# ========================================
+#
+# Required lookups (must be uploaded to Splunk):
+# - bos_services.csv
+# - bos_signal_status.csv
+# - bos_incidents.csv
+# - bos_sli_definitions.csv
+# - bos_slo_configurations.csv
+# - bos_sli_metrics.csv
+# - bos_stakeholder_expectations.csv
+# - bos_impact_indicators.csv
+#
+# See README.md for CSV upload instructions.
