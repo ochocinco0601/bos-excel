@@ -1,6 +1,19 @@
 {
   "annotations": {
-    "list": []
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
   },
   "editable": true,
   "fiscalYearStartMonth": 0,
@@ -9,106 +22,64 @@
   "links": [],
   "panels": [
     {
-      "datasource": {
-        "type": "grafana-splunk-datasource",
-        "uid": "d4c682f8-fd9b-46b2-9b89-e15410aa52dc"
-      },
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
+      "id": 1,
+      "type": "gapit-htmlgraphics-panel",
+      "title": "Services",
+      "transparent": true,
       "gridPos": {
-        "h": 20,
+        "h": 24,
         "w": 24,
         "x": 0,
         "y": 0
       },
-      "id": 1,
-      "pluginVersion": "10.4.2",
-      "title": "",
-      "type": "gapit-htmlgraphics-panel",
+      "datasource": {
+        "type": "grafana-splunk-datasource",
+        "uid": "d4c682f8-fd9b-46b2-9b89-e15410aa52dc"
+      },
       "targets": [
         {
           "datasource": {
             "type": "grafana-splunk-datasource",
             "uid": "d4c682f8-fd9b-46b2-9b89-e15410aa52dc"
           },
-          "query": "| inputlookup bos_services.csv\n| where l4_product_line=\"$l4_product_line\" AND l3_product=\"$l3_product\"\n| fields service_id serviceName displayName businessPurpose\n| rename displayName as service_name\n| join type=left service_id\n    [| inputlookup bos_signal_status.csv\n     | eval health_score=case(\n         status==\"Green\", 100,\n         status==\"Amber\", 50,\n         status==\"Red\", 0,\n         1=1, null())\n     | stats avg(health_score) as health by service_id\n     | eval health=round(health, 1)]\n| join type=left service_id\n    [| inputlookup bos_incidents.csv\n     | where status=\"Open\"\n     | stats count as open_incidents by service_id]\n| fillnull value=0 health open_incidents\n| sort displayName\n| table service_id service_name businessPurpose health open_incidents",
+          "query": "| inputlookup bos_services.csv\n| search l3_product=\"$l3_product\"\n| join type=left service_id\n    [| inputlookup bos_signal_status.csv\n     | eval status_value=case(\n         status==\"Green\", 3,\n         status==\"Amber\", 2,\n         status==\"Red\", 1,\n         1=1, null())\n     | stats min(status_value) as min_status count as signal_count by service_id]\n| eval min_status=coalesce(min_status, 3)\n| eval signal_count=coalesce(signal_count, 0)\n| eval health_status=case(\n    min_status==3, \"Green\",\n    min_status==2, \"Amber\",\n    min_status==1, \"Red\",\n    1=1, \"Unknown\")\n| table service_id service_name health_status signal_count\n| sort service_name",
           "refId": "A",
-          "rawQuery": true
-        },
-        {
-          "datasource": {
-            "type": "grafana-splunk-datasource",
-            "uid": "d4c682f8-fd9b-46b2-9b89-e15410aa52dc"
-          },
-          "query": "| inputlookup bos_services.csv\n| where l4_product_line=\"$l4_product_line\" AND l3_product=\"$l3_product\"\n| fields service_id\n| join type=left service_id\n    [| inputlookup bos_signal_status.csv\n     | eval health_score=case(\n         status==\"Green\", 100,\n         status==\"Amber\", 50,\n         status==\"Red\", 0,\n         1=1, null())\n     | stats avg(health_score) as service_health by service_id\n     | eval service_health=round(service_health, 1)]\n| join type=left service_id\n    [| inputlookup bos_incidents.csv\n     | where status=\"Open\"\n     | stats count as service_incidents by service_id]\n| fillnull value=0 service_health service_incidents\n| stats\n    dc(service_id) as total_services\n    min(service_health) as min_health\n    sum(service_incidents) as total_incidents",
-          "refId": "B",
           "rawQuery": true
         }
       ],
       "options": {
         "SVGBaseFix": true,
-        "add100Percentage": false,
-        "centerAlignContent": false,
-        "codeData": "{}",
-        "css": "\n                /* Base styles */\n                * {\n                    margin: 0;\n                    padding: 0;\n                    box-sizing: border-box;\n                }\n\n                .dashboard-container {\n                    background: #ffffff;\n                    color: #000000;\n                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;\n                    padding: 1.5rem;\n                    min-height: 100vh;\n                }\n\n                /* Breadcrumb navigation */\n                .breadcrumb {\n                    font-size: 0.875rem;\n                    margin-bottom: 1rem;\n                    color: #666666;\n                }\n\n                .breadcrumb a {\n                    color: #000000;\n                    text-decoration: underline;\n                }\n\n                .breadcrumb a:hover {\n                    opacity: 0.7;\n                }\n\n                .separator {\n                    margin: 0 0.5rem;\n                    color: #cccccc;\n                }\n\n                .breadcrumb .current {\n                    color: #000000;\n                    font-weight: 500;\n                }\n\n                /* Header section */\n                .header {\n                    border-bottom: 1px solid #cccccc;\n                    padding-bottom: 1rem;\n                    margin-bottom: 2rem;\n                }\n\n                .title {\n                    font-size: 1.875rem;\n                    font-weight: 700;\n                    color: #000000;\n                    margin: 0;\n                }\n\n                .subtitle {\n                    font-size: 0.875rem;\n                    color: #666666;\n                    margin-top: 0.25rem;\n                }\n\n                /* Stats cards grid */\n                .stats-grid {\n                    display: grid;\n                    grid-template-columns: repeat(3, 1fr);\n                    gap: 1.5rem;\n                    margin-bottom: 2rem;\n                }\n\n                .stat-card {\n                    background: #ffffff;\n                    border: 1px solid #cccccc;\n                    padding: 1.5rem;\n                }\n\n                .stat-label {\n                    font-size: 0.875rem;\n                    font-weight: 500;\n                    color: #666666;\n                    text-transform: uppercase;\n                    letter-spacing: 0.05em;\n                }\n\n                .stat-value {\n                    font-size: 1.875rem;\n                    font-weight: 700;\n                    color: #000000;\n                    margin-top: 0.5rem;\n                }\n\n                /* Data table */\n                .table-container {\n                    background: #ffffff;\n                    border: 1px solid #cccccc;\n                    overflow: hidden;\n                }\n\n                .data-table {\n                    width: 100%;\n                    border-collapse: collapse;\n                }\n\n                .data-table thead {\n                    background: #f7f7f7;\n                }\n\n                .data-table th {\n                    text-align: left;\n                    padding: 0.75rem 1.5rem;\n                    font-size: 0.75rem;\n                    font-weight: 700;\n                    text-transform: uppercase;\n                    letter-spacing: 0.05em;\n                    color: #000000;\n                    border-bottom: 1px solid #cccccc;\n                }\n\n                .data-table td {\n                    padding: 1rem 1.5rem;\n                    font-size: 0.875rem;\n                    border-bottom: 1px solid #cccccc;\n                    color: #000000;\n                }\n\n                .data-table tbody tr:last-child td {\n                    border-bottom: none;\n                }\n\n                .data-table tbody tr:hover {\n                    background: #f7f7f7;\n                }\n\n                .service-name {\n                    font-weight: 500;\n                    color: #000000;\n                    cursor: pointer;\n                    text-decoration: underline;\n                }\n\n                .service-name:hover {\n                    opacity: 0.7;\n                }\n\n                .business-purpose {\n                    max-width: 400px;\n                    overflow: hidden;\n                    text-overflow: ellipsis;\n                    white-space: nowrap;\n                }\n\n                .health-value {\n                    font-weight: 600;\n                    text-align: center;\n                }\n\n                .health-good { color: #00AA00; }\n                .health-warning { color: #FFAA00; }\n                .health-critical { color: #FF0000; }\n\n                .incidents-count {\n                    text-align: center;\n                    font-weight: 600;\n                }\n\n                .incidents-active {\n                    color: #FFAA00;\n                }\n\n                .loading {\n                    text-align: center;\n                    color: #666666;\n                    padding: 2rem;\n                }\n            ",
-        "html": "\n                <div class=\"dashboard-container\">\n                    <div class=\"breadcrumb\">\n                        <a href=\"/d/exec-l4-minimalist-splunk-v1/l4-product-lines-minimalist-splunk-v1\">L4 Product Lines</a>\n                        <span class=\"separator\">\u203a</span>\n                        <a href=\"/d/exec-l3-minimalist-splunk-v1/l3-products-minimalist-splunk-v1\" id=\"l4Link\">\n                            <span id=\"l4Name\">Loading...</span>\n                        </a>\n                        <span class=\"separator\">\u203a</span>\n                        <span class=\"current\" id=\"l3Name\">Loading...</span>\n                    </div>\n\n                    <div class=\"header\">\n                        <h1 class=\"title\">L3 Product Services</h1>\n                        <p class=\"subtitle\">Service-level performance and operational status</p>\n                    </div>\n\n                    <div class=\"stats-grid\">\n                        <div class=\"stat-card\">\n                            <div class=\"stat-label\">Total Services</div>\n                            <div class=\"stat-value\" id=\"totalServices\">--</div>\n                        </div>\n                        <div class=\"stat-card\">\n                            <div class=\"stat-label\">Health %</div>\n                            <div class=\"stat-value\" id=\"minHealth\">--%</div>\n                        </div>\n                        <div class=\"stat-card\">\n                            <div class=\"stat-label\">Open Incidents</div>\n                            <div class=\"stat-value\" id=\"incidentsValue\">0</div>\n                        </div>\n                    </div>\n\n                    <div class=\"table-container\">\n                        <table class=\"data-table\">\n                            <thead>\n                                <tr>\n                                    <th>Service Name</th>\n                                    <th>Business Purpose</th>\n                                    <th style=\"text-align: center\">Health %</th>\n                                    <th style=\"text-align: center\">Incidents</th>\n                                </tr>\n                            </thead>\n                            <tbody id=\"tableBody\">\n                                <tr>\n                                    <td colspan=\"4\" class=\"loading\">Loading data...</td>\n                                </tr>\n                            </tbody>\n                        </table>\n                    </div>\n                </div>\n            ",
-        "onInit": "",
-        "onRender": "\n                // Helper functions\n                const getHealthClass = (value) => {\n                    if (value >= 95) return 'health-good';\n                    if (value >= 90) return 'health-warning';\n                    return 'health-critical';\n                };\n\n                const formatPercentage = (value) => {\n                    if (value === null || value === undefined || value === 0) return '0%';\n                    return value.toFixed(1) + '%';\n                };\n\n                // Process data\n                try {\n                    console.log('Processing Business Flows dashboard data...');\n\n                    // Get DOM elements\n                    const tableBody = htmlNode.querySelector('#tableBody');\n                    const totalServicesEl = htmlNode.querySelector('#totalServices');\n                    const minHealthEl = htmlNode.querySelector('#minHealth');\n                    const incidentsValueEl = htmlNode.querySelector('#incidentsValue');\n                    const l4NameEl = htmlNode.querySelector('#l4Name');\n                    const l3NameEl = htmlNode.querySelector('#l3Name');\n                    const l4LinkEl = htmlNode.querySelector('#l4Link');\n\n                    if (!tableBody) {\n                        console.error('tableBody element not found');\n                        return;\n                    }\n\n                    // Get current L4 and L3 selections from URL parameters\n                    let l4ProductLine = 'Home Lending';\n                    let l3Product = 'Originations';\n\n                    try {\n                        const urlParams = new URLSearchParams(window.location.search);\n                        const urlL4 = urlParams.get('var-l4_product_line');\n                        const urlL3 = urlParams.get('var-l3_product');\n                        if (urlL4) l4ProductLine = decodeURIComponent(urlL4);\n                        if (urlL3) l3Product = decodeURIComponent(urlL3);\n                        console.log('L4:', l4ProductLine, 'L3:', l3Product);\n                    } catch (e) {\n                        console.log('Could not parse URL parameters:', e);\n                    }\n\n                    // Update breadcrumb\n                    if (l4NameEl) l4NameEl.textContent = l4ProductLine;\n                    if (l3NameEl) l3NameEl.textContent = l3Product;\n                    if (l4LinkEl) {\n                        l4LinkEl.href = '/d/exec-l3-minimalist-splunk-v1/l3-products-minimalist-splunk-v1?var-l4_product_line=' + encodeURIComponent(l4ProductLine);\n                    }\n\n                    // Check if data is available\n                    let servicesData = null;\n                    let summaryData = null;\n\n                    // Access queries by index\n                    if (typeof data !== 'undefined' && data && data.series) {\n                        console.log('Total queries returned:', data.series.length);\n\n                        if (data.series.length > 0) {\n                            servicesData = data.series[0];\n                            console.log('Query 0 (Services) fields:', servicesData?.fields?.map(f => f.name));\n                        }\n                        if (data.series.length > 1) {\n                            summaryData = data.series[1];\n                            console.log('Query 1 (Summary) fields:', summaryData?.fields?.map(f => f.name));\n                        }\n                    }\n\n                    // Process summary data\n                    if (summaryData && summaryData.fields && summaryData.fields.length > 0) {\n                        const fields = summaryData.fields;\n                        const values = fields.map(f => f.values.buffer || f.values || []);\n\n                        if (values[0] && values[0].length > 0) {\n                            const totalServicesIdx = fields.findIndex(f => f.name === 'total_services');\n                            const minHealthIdx = fields.findIndex(f => f.name === 'min_health');\n                            const totalIncidentsIdx = fields.findIndex(f => f.name === 'total_incidents');\n\n                            if (totalServicesEl && totalServicesIdx >= 0) {\n                                totalServicesEl.textContent = values[totalServicesIdx][0] || 0;\n                            }\n                            if (minHealthEl && minHealthIdx >= 0) {\n                                const minHealth = values[minHealthIdx][0] || 0;\n                                minHealthEl.textContent = formatPercentage(minHealth);\n                                minHealthEl.className = 'stat-value ' + getHealthClass(minHealth);\n                            }\n                            if (incidentsValueEl && totalIncidentsIdx >= 0) {\n                                const totalIncidents = values[totalIncidentsIdx][0] || 0;\n                                incidentsValueEl.textContent = totalIncidents;\n                            }\n                        }\n                    }\n\n                    // Process services data\n                    if (servicesData && servicesData.fields && servicesData.fields.length > 0) {\n                        const fields = servicesData.fields;\n                        const values = fields.map(f => f.values.buffer || f.values || []);\n\n                        if (values[0] && values[0].length > 0) {\n                            // Find field indices\n                            const serviceIdIdx = fields.findIndex(f => f.name === 'service_id');\n                            const serviceNameIdx = fields.findIndex(f => f.name === 'service_name');\n                            const businessPurposeIdx = fields.findIndex(f => f.name === 'businessPurpose');\n                            const healthIdx = fields.findIndex(f => f.name === 'health');\n                            const incidentsIdx = fields.findIndex(f => f.name === 'open_incidents');\n\n                            // Clear table and add rows\n                            tableBody.innerHTML = '';\n\n                            for (let i = 0; i < values[0].length; i++) {\n                                const serviceId = serviceIdIdx >= 0 ? values[serviceIdIdx][i] : '';\n                                const serviceName = serviceNameIdx >= 0 ? values[serviceNameIdx][i] : 'Unknown Service';\n                                const businessPurpose = businessPurposeIdx >= 0 ? values[businessPurposeIdx][i] : '';\n                                const health = healthIdx >= 0 ? values[healthIdx][i] : 0;\n                                const incidents = incidentsIdx >= 0 ? values[incidentsIdx][i] : 0;\n\n                                // Build detail URL\n                                const detailUrl = '/d/exec-l3-service-detail-splunk-v1/l3-product-service-detail-minimalist-splunk-v1?var-service_id=' + encodeURIComponent(serviceId) +\n                                    '&var-l4_product_line=' + encodeURIComponent(l4ProductLine) +\n                                    '&var-l3_product=' + encodeURIComponent(l3Product);\n\n                                const row = document.createElement('tr');\n                                row.innerHTML =\n                                    '<td>' +\n                                        '<a href=\"' + detailUrl + '\" class=\"service-name\">' +\n                                        serviceName +\n                                        '</a>' +\n                                    '</td>' +\n                                    '<td class=\"business-purpose\" title=\"' + businessPurpose + '\">' +\n                                        businessPurpose +\n                                    '</td>' +\n                                    '<td class=\"health-value ' + getHealthClass(health) + '\">' +\n                                        formatPercentage(health) +\n                                    '</td>' +\n                                    '<td class=\"incidents-count ' + (incidents > 0 ? 'incidents-active' : '') + '\">' +\n                                        incidents +\n                                    '</td>';\n                                tableBody.appendChild(row);\n                            }\n\n                            console.log('Added ' + values[0].length + ' service rows');\n                        } else {\n                            tableBody.innerHTML = '<tr><td colspan=\"4\" style=\"text-align: center; padding: 2rem\">No services found for this selection</td></tr>';\n                        }\n                    } else {\n                        tableBody.innerHTML = '<tr><td colspan=\"4\" style=\"text-align: center; padding: 2rem\">No data available</td></tr>';\n                    }\n                } catch (error) {\n                    console.error('Error processing data:', error);\n                    const tableBody = htmlNode.querySelector('#tableBody');\n                    if (tableBody) {\n                        tableBody.innerHTML = '<tr><td colspan=\"4\" style=\"text-align: center; color: #FF0000; padding: 2rem\">Error loading data: ' + error.message + '</td></tr>';\n                    }\n                }\n            ",
-        "showDatapoints": false,
-        "wrapSingleValueInContainer": true
+        "css": "\n:root {\n    --wf-red: #D71E28;\n    --wf-gray-100: #F3F4F6;\n    --wf-gray-200: #E5E7EB;\n    --wf-gray-500: #6B7280;\n    --wf-gray-700: #374151;\n    --wf-gray-900: #111827;\n    --status-healthy: #10B981;\n    --status-degraded: #F59E0B;\n    --status-critical: #EF4444;\n}\n\n* {\n    margin: 0;\n    padding: 0;\n    box-sizing: border-box;\n}\n\nbody {\n    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;\n    background-color: var(--wf-gray-100);\n    color: var(--wf-gray-900);\n    line-height: 1.6;\n}\n\n.dashboard-header {\n    background-color: var(--wf-red);\n    color: white;\n    padding: 0.75rem 2rem;\n    box-shadow: 0 2px 4px rgba(0,0,0,0.1);\n}\n\n.org-path {\n    font-size: 0.875rem;\n    opacity: 0.9;\n}\n\n.dashboard-header h1 {\n    font-size: 1.25rem;\n    font-weight: 700;\n    margin-top: 0.25rem;\n}\n\n.container {\n    max-width: 1600px;\n    margin: 0 auto;\n    padding: 2rem;\n}\n\n.services-list {\n    background: white;\n    border-radius: 0.5rem;\n    box-shadow: 0 1px 3px rgba(0,0,0,0.1);\n    overflow: hidden;\n}\n\n.list-header {\n    display: grid;\n    grid-template-columns: 3fr 1fr 2fr 1.5fr;\n    gap: 1rem;\n    padding: 0.75rem 1.5rem;\n    background: var(--wf-gray-100);\n    border-bottom: 2px solid var(--wf-gray-200);\n    font-weight: 600;\n    font-size: 0.75rem;\n    text-transform: uppercase;\n    color: var(--wf-gray-700);\n}\n\n.service-row {\n    display: grid;\n    grid-template-columns: 3fr 1fr 2fr 1.5fr;\n    gap: 1rem;\n    padding: 0.75rem 1.5rem;\n    border-bottom: 1px solid var(--wf-gray-200);\n    cursor: pointer;\n    transition: background 0.2s;\n    align-items: center;\n}\n\n.service-row:hover {\n    background: var(--wf-gray-100);\n}\n\n.service-row:last-child {\n    border-bottom: none;\n}\n\n.service-name-cell {\n    display: flex;\n    align-items: center;\n    gap: 0.75rem;\n}\n\n.status-indicator {\n    width: 4px;\n    height: 40px;\n    border-radius: 2px;\n    flex-shrink: 0;\n}\n\n.status-indicator.healthy { background: var(--status-healthy); }\n.status-indicator.degraded { background: var(--status-degraded); }\n.status-indicator.critical { background: var(--status-critical); }\n\n.service-name {\n    font-weight: 600;\n    color: var(--wf-gray-900);\n}\n\n.status-cell {\n    display: flex;\n    align-items: center;\n    gap: 0.5rem;\n}\n\n.status-dot {\n    width: 12px;\n    height: 12px;\n    border-radius: 50%;\n    flex-shrink: 0;\n}\n\n.status-dot.healthy { background: var(--status-healthy); }\n.status-dot.degraded { background: var(--status-degraded); }\n.status-dot.critical { background: var(--status-critical); }\n\n.status-text {\n    font-size: 0.875rem;\n    font-weight: 500;\n}\n\n.status-text.healthy { color: var(--status-healthy); }\n.status-text.degraded { color: var(--status-degraded); }\n.status-text.critical { color: var(--status-critical); }\n\n.sparkline-cell {\n    display: flex;\n    gap: 2px;\n    height: 24px;\n    align-items: flex-end;\n}\n\n.sparkline-bar {\n    flex: 1;\n    min-width: 3px;\n    height: 24px;\n    border-radius: 1px;\n}\n\n.sparkline-bar.healthy { background: var(--status-healthy); }\n.sparkline-bar.degraded { background: var(--status-degraded); }\n.sparkline-bar.critical { background: var(--status-critical); }\n\n.breakdown-cell {\n    display: flex;\n    gap: 0.5rem;\n    font-size: 0.875rem;\n    flex-wrap: wrap;\n}\n\n.signal-count {\n    padding: 0.25rem 0.5rem;\n    border-radius: 0.25rem;\n    font-size: 0.75rem;\n    font-weight: 600;\n    white-space: nowrap;\n}\n\n.signal-count.critical {\n    background: #FEE2E2;\n    color: #991B1B;\n}\n\n.signal-count.degraded {\n    background: #FEF3C7;\n    color: #92400E;\n}\n\n.signal-count.healthy {\n    background: #D1FAE5;\n    color: #065F46;\n}\n\n.loading, .error {\n    text-align: center;\n    padding: 2rem;\n    color: var(--wf-gray-500);\n}\n",
+        "html": "\n<div class=\"dashboard-header\">\n    <div class=\"org-path\" id=\"orgPath\">Loading...</div>\n    <h1>Services</h1>\n</div>\n\n<div class=\"container\">\n    <div class=\"services-list\">\n        <div class=\"list-header\">\n            <div>Service Name</div>\n            <div>Status</div>\n            <div>Last 12 Hours</div>\n            <div>Signals</div>\n        </div>\n        <div id=\"tableBody\">\n            <div class=\"loading\">Loading data...</div>\n        </div>\n    </div>\n</div>\n",
+        "onRender": "\ntry {\n    const tableBody = htmlNode.querySelector('#tableBody');\n    const orgPath = htmlNode.querySelector('#orgPath');\n\n    if (!tableBody) {\n        console.error('tableBody element not found');\n        return;\n    }\n\n    // Set org path from variable\n    if (orgPath) {\n        const l3Product = '$l3_product' || 'Home Lending';\n        orgPath.textContent = l3Product;\n    }\n\n    // Get query data\n    let queryData = null;\n    if (typeof data !== 'undefined' && data && data.series) {\n        queryData = data.series;\n    } else if (typeof htmlGraphics !== 'undefined' && htmlGraphics.data && htmlGraphics.data.series) {\n        queryData = htmlGraphics.data.series;\n    }\n\n    if (!queryData || queryData.length === 0) {\n        tableBody.innerHTML = '<div class=\"error\">No data available</div>';\n        return;\n    }\n\n    const series = queryData[0];\n    const fields = series.fields;\n\n    if (!fields || fields.length === 0) {\n        tableBody.innerHTML = '<div class=\"error\">No fields in data</div>';\n        return;\n    }\n\n    // Build field map\n    const fieldMap = {};\n    fields.forEach((field, index) => {\n        fieldMap[field.name] = index;\n    });\n\n    // Get values arrays\n    const values = fields.map(f => f.values.buffer || f.values || []);\n    const rowCount = values[0] ? values[0].length : 0;\n\n    if (rowCount === 0) {\n        tableBody.innerHTML = '<div class=\"error\">No rows in data</div>';\n        return;\n    }\n\n    // Build table rows\n    let tableHTML = '';\n\n    for (let i = 0; i < rowCount; i++) {\n        const serviceId = values[fieldMap['service_id']] ? values[fieldMap['service_id']][i] : '';\n        const serviceName = values[fieldMap['service_name']] ? values[fieldMap['service_name']][i] : 'Unknown';\n        const signalCount = values[fieldMap['signal_count']] ? values[fieldMap['signal_count']][i] : 0;\n        const healthStatus = values[fieldMap['health_status']] ? values[fieldMap['health_status']][i] : 'Unknown';\n\n        // Determine status class\n        const statusClass = healthStatus === 'Green' ? 'healthy' :\n                           healthStatus === 'Amber' ? 'degraded' :\n                           'critical';\n\n        // Mock sparkline (all green for now - Phase 2: real time series data)\n        let sparklineHTML = '';\n        for (let j = 0; j < 12; j++) {\n            sparklineHTML += `<div class=\"sparkline-bar ${statusClass}\"></div>`;\n        }\n\n        // Mock breakdown counts (Phase 2: real signal counts)\n        const breakdownHTML = '<span class=\"signal-count ' + statusClass + '\">' + signalCount + '</span>';\n\n        tableHTML += `\n            <div class=\"service-row\" onclick=\"window.location.href='/d/bos-exec-svc-detail-splunk/service-detail-splunk-v1?var-service_id=${encodeURIComponent(serviceId)}'\">\n                <div class=\"service-name-cell\">\n                    <div class=\"status-indicator ${statusClass}\"></div>\n                    <div class=\"service-name\">${serviceName}</div>\n                </div>\n                <div class=\"status-cell\">\n                    <div class=\"status-dot ${statusClass}\"></div>\n                    <span class=\"status-text ${statusClass}\">${healthStatus}</span>\n                </div>\n                <div class=\"sparkline-cell\">\n                    ${sparklineHTML}\n                </div>\n                <div class=\"breakdown-cell\">\n                    ${breakdownHTML}\n                </div>\n            </div>\n        `;\n    }\n\n    tableBody.innerHTML = tableHTML;\n\n} catch (err) {\n    console.error('Error processing data:', err);\n    const tableBody = htmlNode.querySelector('#tableBody');\n    if (tableBody) {\n        tableBody.innerHTML = '<div class=\"error\">Error: ' + err.message + '</div>';\n    }\n}\n",
+        "renderOnMount": true
       },
-      "transparent": false
+      "pluginVersion": "2.2.1"
     }
   ],
   "refresh": "30s",
   "schemaVersion": 39,
   "tags": [
     "executive",
-    "l3-product-services",
-    "minimalist",
+    "services",
+    "bos",
+    "list-pattern",
     "splunk"
   ],
   "templating": {
     "list": [
       {
-        "datasource": {
-          "type": "grafana-splunk-datasource",
-          "uid": "d4c682f8-fd9b-46b2-9b89-e15410aa52dc"
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
         },
-        "definition": "",
         "hide": 0,
-        "includeAll": false,
-        "label": "L4 Product Line",
-        "multi": false,
-        "name": "l4_product_line",
-        "options": [],
-        "query": "| inputlookup bos_services.csv | stats count by l4_product_line | fields l4_product_line | sort l4_product_line",
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "type": "query"
-      },
-      {
-        "datasource": {
-          "type": "grafana-splunk-datasource",
-          "uid": "d4c682f8-fd9b-46b2-9b89-e15410aa52dc"
-        },
-        "definition": "",
-        "hide": 0,
-        "includeAll": false,
-        "label": "L3 Product",
-        "multi": false,
         "name": "l3_product",
         "options": [],
-        "query": "| inputlookup bos_services.csv | where l4_product_line=\"$l4_product_line\" | stats count by l3_product | fields l3_product | sort l3_product",
-        "refresh": 2,
-        "regex": "",
+        "query": "",
         "skipUrlSync": false,
-        "sort": 0,
-        "type": "query"
+        "type": "textbox"
       }
     ]
   },
@@ -117,9 +88,9 @@
     "to": "now"
   },
   "timepicker": {},
-  "timezone": "browser",
-  "title": "L3 Product Services (Minimalist v1 - Splunk)",
-  "uid": "exec-l3-product-services-splunk-v1",
-  "version": 1,
+  "timezone": "",
+  "title": "Services (List Pattern v1 - Splunk)",
+  "uid": "bos-exec-services-splunk",
+  "version": 0,
   "weekStart": ""
 }
