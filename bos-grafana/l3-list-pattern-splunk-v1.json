@@ -69,17 +69,23 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": false,
-          "text": "",
-          "value": ""
+        "datasource": {
+          "type": "grafana-splunk-datasource",
+          "uid": "d4c682f8-fd9b-46b2-9b89-e15410aa52dc"
         },
+        "definition": "| inputlookup bos_services.csv | stats count by l4_product_line | fields l4_product_line",
         "hide": 0,
+        "includeAll": false,
+        "label": "Product Line",
+        "multi": false,
         "name": "l4_product_line",
         "options": [],
-        "query": "",
+        "query": "| inputlookup bos_services.csv | stats count by l4_product_line | fields l4_product_line",
+        "refresh": 1,
+        "regex": "",
         "skipUrlSync": false,
-        "type": "textbox"
+        "sort": 1,
+        "type": "query"
       }
     ]
   },
