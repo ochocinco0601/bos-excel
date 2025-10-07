@@ -1,0 +1,2126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Option 3: Combined with Improvements - BOS Onboarding</title>
+    <style>
+        /* ===== DESIGN TOKENS ===== */
+        :root {
+            /* Colors */
+            --color-brand-primary: #D71E28;
+            --color-brand-primary-hover: #B71C24;
+            --color-brand-primary-light: rgba(215, 30, 40, 0.1);
+            --color-success: #10B981;
+            --color-warning: #F59E0B;
+            --color-info: #3B82F6;
+            --color-info-light: #DBEAFE;
+            --color-gray-50: #F9FAFB;
+            --color-gray-100: #F3F4F6;
+            --color-gray-200: #E5E7EB;
+            --color-gray-300: #D1D5DB;
+            --color-gray-400: #9CA3AF;
+            --color-gray-500: #6B7280;
+            --color-gray-600: #4B5563;
+            --color-gray-700: #374151;
+            --color-text-primary: #111827;
+            --color-text-secondary: #374151;
+            --color-text-tertiary: #6B7280;
+            --color-text-inverse: #FFFFFF;
+            --color-bg-primary: #FFFFFF;
+            --color-bg-secondary: #F3F4F6;
+            --color-border-default: #D1D5DB;
+            --color-border-light: #E5E7EB;
+            --color-border-focus: #D71E28;
+
+            /* Spacing */
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 12px;
+            --spacing-lg: 16px;
+            --spacing-xl: 24px;
+            --spacing-2xl: 32px;
+            --spacing-field-padding: 12px;
+            --spacing-section-gap: 16px;
+            --spacing-card-padding: 24px;
+
+            /* Typography */
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-monospace: 'Courier New', 'Consolas', monospace;
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-2xl: 1.5rem;
+            --font-weight-normal: 400;
+            --font-weight-medium: 500;
+            --font-weight-semibold: 600;
+            --font-weight-bold: 700;
+            --line-height-normal: 1.5;
+            --line-height-relaxed: 1.6;
+
+            /* Layout */
+            --height-header: 60px;
+            --height-tab-bar: 48px;
+            --height-footer: 40px;
+            --width-form-max: 900px;
+            --width-drawer: 480px;
+
+            /* Borders & Effects */
+            --border-width-default: 1px;
+            --border-width-thick: 2px;
+            --radius-sm: 0.25rem;
+            --radius-md: 0.375rem;
+            --radius-lg: 0.5rem;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.15);
+            --shadow-drawer: -4px 0 16px rgba(0, 0, 0, 0.2);
+
+            /* Transitions */
+            --transition-base: 0.2s ease;
+            --transition-slow: 0.3s ease;
+
+            /* Z-index */
+            --z-index-overlay: 999;
+            --z-index-modal: 1000;
+            --z-index-drawer: 1001;
+        }
+
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background-color: var(--color-bg-secondary);
+            color: var(--color-text-primary);
+            line-height: var(--line-height-relaxed);
+        }
+
+        /* ===== PAGE LAYOUT ===== */
+        .page-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== HEADER ===== */
+        .page-header {
+            background-color: var(--color-brand-primary);
+            color: var(--color-text-inverse);
+            padding: var(--spacing-md) var(--spacing-xl);
+            box-shadow: var(--shadow-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: var(--height-header);
+            flex-shrink: 0;
+        }
+
+        .page-header h1 {
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-bold);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-lg);
+        }
+
+        .help-icon {
+            font-size: var(--font-size-xl);
+            cursor: pointer;
+            opacity: 0.9;
+            transition: opacity var(--transition-base);
+            background: none;
+            border: none;
+            color: var(--color-text-inverse);
+            padding: var(--spacing-sm);
+        }
+
+        .help-icon:hover {
+            opacity: 1;
+        }
+
+        .back-to-gallery {
+            background: none;
+            border: none;
+            color: var(--color-text-inverse);
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+            cursor: pointer;
+            opacity: 0.9;
+            transition: opacity var(--transition-base);
+            display: none;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: var(--spacing-sm) var(--spacing-md);
+        }
+
+        .back-to-gallery:hover {
+            opacity: 1;
+        }
+
+        .back-to-gallery.visible {
+            display: flex;
+        }
+
+        /* ===== CONTAINER ===== */
+        .container {
+            flex: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            width: 100%;
+        }
+
+        /* ===== INTRO SECTION ===== */
+        .intro-section {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .intro-section h2 {
+            font-size: 2rem;
+            color: var(--color-text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .intro-section p {
+            font-size: 1.125rem;
+            color: var(--color-text-secondary);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        /* ===== EXAMPLE GRID ===== */
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .example-card {
+            background: var(--color-bg-primary);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            padding: 1.5rem;
+            transition: transform var(--transition-base), box-shadow var(--transition-base);
+            border-left: 4px solid var(--color-brand-primary);
+        }
+
+        .example-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .example-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .example-icon {
+            font-size: 2.5rem;
+            flex-shrink: 0;
+        }
+
+        .example-title-section {
+            flex: 1;
+        }
+
+        .complexity-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-semibold);
+            margin-bottom: 0.5rem;
+        }
+
+        .complexity-badge.standard {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .complexity-badge.complex {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .example-card h3 {
+            font-size: var(--font-size-lg);
+            color: var(--color-text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .example-card p {
+            color: var(--color-text-secondary);
+            font-size: var(--font-size-sm);
+            margin-bottom: 1.5rem;
+            min-height: 60px;
+        }
+
+        .example-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: var(--spacing-md) var(--spacing-xl);
+            border-radius: var(--radius-md);
+            font-weight: var(--font-weight-semibold);
+            font-size: var(--font-size-sm);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            flex: 1;
+            min-width: 120px;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: var(--color-brand-primary);
+            color: var(--color-text-inverse);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--color-brand-primary-hover);
+        }
+
+        .btn-secondary {
+            background: var(--color-bg-primary);
+            color: var(--color-text-secondary);
+            border: var(--border-width-default) solid var(--color-border-default);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--color-gray-50);
+            border-color: var(--color-gray-400);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* ===== START SECTION ===== */
+        .start-section {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+        }
+
+        .start-section h3 {
+            font-size: var(--font-size-lg);
+            margin-bottom: 1rem;
+            color: var(--color-text-primary);
+        }
+
+        .start-section p {
+            color: var(--color-text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-large {
+            padding: 0.875rem 2rem;
+            font-size: 1rem;
+        }
+
+        /* ===== FORM VIEW (Hidden initially) ===== */
+        .form-view {
+            display: none;
+            flex-direction: column;
+            min-height: calc(100vh - var(--height-header) - var(--height-footer));
+        }
+
+        .form-view.active {
+            display: flex;
+        }
+
+        /* ===== TAB BAR ===== */
+        .tab-bar {
+            background: var(--color-bg-primary);
+            border-bottom: var(--border-width-thick) solid var(--color-gray-200);
+            display: flex;
+            height: var(--height-tab-bar);
+            align-items: stretch;
+            flex-shrink: 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .tab {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            background: var(--color-gray-50);
+            border: none;
+            border-right: var(--border-width-default) solid var(--color-gray-200);
+            cursor: pointer;
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-text-tertiary);
+            transition: all var(--transition-base);
+            position: relative;
+            padding: var(--spacing-sm);
+        }
+
+        .tab:last-child {
+            border-right: none;
+        }
+
+        .tab:hover:not(.active) {
+            background: var(--color-gray-100);
+            color: var(--color-text-secondary);
+        }
+
+        .tab.active {
+            background: var(--color-bg-primary);
+            color: var(--color-brand-primary);
+            border-bottom: 3px solid var(--color-brand-primary);
+        }
+
+        .tab.completed {
+            color: var(--color-success);
+        }
+
+        .tab-status {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-xs);
+            border: 2px solid currentColor;
+            flex-shrink: 0;
+        }
+
+        .tab.active .tab-status {
+            border-color: var(--color-brand-primary);
+            background: var(--color-brand-primary-light);
+        }
+
+        .tab.completed .tab-status {
+            border-color: var(--color-success);
+            background: var(--color-success);
+            color: white;
+        }
+
+        /* ===== FORM CONTAINER ===== */
+        .form-container {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+            padding: var(--spacing-lg);
+        }
+
+        .form-card {
+            background: var(--color-bg-primary);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            padding: var(--spacing-card-padding);
+            width: 100%;
+            max-width: var(--width-form-max);
+            height: fit-content;
+        }
+
+        /* ===== TAB CONTENT ===== */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* ===== FORM ELEMENTS ===== */
+        .form-group {
+            margin-bottom: var(--spacing-section-gap);
+        }
+
+        .form-label {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-sm);
+            font-size: var(--font-size-sm);
+        }
+
+        .form-label.critical {
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-text-primary);
+        }
+
+        .required {
+            color: var(--color-brand-primary);
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: var(--spacing-field-padding);
+            border: var(--border-width-default) solid var(--color-border-default);
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-sm);
+            font-family: var(--font-primary);
+            transition: all var(--transition-base);
+            background: var(--color-bg-primary);
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--color-border-focus);
+            box-shadow: 0 0 0 3px var(--color-brand-primary-light);
+        }
+
+        .form-input.critical:focus {
+            border-color: var(--color-brand-primary);
+            box-shadow: 0 0 0 4px var(--color-brand-primary-light);
+        }
+
+        textarea.form-input {
+            resize: vertical;
+            font-family: var(--font-primary);
+        }
+
+        textarea.form-input.short {
+            min-height: 80px;
+        }
+
+        textarea.form-input.medium {
+            min-height: 100px;
+        }
+
+        textarea.form-input.tall {
+            min-height: 160px;
+        }
+
+        textarea.technical {
+            font-family: var(--font-monospace);
+            font-size: var(--font-size-xs);
+            background: var(--color-gray-50);
+        }
+
+        .field-hint {
+            font-size: var(--font-size-xs);
+            color: var(--color-text-tertiary);
+            margin-top: var(--spacing-xs);
+            line-height: var(--line-height-normal);
+        }
+
+        .template-indicator {
+            display: inline-block;
+            font-size: var(--font-size-xs);
+            color: var(--color-info);
+            font-weight: var(--font-weight-medium);
+            margin-left: var(--spacing-sm);
+        }
+
+        /* ===== NAVIGATION BUTTONS ===== */
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding-top: var(--spacing-lg);
+            border-top: var(--border-width-default) solid var(--color-border-light);
+            margin-top: var(--spacing-xl);
+        }
+
+        .progress-indicator {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            font-size: var(--font-size-xs);
+            color: var(--color-text-tertiary);
+        }
+
+        .progress-bar {
+            width: 120px;
+            height: 6px;
+            background: var(--color-gray-200);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--color-brand-primary);
+            transition: width var(--transition-slow);
+        }
+
+        /* ===== QUALITY CHECKLIST (Preview Tab) ===== */
+        .checklist-section {
+            background: var(--color-gray-50);
+            border: var(--border-width-default) solid var(--color-border-light);
+            border-radius: var(--radius-md);
+            margin-top: var(--spacing-xl);
+        }
+
+        .checklist-header {
+            padding: var(--spacing-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .checklist-header h4 {
+            font-size: var(--font-size-base);
+            color: var(--color-text-primary);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .checklist-toggle {
+            font-size: var(--font-size-xs);
+            color: var(--color-text-tertiary);
+            transition: transform var(--transition-base);
+        }
+
+        .checklist-header.expanded .checklist-toggle {
+            transform: rotate(180deg);
+        }
+
+        .checklist-content {
+            display: none;
+            padding: 0 var(--spacing-lg) var(--spacing-lg);
+        }
+
+        .checklist-content.visible {
+            display: block;
+        }
+
+        .checklist-category {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .checklist-category:last-child {
+            margin-bottom: 0;
+        }
+
+        .checklist-category h5 {
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-sm);
+            font-size: var(--font-size-sm);
+        }
+
+        .checklist-item .icon {
+            flex-shrink: 0;
+            font-size: var(--font-size-base);
+        }
+
+        /* ===== PREVIEW TAB STYLES ===== */
+        .preview-container {
+            background: var(--color-gray-50);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+        }
+
+        .preview-header {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+            padding-bottom: var(--spacing-lg);
+            border-bottom: 2px solid var(--color-gray-200);
+        }
+
+        .preview-header h3 {
+            font-size: var(--font-size-xl);
+            color: var(--color-text-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .preview-header p {
+            color: var(--color-text-tertiary);
+            font-size: var(--font-size-sm);
+        }
+
+        .preview-card {
+            background: var(--color-bg-primary);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+            box-shadow: var(--shadow-md);
+        }
+
+        .preview-section-title {
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-brand-primary);
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 2px solid var(--color-brand-primary);
+        }
+
+        .preview-field {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .preview-field:last-child {
+            margin-bottom: 0;
+        }
+
+        .preview-field-label {
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .preview-field-value {
+            font-size: var(--font-size-base);
+            color: var(--color-text-primary);
+            line-height: var(--line-height-relaxed);
+            white-space: pre-wrap;
+        }
+
+        .preview-field-value.code {
+            background: var(--color-gray-100);
+            border: var(--border-width-default) solid var(--color-border-light);
+            border-radius: var(--radius-sm);
+            padding: var(--spacing-md);
+            font-family: var(--font-monospace);
+            font-size: var(--font-size-sm);
+            overflow-x: auto;
+        }
+
+        .preview-field-value.empty {
+            color: var(--color-text-tertiary);
+            font-style: italic;
+        }
+
+        .preview-next-steps {
+            background: var(--color-info-light);
+            border-left: 4px solid var(--color-info);
+            border-radius: var(--radius-sm);
+            padding: var(--spacing-lg);
+            margin-top: var(--spacing-xl);
+        }
+
+        .preview-next-steps h4 {
+            font-size: var(--font-size-base);
+            color: var(--color-info);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .preview-next-steps ul {
+            margin-left: var(--spacing-xl);
+        }
+
+        .preview-next-steps li {
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-sm);
+            font-size: var(--font-size-sm);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-semibold);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .badge-complete {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .badge-incomplete {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        /* ===== MODALS ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: var(--z-index-overlay);
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal-overlay.visible {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: var(--radius-lg);
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+        }
+
+        .modal-header {
+            background: var(--color-brand-primary);
+            color: white;
+            padding: var(--spacing-xl);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .modal-header h3 {
+            font-size: var(--font-size-lg);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0.9;
+        }
+
+        .modal-close:hover {
+            opacity: 1;
+        }
+
+        .modal-content {
+            padding: var(--spacing-xl);
+        }
+
+        .field-display {
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-lg);
+            border-bottom: 1px solid var(--color-gray-200);
+        }
+
+        .field-display:last-child {
+            border-bottom: none;
+        }
+
+        .field-label {
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-text-secondary);
+            font-size: var(--font-size-sm);
+            margin-bottom: var(--spacing-sm);
+            display: block;
+        }
+
+        .field-value {
+            color: var(--color-text-primary);
+            font-size: var(--font-size-base);
+            white-space: pre-wrap;
+        }
+
+        .field-value.code {
+            background: var(--color-gray-50);
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-sm);
+            font-family: var(--font-monospace);
+            font-size: var(--font-size-sm);
+            overflow-x: auto;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            flex-shrink: 0;
+            padding: var(--spacing-md) var(--spacing-xl);
+            text-align: center;
+            font-size: var(--font-size-xs);
+            color: var(--color-text-tertiary);
+            border-top: var(--border-width-default) solid var(--color-border-light);
+            background: var(--color-bg-primary);
+            height: var(--height-footer);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ===== HELP DRAWER ===== */
+        .guide-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: var(--z-index-overlay);
+        }
+
+        .guide-overlay.visible {
+            display: block;
+        }
+
+        .help-drawer {
+            position: fixed;
+            top: 0;
+            right: -500px;
+            width: var(--width-drawer);
+            height: 100%;
+            background: var(--color-bg-primary);
+            box-shadow: var(--shadow-drawer);
+            z-index: var(--z-index-drawer);
+            transition: right var(--transition-slow);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .help-drawer.visible {
+            right: 0;
+        }
+
+        .drawer-header {
+            background: var(--color-brand-primary);
+            color: var(--color-text-inverse);
+            padding: var(--spacing-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .drawer-header h2 {
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-bold);
+        }
+
+        .close-btn {
+            font-size: var(--font-size-2xl);
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: var(--color-text-inverse);
+            line-height: 1;
+            opacity: 0.9;
+            padding: 0;
+        }
+
+        .close-btn:hover {
+            opacity: 1;
+        }
+
+        .drawer-content {
+            padding: var(--spacing-lg);
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .drawer-content h3 {
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-text-primary);
+            margin-top: var(--spacing-lg);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .drawer-content h3:first-child {
+            margin-top: 0;
+        }
+
+        .drawer-content p {
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-md);
+            font-size: var(--font-size-sm);
+        }
+
+        .drawer-content ul {
+            margin-left: var(--spacing-xl);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .drawer-content li {
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-sm);
+            font-size: var(--font-size-sm);
+        }
+
+        .example-box {
+            background: var(--color-gray-50);
+            border-left: 4px solid var(--color-brand-primary);
+            padding: var(--spacing-md);
+            margin: var(--spacing-md) 0;
+            font-size: var(--font-size-sm);
+        }
+
+        .example-box strong {
+            display: block;
+            color: var(--color-brand-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .pattern-hint {
+            background: var(--color-info-light);
+            border-left: 3px solid var(--color-info);
+            padding: var(--spacing-md);
+            margin: var(--spacing-sm) 0;
+            font-size: var(--font-size-xs);
+            border-radius: var(--radius-sm);
+        }
+
+        .pattern-hint strong {
+            color: var(--color-info);
+            display: block;
+            margin-bottom: var(--spacing-xs);
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <div class="page-header">
+            <h1>Add Service to BOS</h1>
+            <div class="header-right">
+                <button class="back-to-gallery" id="backToGallery" aria-label="Back to examples">← Back to Examples</button>
+                <button class="help-icon" id="helpIcon" aria-label="Open help drawer">ℹ️</button>
+            </div>
+        </div>
+
+        <!-- Gallery View (Initial) -->
+        <div class="container" id="galleryView">
+            <div class="intro-section">
+                <h2>Before you start, see some examples</h2>
+                <p>View complete BOS entries from real services to understand what you'll be creating. You can use any of these as a template to speed up your entry.</p>
+            </div>
+
+            <div class="example-grid">
+                <!-- Example 1: Funding Service (Standard) -->
+                <div class="example-card">
+                    <div class="example-header">
+                        <div class="example-icon">📦</div>
+                        <div class="example-title-section">
+                            <div class="complexity-badge standard">🟢 STANDARD</div>
+                            <h3>Funding Service</h3>
+                        </div>
+                    </div>
+                    <p>Wire transfer execution for home purchase transactions. Moves funds from bank to title company to complete closing.</p>
+                    <div class="example-actions">
+                        <button class="btn btn-secondary" data-action="view" data-example="funding">View Details</button>
+                        <button class="btn btn-primary" data-action="use" data-example="funding">Use Template</button>
+                    </div>
+                </div>
+
+                <!-- Example 2: Credit Check Service (Standard) -->
+                <div class="example-card">
+                    <div class="example-header">
+                        <div class="example-icon">💳</div>
+                        <div class="example-title-section">
+                            <div class="complexity-badge standard">🟢 STANDARD</div>
+                            <h3>Credit Check Service</h3>
+                        </div>
+                    </div>
+                    <p>Borrower creditworthiness validation for loan approval decisions. Returns credit scores within regulatory timeframes.</p>
+                    <div class="example-actions">
+                        <button class="btn btn-secondary" data-action="view" data-example="credit">View Details</button>
+                        <button class="btn btn-primary" data-action="use" data-example="credit">Use Template</button>
+                    </div>
+                </div>
+
+                <!-- Example 3: TRID Disclosure Service (Complex) -->
+                <div class="example-card">
+                    <div class="example-header">
+                        <div class="example-icon">📋</div>
+                        <div class="example-title-section">
+                            <div class="complexity-badge complex">🟡 COMPLEX</div>
+                            <h3>TRID Disclosure Service</h3>
+                        </div>
+                    </div>
+                    <p>Regulatory compliance for mortgage disclosure delivery. Must meet CFPB 3-day rule with business day calculations and revision handling.</p>
+                    <div class="example-actions">
+                        <button class="btn btn-secondary" data-action="view" data-example="trid">View Details</button>
+                        <button class="btn btn-primary" data-action="use" data-example="trid">Use Template</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="start-section">
+                <h3>Ready to create your own entry?</h3>
+                <p>Start with a blank form or browse more examples to find one similar to your service.</p>
+                <button class="btn btn-primary btn-large" id="startFresh">Start from Scratch</button>
+            </div>
+        </div>
+
+        <!-- Form View (Hidden initially) -->
+        <div class="form-view" id="formView">
+            <!-- Tab Bar -->
+            <div class="tab-bar">
+                <button class="tab active" data-tab="business-context" id="tabBusinessContext">
+                    <span class="tab-status" id="statusBusinessContext">1</span>
+                    <span>Business Context</span>
+                </button>
+                <button class="tab" data-tab="impact-definition" id="tabImpactDefinition">
+                    <span class="tab-status" id="statusImpactDefinition">2</span>
+                    <span>Impact Definition</span>
+                </button>
+                <button class="tab" data-tab="signal-definition" id="tabSignalDefinition">
+                    <span class="tab-status" id="statusSignalDefinition">3</span>
+                    <span>Signal Definition</span>
+                </button>
+                <button class="tab" data-tab="preview" id="tabPreview">
+                    <span class="tab-status" id="statusPreview">4</span>
+                    <span>Preview & Submit</span>
+                </button>
+            </div>
+
+            <!-- Form Container -->
+            <div class="form-container">
+                <div class="form-card">
+                    <form id="addServiceForm">
+                        <!-- Tab 1: Business Context -->
+                        <div class="tab-content active" id="contentBusinessContext">
+                            <div class="form-group">
+                                <label class="form-label critical" for="serviceName">
+                                    Service Name <span class="required">*</span>
+                                    <span class="template-indicator" id="indicatorServiceName"></span>
+                                </label>
+                                <input
+                                    type="text"
+                                    id="serviceName"
+                                    name="serviceName"
+                                    class="form-input critical"
+                                    placeholder="e.g., Funding Service"
+                                    required
+                                />
+                                <div class="field-hint">The technical name of your service as it appears in monitoring systems and deployment configs.</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="businessPurpose">
+                                    Business Purpose <span class="required">*</span>
+                                    <span class="template-indicator" id="indicatorBusinessPurpose"></span>
+                                </label>
+                                <textarea
+                                    id="businessPurpose"
+                                    name="businessPurpose"
+                                    class="form-input medium"
+                                    placeholder="Describe what this service does from a business perspective and what value it provides..."
+                                    required
+                                ></textarea>
+                                <div class="field-hint">Explain what business value this service provides. Focus on the "why" - why does this service exist? What would break if it went down?</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="successBaseline">
+                                    Success Baseline <span class="required">*</span>
+                                    <span class="template-indicator" id="indicatorSuccessBaseline"></span>
+                                </label>
+                                <textarea
+                                    id="successBaseline"
+                                    name="successBaseline"
+                                    class="form-input short"
+                                    placeholder="Describe what 'normal, successful operation' looks like..."
+                                    required
+                                ></textarea>
+                                <div class="field-hint">When everything is working well, what does that look like? This establishes the baseline for measuring performance.</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="impactCategory">
+                                    Primary Impact Category <span class="required">*</span>
+                                    <span class="template-indicator" id="indicatorImpactCategory"></span>
+                                </label>
+                                <select id="impactCategory" name="impactCategory" class="form-select" required>
+                                    <option value="">Select impact category...</option>
+                                    <option value="customer">Customer Impact</option>
+                                    <option value="financial">Financial Impact</option>
+                                    <option value="legal">Legal/Regulatory/Risk Impact</option>
+                                    <option value="operational">Operational Impact</option>
+                                </select>
+                                <div class="field-hint">What type of business impact occurs when this service fails? Choose the most significant category.</div>
+                            </div>
+
+                            <div class="form-actions">
+                                <div class="progress-indicator">
+                                    <span>Step 1 of 4</span>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 25%;"></div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-primary" id="btnNextToImpact">
+                                    Next: Define Impact →
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Tab 2: Impact Definition -->
+                        <div class="tab-content" id="contentImpactDefinition">
+                            <div class="form-group">
+                                <label class="form-label" for="stakeholder">
+                                    Who is Affected? <span class="required">*</span>
+                                    <span class="template-indicator" id="indicatorStakeholder"></span>
+                                </label>
+                                <input
+                                    type="text"
+                                    id="stakeholder"
+                                    name="stakeholder"
+                                    class="form-input"
+                                    placeholder="e.g., Home buyers, Loan officers, Compliance team"
+                                    required
+                                />
+                                <div class="field-hint">Which stakeholder group experiences the impact when this service fails?</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="businessConsequence">
+                                    What Happens? <span class="required">*</span>
+                                    <span class="template-indicator" id="indicatorBusinessConsequence"></span>
+                                </label>
+                                <textarea
+                                    id="businessConsequence"
+                                    name="businessConsequence"
+                                    class="form-input medium"
+                                    placeholder="Describe the business consequence when service fails..."
+                                    required
+                                ></textarea>
+                                <div class="field-hint">Describe the specific business consequence. What can't the stakeholder do? What process breaks?</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="financialImpact">
+                                    Financial Impact <span class="required">*</span>
+                                    <span class="template-indicator" id="indicatorFinancialImpact"></span>
+                                </label>
+                                <textarea
+                                    id="financialImpact"
+                                    name="financialImpact"
+                                    class="form-input short"
+                                    placeholder="Quantify the financial impact (revenue loss, costs, penalties)..."
+                                    required
+                                ></textarea>
+                                <div class="field-hint">What is the financial cost? Include revenue loss, operational costs, regulatory penalties, or customer remediation.</div>
+                            </div>
+
+                            <div class="form-actions">
+                                <div class="progress-indicator">
+                                    <span>Step 2 of 4</span>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 50%;"></div>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: var(--spacing-md);">
+                                    <button type="button" class="btn btn-secondary" id="btnBackToBusiness">
+                                        ← Back
+                                    </button>
+                                    <button type="button" class="btn btn-primary" id="btnNextToSignal">
+                                        Next: Define Signal →
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 3: Signal Definition -->
+                        <div class="tab-content" id="contentSignalDefinition">
+                            <div class="form-group">
+                                <label class="form-label critical" for="signalName">
+                                    Signal Name <span class="required">*</span>
+                                    <span class="template-indicator" id="indicatorSignalName"></span>
+                                </label>
+                                <input
+                                    type="text"
+                                    id="signalName"
+                                    name="signalName"
+                                    class="form-input critical"
+                                    placeholder="e.g., funding-success-rate"
+                                    required
+                                />
+                                <div class="field-hint">A unique identifier for this signal. Use lowercase with hyphens (kebab-case): service-function-metric</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="businessCriteria">
+                                    Business Criteria <span class="required">*</span>
+                                    <span class="template-indicator" id="indicatorBusinessCriteria"></span>
+                                </label>
+                                <textarea
+                                    id="businessCriteria"
+                                    name="businessCriteria"
+                                    class="form-input medium"
+                                    placeholder="Describe what 'success' looks like from a business perspective..."
+                                    required
+                                ></textarea>
+                                <div class="field-hint">In plain language, describe what you're measuring and what "good" means. This is how a Product Owner would describe success.</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="technicalCriteria">
+                                    Technical Criteria <span class="required">*</span>
+                                    <span class="template-indicator" id="indicatorTechnicalCriteria"></span>
+                                </label>
+                                <textarea
+                                    id="technicalCriteria"
+                                    name="technicalCriteria"
+                                    class="form-input technical tall"
+                                    placeholder="Enter SQL query, Splunk SPL, or measurement logic..."
+                                    required
+                                ></textarea>
+                                <div class="field-hint">The actual query or measurement logic that calculates this signal. This can be SQL, Splunk SPL, API endpoint, or other technical implementation.</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="sloTarget">
+                                    SLO Target <span class="required">*</span>
+                                    <span class="template-indicator" id="indicatorSloTarget"></span>
+                                </label>
+                                <input
+                                    type="text"
+                                    id="sloTarget"
+                                    name="sloTarget"
+                                    class="form-input"
+                                    placeholder="e.g., 99.5%"
+                                    required
+                                />
+                                <div class="field-hint">What performance level are you targeting? (e.g., 99.5%, < 2s, 0 errors)</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="sloRationale">
+                                    SLO Rationale <span class="required">*</span>
+                                    <span class="template-indicator" id="indicatorSloRationale"></span>
+                                </label>
+                                <textarea
+                                    id="sloRationale"
+                                    name="sloRationale"
+                                    class="form-input short"
+                                    placeholder="Why this target? Is it regulatory, contractual, or business-driven?"
+                                    required
+                                ></textarea>
+                                <div class="field-hint">Explain why this target was chosen. Is it mandated by regulation, contract, or business need?</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="timeWindow">
+                                    Time Window <span class="required">*</span>
+                                    <span class="template-indicator" id="indicatorTimeWindow"></span>
+                                </label>
+                                <select id="timeWindow" name="timeWindow" class="form-select" required>
+                                    <option value="">Select time window...</option>
+                                    <option value="1h">Last 1 hour</option>
+                                    <option value="24h">Last 24 hours</option>
+                                    <option value="7d">Last 7 days</option>
+                                    <option value="30d">Last 30 days</option>
+                                </select>
+                                <div class="field-hint">Over what time period should this signal be measured?</div>
+                            </div>
+
+                            <div class="form-actions">
+                                <div class="progress-indicator">
+                                    <span>Step 3 of 4</span>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 75%;"></div>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: var(--spacing-md);">
+                                    <button type="button" class="btn btn-secondary" id="btnBackToImpact">
+                                        ← Back
+                                    </button>
+                                    <button type="button" class="btn btn-primary" id="btnNextToPreview">
+                                        Next: Preview & Submit →
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 4: Preview & Submit -->
+                        <div class="tab-content" id="contentPreview">
+                            <div class="preview-container">
+                                <div class="preview-header">
+                                    <h3>Preview Your BOS Entry</h3>
+                                    <p>Review how your service and signal will appear in the BOS system</p>
+                                    <div id="previewCompletionBadge"></div>
+                                </div>
+
+                                <div class="preview-card">
+                                    <div class="preview-section-title">🎯 Business Context</div>
+                                    <div class="preview-field">
+                                        <div class="preview-field-label">Service Name</div>
+                                        <div class="preview-field-value" id="previewServiceName">(Not yet entered)</div>
+                                    </div>
+                                    <div class="preview-field">
+                                        <div class="preview-field-label">Business Purpose</div>
+                                        <div class="preview-field-value" id="previewBusinessPurpose">(Not yet entered)</div>
+                                    </div>
+                                    <div class="preview-field">
+                                        <div class="preview-field-label">Success Baseline</div>
+                                        <div class="preview-field-value" id="previewSuccessBaseline">(Not yet entered)</div>
+                                    </div>
+                                    <div class="preview-field">
+                                        <div class="preview-field-label">Impact Category</div>
+                                        <div class="preview-field-value" id="previewImpactCategory">(Not yet entered)</div>
+                                    </div>
+                                </div>
+
+                                <div class="preview-card">
+                                    <div class="preview-section-title">💥 Impact Definition</div>
+                                    <div class="preview-field">
+                                        <div class="preview-field-label">Stakeholder Affected</div>
+                                        <div class="preview-field-value" id="previewStakeholder">(Not yet entered)</div>
+                                    </div>
+                                    <div class="preview-field">
+                                        <div class="preview-field-label">Business Consequence</div>
+                                        <div class="preview-field-value" id="previewBusinessConsequence">(Not yet entered)</div>
+                                    </div>
+                                    <div class="preview-field">
+                                        <div class="preview-field-label">Financial Impact</div>
+                                        <div class="preview-field-value" id="previewFinancialImpact">(Not yet entered)</div>
+                                    </div>
+                                </div>
+
+                                <div class="preview-card">
+                                    <div class="preview-section-title">📊 Signal Definition</div>
+                                    <div class="preview-field">
+                                        <div class="preview-field-label">Signal Name</div>
+                                        <div class="preview-field-value" id="previewSignalName">(Not yet entered)</div>
+                                    </div>
+                                    <div class="preview-field">
+                                        <div class="preview-field-label">Business Criteria</div>
+                                        <div class="preview-field-value" id="previewBusinessCriteria">(Not yet entered)</div>
+                                    </div>
+                                    <div class="preview-field">
+                                        <div class="preview-field-label">Technical Criteria (Query/Logic)</div>
+                                        <div class="preview-field-value code" id="previewTechnicalCriteria">(Not yet entered)</div>
+                                    </div>
+                                    <div class="preview-field">
+                                        <div class="preview-field-label">SLO Target & Rationale</div>
+                                        <div class="preview-field-value" id="previewSLO">(Not yet entered)</div>
+                                    </div>
+                                    <div class="preview-field">
+                                        <div class="preview-field-label">Time Window</div>
+                                        <div class="preview-field-value" id="previewTimeWindow">(Not yet entered)</div>
+                                    </div>
+                                </div>
+
+                                <!-- Quality Checklist -->
+                                <div class="checklist-section">
+                                    <div class="checklist-header" id="checklistHeader">
+                                        <h4>✅ Quality Checklist</h4>
+                                        <span class="checklist-toggle">▼</span>
+                                    </div>
+                                    <div class="checklist-content" id="checklistContent">
+                                        <div class="checklist-category">
+                                            <h5>Business Definition</h5>
+                                            <div class="checklist-item">
+                                                <span class="icon">✓</span>
+                                                <span>Success criteria describes business outcome (not technical detail)</span>
+                                            </div>
+                                            <div class="checklist-item">
+                                                <span class="icon">✓</span>
+                                                <span>Impact describes stakeholder consequence</span>
+                                            </div>
+                                            <div class="checklist-item">
+                                                <span class="icon">⚠</span>
+                                                <span>SLO target has clear rationale (why this %?)</span>
+                                            </div>
+                                        </div>
+                                        <div class="checklist-category">
+                                            <h5>Technical Implementation</h5>
+                                            <div class="checklist-item">
+                                                <span class="icon">✓</span>
+                                                <span>Query maps directly to business definition</span>
+                                            </div>
+                                            <div class="checklist-item">
+                                                <span class="icon">✓</span>
+                                                <span>Data source is identified and accessible</span>
+                                            </div>
+                                            <div class="checklist-item">
+                                                <span class="icon">✓</span>
+                                                <span>Time window matches business need</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="preview-next-steps">
+                                    <h4>📋 Next Steps After Submission</h4>
+                                    <ul>
+                                        <li>Add 2-3 additional signals to measure different aspects of service health</li>
+                                        <li>Review and refine SLO targets based on historical performance</li>
+                                        <li>Add operational metadata (runbooks, alert routing, escalation contacts)</li>
+                                        <li>Define alerting thresholds and notification preferences</li>
+                                    </ul>
+                                </div>
+
+                                <div class="form-actions">
+                                    <div class="progress-indicator">
+                                        <span>Step 4 of 4</span>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 100%;"></div>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; gap: var(--spacing-md);">
+                                        <button type="button" class="btn btn-secondary" id="btnBackToSignal">
+                                            ← Back to Edit
+                                        </button>
+                                        <button type="submit" class="btn btn-primary">
+                                            ✓ Submit Service to BOS
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <strong>BOS Platform UI</strong> | Option 3: Combined with Improvements | 4-Step Workflow with Validation
+        </div>
+    </div>
+
+    <!-- Example Details Modal -->
+    <div class="modal-overlay" id="exampleModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="exampleModalTitle">Service Example</h3>
+                <button class="modal-close" id="exampleModalClose">×</button>
+            </div>
+            <div class="modal-content" id="exampleModalContent">
+                <!-- Content populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Drawer -->
+    <div class="guide-overlay" id="overlay"></div>
+    <div class="help-drawer" id="drawer">
+        <div class="drawer-header">
+            <h2>Quick Reference</h2>
+            <button class="close-btn" id="closeBtn" aria-label="Close help drawer">×</button>
+        </div>
+        <div class="drawer-content">
+            <h3>Purpose</h3>
+            <p>This 4-step workflow captures essential information to add your service to the Business Observability System (BOS), aligned with the guided prompt methodology.</p>
+
+            <h3>Workflow Overview</h3>
+            <p><strong>Step 1: Business Context</strong> - Define what your service does, why it matters, and baseline performance expectations</p>
+            <p><strong>Step 2: Impact Definition</strong> - Describe who is affected and what happens when the service fails</p>
+            <p><strong>Step 3: Signal Definition</strong> - Create measurements that indicate service health</p>
+            <p><strong>Step 4: Preview & Submit</strong> - Review your entry and validate quality</p>
+
+            <h3>What is a Signal?</h3>
+            <p>A signal is a measurement that answers a specific business question about service performance. It connects business criteria (plain language) to technical criteria (query/logic).</p>
+
+            <h3>📚 Complex Scenarios - Pattern Library</h3>
+            <p>If your service involves these patterns, additional guidance is available:</p>
+            <div class="pattern-hint">
+                <strong>Business Day Calculations</strong>
+                Services that must exclude weekends and holidays (e.g., TRID 3-day rule)
+            </div>
+            <div class="pattern-hint">
+                <strong>Document Revisions</strong>
+                Services with document versions where only the latest matters
+            </div>
+            <div class="pattern-hint">
+                <strong>Forward-Looking Metrics</strong>
+                Measuring "at-risk" before violation occurs (proactive intervention)
+            </div>
+            <div class="pattern-hint">
+                <strong>Regulatory vs Business Targets</strong>
+                Distinguishing mandated compliance (99.95%) from aspirational goals (99.9%)
+            </div>
+            <div class="pattern-hint">
+                <strong>Multi-System Aggregation</strong>
+                Combining data from multiple systems using correlation IDs
+            </div>
+
+            <h3>Complexity Indicators</h3>
+            <p><strong>🟢 STANDARD</strong> - Straightforward metrics with basic queries</p>
+            <p><strong>🟡 COMPLEX</strong> - Requires pattern library guidance (business day calc, revisions, regulatory compliance)</p>
+
+            <h3>Complete Funding Service Example</h3>
+            <div class="example-box">
+                <strong>Service Name:</strong> Funding Service
+            </div>
+            <div class="example-box">
+                <strong>Business Purpose:</strong><br>
+                Execute wire transfers to complete home purchase transactions. When a home loan is approved and closing date arrives, this service transfers funds from the bank to the title company.
+            </div>
+            <div class="example-box">
+                <strong>Signal Name:</strong> funding-success-rate
+            </div>
+            <div class="example-box">
+                <strong>Business Criteria:</strong><br>
+                The percentage of wire transfers that successfully complete on scheduled closing dates. We expect 99.5% success rate.
+            </div>
+
+            <h3>Need Help?</h3>
+            <p>Contact the BOS Platform team for assistance with signal definitions, query writing, or accessing monitoring data sources.</p>
+        </div>
+    </div>
+
+    <script>
+        // ===== EXAMPLE DATA =====
+        const examples = {
+            funding: {
+                title: 'Funding Service - Complete BOS Entry',
+                complexity: 'standard',
+                serviceName: 'Funding Service',
+                businessPurpose: 'Execute wire transfers to complete home purchase transactions. When a home loan is approved and closing date arrives, this service transfers funds from the bank to the title company to complete the purchase. Without this service, home closings cannot proceed and customers cannot complete their home purchases.',
+                successBaseline: 'When operating normally, 99.5% of wire transfer requests complete successfully on the scheduled closing date, with funds reaching the title company within the required timeframe.',
+                impactCategory: 'customer',
+                stakeholder: 'Home buyers and loan officers',
+                businessConsequence: 'Home closings are delayed, customers cannot move into their new homes on schedule, and loan officers must manage customer escalations and rescheduling.',
+                financialImpact: 'Each delayed closing costs approximately $2,000 in operational overhead, customer remediation, and potential regulatory penalties. At 500 daily transactions, a 1% failure rate impacts 5 customers per day.',
+                signalName: 'funding-success-rate',
+                businessCriteria: 'The percentage of wire transfer requests that successfully complete on the scheduled closing date. Success means the funds reach the title company within the required timeframe, allowing the home purchase to close as planned. We expect 99.5% of transfers to succeed.',
+                technicalCriteria: `SELECT
+  (COUNT(*) FILTER (WHERE status='completed') * 100.0)
+  / COUNT(*) as success_rate
+FROM wire_transfers
+WHERE
+  scheduled_date = CURRENT_DATE
+  AND created_at >= CURRENT_DATE`,
+                sloTarget: '99.5%',
+                sloRationale: 'Target is based on contractual SLA with title companies and historical baseline performance over the past 12 months.',
+                timeWindow: '24h'
+            },
+            credit: {
+                title: 'Credit Check Service - Complete BOS Entry',
+                complexity: 'standard',
+                serviceName: 'Credit Check Service',
+                businessPurpose: 'Validate borrower creditworthiness for loan approval decisions. Retrieves credit scores from major bureaus (Equifax, Experian, TransUnion) and provides decision-ready reports to loan officers. Critical for regulatory compliance with FCRA 30-day requirement.',
+                successBaseline: 'Under normal operation, 99.5% of credit check requests return valid credit scores within 3 seconds, enabling loan officers to proceed with approval decisions immediately.',
+                impactCategory: 'legal',
+                stakeholder: 'Loan officers and borrowers',
+                businessConsequence: 'Loan officers cannot complete credit assessments, loan approvals are delayed, and FCRA 30-day decision requirement may be violated. Borrowers experience delays in loan processing.',
+                financialImpact: 'Each failed credit check delays loan processing by 1-2 days. With 2,000 daily requests, a 1% failure rate affects 20 borrowers. FCRA violations carry penalties of $100-$1,000 per incident.',
+                signalName: 'credit-check-success-rate',
+                businessCriteria: 'The percentage of credit check requests that return valid credit scores within acceptable timeframes. Success means receiving complete bureau responses with actionable scores, allowing loan officers to proceed with approval decisions. We expect 99.5% success rate.',
+                technicalCriteria: `SELECT
+  (COUNT(*) FILTER (WHERE
+    status='success'
+    AND response_time_ms < 3000
+    AND score IS NOT NULL
+  ) * 100.0) / COUNT(*) as success_rate
+FROM credit_check_requests
+WHERE
+  created_at >= CURRENT_DATE
+  AND request_type = 'loan_application'`,
+                sloTarget: '99.5%',
+                sloRationale: 'Target driven by FCRA compliance requirements and contractual SLAs with credit bureaus. 3-second response time ensures loan officer workflow remains uninterrupted.',
+                timeWindow: '24h'
+            },
+            trid: {
+                title: 'TRID Disclosure Service - Complete BOS Entry',
+                complexity: 'complex',
+                serviceName: 'TRID Disclosure Service',
+                businessPurpose: 'Ensure timely delivery of mortgage loan disclosure documents to borrowers in compliance with CFPB TRID rule. Must deliver Loan Estimate within 3 business days of application and Closing Disclosure at least 3 business days before closing. Regulatory compliance is mandatory.',
+                successBaseline: 'Under normal operation, 99.95% of disclosure deliveries meet CFPB timing requirements, with business day calculations properly excluding weekends and holidays. Document revision handling ensures only the latest version triggers new 3-day waiting periods when material changes occur.',
+                impactCategory: 'legal',
+                stakeholder: 'Compliance team, borrowers, and loan officers',
+                businessConsequence: 'CFPB violations occur, resulting in regulatory penalties, delayed closings, and potential loan application withdrawals. Borrowers may lose their interest rate lock or purchase contract deadlines.',
+                financialImpact: 'CFPB TRID violations carry penalties up to $5,000 per incident for non-egregious violations, $25,000 for reckless violations. Each delayed closing costs $2,000 in operational overhead. With 300 daily applications, a 0.05% violation rate is 15 violations monthly ($75,000 minimum penalty exposure).',
+                signalName: 'trid-delivery-compliance-rate',
+                businessCriteria: 'The percentage of disclosure deliveries that meet CFPB 3-business-day requirements. Success means delivering Loan Estimate within 3 business days of application, and Closing Disclosure at least 3 business days before closing, using proper business day calculation (excluding weekends and holidays). We expect 99.95% compliance.',
+                technicalCriteria: `WITH business_days AS (
+  SELECT date FROM calendar
+  WHERE is_business_day = true
+),
+latest_disclosures AS (
+  SELECT
+    loan_id,
+    disclosure_type,
+    delivered_date,
+    ROW_NUMBER() OVER (
+      PARTITION BY loan_id, disclosure_type
+      ORDER BY version DESC
+    ) as rn
+  FROM disclosures
+)
+SELECT
+  (COUNT(*) FILTER (WHERE
+    disclosure_type = 'LE'
+    AND business_days_between(application_date, delivered_date) <= 3
+    OR
+    disclosure_type = 'CD'
+    AND business_days_between(delivered_date, closing_date) >= 3
+  ) * 100.0) / COUNT(*) as compliance_rate
+FROM latest_disclosures
+JOIN loans USING (loan_id)
+WHERE rn = 1 AND created_at >= CURRENT_DATE - 30`,
+                sloTarget: '99.95%',
+                sloRationale: 'Target mandated by CFPB TRID regulatory requirement. 99.95% allows for minimal technical exceptions while maintaining regulatory compliance. Higher than typical business SLO due to legal mandate.',
+                timeWindow: '30d'
+            }
+        };
+
+        // ===== STATE MANAGEMENT =====
+        let currentView = 'gallery';
+        let isUsingTemplate = false;
+        let currentTemplate = null;
+
+        // ===== DOM ELEMENTS =====
+        const galleryView = document.getElementById('galleryView');
+        const formView = document.getElementById('formView');
+        const exampleModal = document.getElementById('exampleModal');
+        const exampleModalTitle = document.getElementById('exampleModalTitle');
+        const exampleModalContent = document.getElementById('exampleModalContent');
+        const exampleModalClose = document.getElementById('exampleModalClose');
+        const helpIcon = document.getElementById('helpIcon');
+        const closeBtn = document.getElementById('closeBtn');
+        const overlay = document.getElementById('overlay');
+        const drawer = document.getElementById('drawer');
+
+        // ===== INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeEventListeners();
+            initializeTabNavigation();
+            initializeHelpDrawer();
+            initializeQualityChecklist();
+        });
+
+        // ===== EVENT LISTENERS =====
+        function initializeEventListeners() {
+            // Gallery view buttons
+            document.querySelectorAll('[data-action="view"]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    viewExample(this.dataset.example);
+                });
+            });
+
+            document.querySelectorAll('[data-action="use"]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    useTemplate(this.dataset.example);
+                });
+            });
+
+            document.getElementById('startFresh').addEventListener('click', startFresh);
+
+            // Back to gallery button
+            document.getElementById('backToGallery').addEventListener('click', showGalleryView);
+
+            // Example modal
+            exampleModalClose.addEventListener('click', closeExampleModal);
+            exampleModal.addEventListener('click', function(e) {
+                if (e.target === this) closeExampleModal();
+            });
+        }
+
+        // ===== GALLERY FUNCTIONS =====
+        function viewExample(type) {
+            const example = examples[type];
+            exampleModalTitle.textContent = example.title;
+
+            const complexityBadge = example.complexity === 'complex'
+                ? '<span class="complexity-badge complex">🟡 COMPLEX</span>'
+                : '<span class="complexity-badge standard">🟢 STANDARD</span>';
+
+            const content = `
+                ${complexityBadge}
+
+                <div class="field-display">
+                    <span class="field-label">Service Name</span>
+                    <div class="field-value">${example.serviceName}</div>
+                </div>
+
+                <div class="field-display">
+                    <span class="field-label">Business Purpose</span>
+                    <div class="field-value">${example.businessPurpose}</div>
+                </div>
+
+                <div class="field-display">
+                    <span class="field-label">Success Baseline</span>
+                    <div class="field-value">${example.successBaseline}</div>
+                </div>
+
+                <div class="field-display">
+                    <span class="field-label">Primary Impact</span>
+                    <div class="field-value">${formatImpactCategory(example.impactCategory)}</div>
+                </div>
+
+                <div class="field-display">
+                    <span class="field-label">Stakeholder</span>
+                    <div class="field-value">${example.stakeholder}</div>
+                </div>
+
+                <div class="field-display">
+                    <span class="field-label">Business Consequence</span>
+                    <div class="field-value">${example.businessConsequence}</div>
+                </div>
+
+                <div class="field-display">
+                    <span class="field-label">Financial Impact</span>
+                    <div class="field-value">${example.financialImpact}</div>
+                </div>
+
+                <div class="field-display">
+                    <span class="field-label">Signal Name</span>
+                    <div class="field-value">${example.signalName}</div>
+                </div>
+
+                <div class="field-display">
+                    <span class="field-label">Business Criteria</span>
+                    <div class="field-value">${example.businessCriteria}</div>
+                </div>
+
+                <div class="field-display">
+                    <span class="field-label">Technical Criteria</span>
+                    <div class="field-value code">${example.technicalCriteria}</div>
+                </div>
+
+                <div class="field-display">
+                    <span class="field-label">SLO Target</span>
+                    <div class="field-value">${example.sloTarget} - ${example.sloRationale}</div>
+                </div>
+
+                <div class="field-display">
+                    <span class="field-label">Time Window</span>
+                    <div class="field-value">${formatTimeWindow(example.timeWindow)}</div>
+                </div>
+            `;
+
+            exampleModalContent.innerHTML = content;
+            exampleModal.classList.add('visible');
+        }
+
+        function closeExampleModal() {
+            exampleModal.classList.remove('visible');
+        }
+
+        function useTemplate(type) {
+            currentTemplate = type;
+            isUsingTemplate = true;
+
+            const example = examples[type];
+
+            // Pre-fill all form fields
+            document.getElementById('serviceName').value = example.serviceName;
+            document.getElementById('businessPurpose').value = example.businessPurpose;
+            document.getElementById('successBaseline').value = example.successBaseline;
+            document.getElementById('impactCategory').value = example.impactCategory;
+            document.getElementById('stakeholder').value = example.stakeholder;
+            document.getElementById('businessConsequence').value = example.businessConsequence;
+            document.getElementById('financialImpact').value = example.financialImpact;
+            document.getElementById('signalName').value = example.signalName;
+            document.getElementById('businessCriteria').value = example.businessCriteria;
+            document.getElementById('technicalCriteria').value = example.technicalCriteria;
+            document.getElementById('sloTarget').value = example.sloTarget;
+            document.getElementById('sloRationale').value = example.sloRationale;
+            document.getElementById('timeWindow').value = example.timeWindow;
+
+            // Show template indicators
+            document.querySelectorAll('.template-indicator').forEach(indicator => {
+                indicator.textContent = '(from template)';
+            });
+
+            // Switch to form view
+            showFormView();
+        }
+
+        function startFresh() {
+            isUsingTemplate = false;
+            currentTemplate = null;
+
+            // Clear all form fields
+            document.getElementById('addServiceForm').reset();
+
+            // Hide template indicators
+            document.querySelectorAll('.template-indicator').forEach(indicator => {
+                indicator.textContent = '';
+            });
+
+            // Switch to form view
+            showFormView();
+        }
+
+        function showFormView() {
+            galleryView.style.display = 'none';
+            formView.classList.add('active');
+            currentView = 'form';
+
+            // Show back to gallery button
+            document.getElementById('backToGallery').classList.add('visible');
+
+            // Focus first field
+            document.getElementById('serviceName').focus();
+        }
+
+        function showGalleryView() {
+            formView.classList.remove('active');
+            galleryView.style.display = 'block';
+            currentView = 'gallery';
+
+            // Hide back to gallery button
+            document.getElementById('backToGallery').classList.remove('visible');
+
+            // Reset form to Tab 1
+            switchTab('business-context');
+
+            // Clear completed states
+            document.querySelectorAll('.tab.completed').forEach(tab => {
+                tab.classList.remove('completed');
+            });
+            document.getElementById('statusBusinessContext').textContent = '1';
+            document.getElementById('statusImpactDefinition').textContent = '2';
+            document.getElementById('statusSignalDefinition').textContent = '3';
+            document.getElementById('statusPreview').textContent = '4';
+        }
+
+        // ===== TAB NAVIGATION =====
+        function initializeTabNavigation() {
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            // Tab click handlers
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    if (!this.classList.contains('active')) {
+                        switchTab(this.dataset.tab);
+                    }
+                });
+            });
+
+            // Navigation button handlers
+            document.getElementById('btnNextToImpact').addEventListener('click', () => {
+                if (validateTab('business-context')) {
+                    markTabCompleted('business-context');
+                    switchTab('impact-definition');
+                }
+            });
+
+            document.getElementById('btnBackToBusiness').addEventListener('click', () => {
+                switchTab('business-context');
+            });
+
+            document.getElementById('btnNextToSignal').addEventListener('click', () => {
+                if (validateTab('impact-definition')) {
+                    markTabCompleted('impact-definition');
+                    switchTab('signal-definition');
+                }
+            });
+
+            document.getElementById('btnBackToImpact').addEventListener('click', () => {
+                switchTab('impact-definition');
+            });
+
+            document.getElementById('btnNextToPreview').addEventListener('click', () => {
+                if (validateTab('signal-definition')) {
+                    markTabCompleted('signal-definition');
+                    updatePreview();
+                    switchTab('preview');
+                }
+            });
+
+            document.getElementById('btnBackToSignal').addEventListener('click', () => {
+                switchTab('signal-definition');
+            });
+
+            // Form submission
+            document.getElementById('addServiceForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                handleFormSubmit();
+            });
+        }
+
+        function switchTab(tabId) {
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(tab => {
+                if (tab.dataset.tab === tabId) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+
+            tabContents.forEach(content => {
+                const contentId = 'content' + tabId.split('-').map(w =>
+                    w.charAt(0).toUpperCase() + w.slice(1)
+                ).join('');
+
+                if (content.id === contentId) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+        }
+
+        function validateTab(tabId) {
+            if (tabId === 'business-context') {
+                const serviceName = document.getElementById('serviceName').value.trim();
+                const businessPurpose = document.getElementById('businessPurpose').value.trim();
+                const successBaseline = document.getElementById('successBaseline').value.trim();
+                const impactCategory = document.getElementById('impactCategory').value;
+
+                if (!serviceName || !businessPurpose || !successBaseline || !impactCategory) {
+                    alert('Please complete all required fields in Business Context');
+                    return false;
+                }
+            } else if (tabId === 'impact-definition') {
+                const stakeholder = document.getElementById('stakeholder').value.trim();
+                const businessConsequence = document.getElementById('businessConsequence').value.trim();
+                const financialImpact = document.getElementById('financialImpact').value.trim();
+
+                if (!stakeholder || !businessConsequence || !financialImpact) {
+                    alert('Please complete all required fields in Impact Definition');
+                    return false;
+                }
+            } else if (tabId === 'signal-definition') {
+                const signalName = document.getElementById('signalName').value.trim();
+                const businessCriteria = document.getElementById('businessCriteria').value.trim();
+                const technicalCriteria = document.getElementById('technicalCriteria').value.trim();
+                const sloTarget = document.getElementById('sloTarget').value.trim();
+                const sloRationale = document.getElementById('sloRationale').value.trim();
+                const timeWindow = document.getElementById('timeWindow').value;
+
+                if (!signalName || !businessCriteria || !technicalCriteria || !sloTarget || !sloRationale || !timeWindow) {
+                    alert('Please complete all required fields in Signal Definition');
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        function markTabCompleted(tabId) {
+            const tab = document.querySelector(`[data-tab="${tabId}"]`);
+            const status = document.getElementById('status' + tabId.split('-').map(w =>
+                w.charAt(0).toUpperCase() + w.slice(1)
+            ).join(''));
+
+            tab.classList.add('completed');
+            status.textContent = '✓';
+        }
+
+        // ===== PREVIEW =====
+        function updatePreview() {
+            // Get all form values
+            const serviceName = document.getElementById('serviceName').value.trim();
+            const businessPurpose = document.getElementById('businessPurpose').value.trim();
+            const successBaseline = document.getElementById('successBaseline').value.trim();
+            const impactCategory = document.getElementById('impactCategory').value;
+            const stakeholder = document.getElementById('stakeholder').value.trim();
+            const businessConsequence = document.getElementById('businessConsequence').value.trim();
+            const financialImpact = document.getElementById('financialImpact').value.trim();
+            const signalName = document.getElementById('signalName').value.trim();
+            const businessCriteria = document.getElementById('businessCriteria').value.trim();
+            const technicalCriteria = document.getElementById('technicalCriteria').value.trim();
+            const sloTarget = document.getElementById('sloTarget').value.trim();
+            const sloRationale = document.getElementById('sloRationale').value.trim();
+            const timeWindow = document.getElementById('timeWindow').value;
+
+            // Update preview fields
+            document.getElementById('previewServiceName').textContent = serviceName || '(Not yet entered)';
+            document.getElementById('previewBusinessPurpose').textContent = businessPurpose || '(Not yet entered)';
+            document.getElementById('previewSuccessBaseline').textContent = successBaseline || '(Not yet entered)';
+            document.getElementById('previewImpactCategory').textContent = impactCategory ? formatImpactCategory(impactCategory) : '(Not yet entered)';
+            document.getElementById('previewStakeholder').textContent = stakeholder || '(Not yet entered)';
+            document.getElementById('previewBusinessConsequence').textContent = businessConsequence || '(Not yet entered)';
+            document.getElementById('previewFinancialImpact').textContent = financialImpact || '(Not yet entered)';
+            document.getElementById('previewSignalName').textContent = signalName || '(Not yet entered)';
+            document.getElementById('previewBusinessCriteria').textContent = businessCriteria || '(Not yet entered)';
+            document.getElementById('previewTechnicalCriteria').textContent = technicalCriteria || '(Not yet entered)';
+            document.getElementById('previewSLO').textContent = sloTarget && sloRationale ? `${sloTarget} - ${sloRationale}` : '(Not yet entered)';
+            document.getElementById('previewTimeWindow').textContent = timeWindow ? formatTimeWindow(timeWindow) : '(Not yet entered)';
+
+            // Update completion badge
+            const allFieldsFilled = serviceName && businessPurpose && successBaseline && impactCategory &&
+                                   stakeholder && businessConsequence && financialImpact &&
+                                   signalName && businessCriteria && technicalCriteria &&
+                                   sloTarget && sloRationale && timeWindow;
+
+            const badge = allFieldsFilled ?
+                '<span class="badge badge-complete">✓ All Fields Complete</span>' :
+                '<span class="badge badge-incomplete">⚠ Some Fields Incomplete</span>';
+
+            document.getElementById('previewCompletionBadge').innerHTML = badge;
+        }
+
+        // ===== QUALITY CHECKLIST =====
+        function initializeQualityChecklist() {
+            const checklistHeader = document.getElementById('checklistHeader');
+            const checklistContent = document.getElementById('checklistContent');
+
+            checklistHeader.addEventListener('click', function() {
+                this.classList.toggle('expanded');
+                checklistContent.classList.toggle('visible');
+            });
+        }
+
+        // ===== HELP DRAWER =====
+        function initializeHelpDrawer() {
+            helpIcon.addEventListener('click', toggleDrawer);
+            closeBtn.addEventListener('click', closeDrawer);
+            overlay.addEventListener('click', closeDrawer);
+        }
+
+        function toggleDrawer() {
+            drawer.classList.toggle('visible');
+            overlay.classList.toggle('visible');
+        }
+
+        function closeDrawer() {
+            drawer.classList.remove('visible');
+            overlay.classList.remove('visible');
+        }
+
+        // ===== FORM SUBMISSION =====
+        function handleFormSubmit() {
+            alert('✅ Service submitted successfully!\n\nThis is a mockup. In the real system, this would:\n1. Validate your data\n2. Create the service entry\n3. Generate the signal definition\n4. Redirect you to add more signals or configure additional details');
+        }
+
+        // ===== UTILITY FUNCTIONS =====
+        function formatImpactCategory(value) {
+            const categories = {
+                'customer': 'Customer Impact',
+                'financial': 'Financial Impact',
+                'legal': 'Legal/Regulatory/Risk Impact',
+                'operational': 'Operational Impact'
+            };
+            return categories[value] || value;
+        }
+
+        function formatTimeWindow(value) {
+            const windows = {
+                '1h': 'Last 1 hour',
+                '24h': 'Last 24 hours',
+                '7d': 'Last 7 days',
+                '30d': 'Last 30 days'
+            };
+            return windows[value] || value;
+        }
+    </script>
+</body>
+</html>
