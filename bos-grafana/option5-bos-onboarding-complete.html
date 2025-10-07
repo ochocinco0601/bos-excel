@@ -773,6 +773,134 @@
             font-style: italic;
         }
 
+        /* User Stories Section */
+        .user-stories-section {
+            margin-top: var(--spacing-xl);
+            padding: var(--spacing-lg);
+            background: var(--color-gray-50);
+            border-radius: var(--radius-md);
+        }
+
+        .user-stories-section h4 {
+            font-size: var(--font-size-lg);
+            color: var(--color-text-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .user-stories-section > p {
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-lg);
+            font-size: var(--font-size-sm);
+        }
+
+        .story-card {
+            background: var(--color-bg-primary);
+            border: var(--border-width-default) solid var(--color-border-default);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .story-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .story-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .story-id {
+            font-family: var(--font-monospace);
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-gray-600);
+            background: var(--color-gray-100);
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-sm);
+        }
+
+        .story-persona {
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-medium);
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .story-persona.developer {
+            background: #DBEAFE;
+            color: #1E40AF;
+        }
+
+        .story-persona.sre {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .story-persona.po {
+            background: #DCFCE7;
+            color: #166534;
+        }
+
+        .story-card h5 {
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-text-primary);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .story-details {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .story-details p {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .story-details strong {
+            color: var(--color-text-primary);
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .story-dynamic {
+            color: var(--color-brand-primary);
+            font-weight: var(--font-weight-medium);
+            font-style: italic;
+        }
+
+        .acceptance-criteria {
+            background: var(--color-gray-50);
+            padding: var(--spacing-md);
+            border-radius: var(--radius-sm);
+            margin-top: var(--spacing-md);
+        }
+
+        .acceptance-criteria strong {
+            display: block;
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-text-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .acceptance-criteria ul {
+            margin-left: var(--spacing-xl);
+            margin-top: var(--spacing-sm);
+        }
+
+        .acceptance-criteria li {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-xs);
+            line-height: var(--line-height-relaxed);
+        }
+
         .preview-next-steps {
             background: var(--color-info-light);
             border-left: 4px solid var(--color-info);
@@ -1053,10 +1181,442 @@
             display: block;
             margin-bottom: var(--spacing-xs);
         }
+
+        /* ===== LANDING SCREEN ===== */
+        .landing-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--color-bg-primary);
+            z-index: 2000;
+            overflow-y: auto;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .landing-screen.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .landing-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-2xl);
+        }
+
+        .landing-hero {
+            text-align: center;
+            padding: 60px 0 40px;
+            border-bottom: 2px solid var(--color-border-light);
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .landing-hero h1 {
+            font-size: 2.5rem;
+            color: var(--color-text-primary);
+            margin-bottom: var(--spacing-lg);
+            font-weight: var(--font-weight-bold);
+            line-height: 1.2;
+        }
+
+        .landing-hero .subtitle {
+            font-size: var(--font-size-lg);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .executive-questions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-lg);
+            max-width: 800px;
+            margin: 0 auto var(--spacing-2xl);
+        }
+
+        .exec-question {
+            background: #FEF2F2;
+            border-left: 4px solid var(--color-brand-primary);
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-base);
+            color: var(--color-text-primary);
+            font-weight: var(--font-weight-medium);
+        }
+
+        .landing-section {
+            margin-bottom: var(--spacing-2xl);
+            padding: var(--spacing-2xl) 0;
+        }
+
+        .landing-section h2 {
+            font-size: 1.75rem;
+            color: var(--color-brand-primary);
+            margin-bottom: var(--spacing-lg);
+            text-align: center;
+        }
+
+        .landing-section h3 {
+            font-size: 1.25rem;
+            color: var(--color-text-primary);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .landing-section p {
+            font-size: var(--font-size-base);
+            color: var(--color-text-secondary);
+            line-height: var(--line-height-relaxed);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-xl);
+            margin-top: var(--spacing-xl);
+        }
+
+        .comparison-box {
+            background: var(--color-bg-secondary);
+            border: 2px solid var(--color-border-default);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+        }
+
+        .comparison-box.enhanced {
+            background: #F0FDF4;
+            border-color: var(--color-success);
+        }
+
+        .comparison-box h3 {
+            margin-top: 0;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .signal-list {
+            font-family: var(--font-monospace);
+            font-size: var(--font-size-sm);
+            color: var(--color-text-primary);
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        .signal-list .signal-warning {
+            color: #D97706;
+        }
+
+        .signal-list .signal-ok {
+            color: var(--color-success);
+        }
+
+        .signal-list .highlight {
+            background: #FEF3C7;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .semantic-flow {
+            background: var(--color-gray-50);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-2xl);
+            margin: var(--spacing-xl) 0;
+        }
+
+        .flow-diagram {
+            font-size: var(--font-size-base);
+            line-height: 2;
+            text-align: center;
+            color: var(--color-text-primary);
+        }
+
+        .flow-diagram .flow-item {
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-brand-primary);
+        }
+
+        .flow-example {
+            margin-top: var(--spacing-xl);
+            padding: var(--spacing-lg);
+            background: var(--color-bg-primary);
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-sm);
+            line-height: 1.8;
+        }
+
+        .role-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-xl);
+        }
+
+        .role-card {
+            background: var(--color-bg-primary);
+            border: 2px solid var(--color-border-default);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            text-align: center;
+        }
+
+        .role-card .role-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            background: var(--color-brand-primary);
+            color: white;
+            border-radius: 50%;
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-bold);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .role-card h4 {
+            color: var(--color-text-primary);
+            margin-bottom: var(--spacing-md);
+            font-size: var(--font-size-lg);
+        }
+
+        .role-card ul {
+            text-align: left;
+            list-style: none;
+            padding: 0;
+        }
+
+        .role-card li {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-sm);
+            padding-left: var(--spacing-lg);
+            position: relative;
+        }
+
+        .role-card li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--color-brand-primary);
+            font-weight: bold;
+        }
+
+        .bridge-message {
+            background: var(--color-info-light);
+            border: 2px solid var(--color-info);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-2xl);
+            margin: var(--spacing-2xl) 0;
+        }
+
+        .bridge-message h3 {
+            color: var(--color-info);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .bridge-formula {
+            background: var(--color-bg-primary);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            font-family: var(--font-monospace);
+            font-size: var(--font-size-sm);
+            line-height: 1.8;
+            margin: var(--spacing-lg) 0;
+        }
+
+        .bridge-points {
+            list-style: none;
+            padding: 0;
+        }
+
+        .bridge-points li {
+            padding-left: var(--spacing-xl);
+            margin-bottom: var(--spacing-sm);
+            position: relative;
+        }
+
+        .bridge-points li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--color-success);
+            font-weight: bold;
+        }
+
+        .landing-cta {
+            text-align: center;
+            padding: 60px 0;
+        }
+
+        .landing-cta h2 {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .landing-cta .btn-large {
+            font-size: var(--font-size-lg);
+            padding: var(--spacing-lg) var(--spacing-2xl);
+            border-radius: var(--radius-md);
+            font-weight: var(--font-weight-semibold);
+        }
     </style>
 </head>
 <body>
     <div class="page-wrapper">
+        <!-- Landing Screen -->
+        <div id="landingScreen" class="landing-screen visible">
+            <div class="landing-content">
+                <!-- Hero Section -->
+                <div class="landing-hero">
+                    <h1>Your observability platform tells you WHAT is broken.<br>But can you answer these executive questions?</h1>
+                    <div class="executive-questions">
+                        <div class="exec-question">"How many customers are impacted?"</div>
+                        <div class="exec-question">"What's the revenue at risk?"</div>
+                        <div class="exec-question">"Are we violating compliance deadlines?"</div>
+                        <div class="exec-question">"Which stakeholder expectations are we breaking?"</div>
+                    </div>
+                </div>
+
+                <!-- Logic Model Section -->
+                <div class="landing-section">
+                    <h2>The BOS Principle</h2>
+                    <p style="max-width: 900px; margin: 0 auto; text-align: center; font-size: 1.125rem; font-style: italic;">
+                        "A problem is only solved if the intended outcome is achieved. Achieving an outcome requires knowing what that outcome is. Knowing if the outcome was achieved requires explicit validation. Validation requires instrumentation and measurement."
+                    </p>
+                    <p style="max-width: 900px; margin: var(--spacing-lg) auto 0; text-align: center; font-weight: var(--font-weight-semibold);">
+                        <strong>Therefore:</strong> If you want to know whether a business problem is solved, you must treat the business goal as a requirement and build in validation.
+                    </p>
+                </div>
+
+                <!-- Comparison Section -->
+                <div class="landing-section">
+                    <h2>Technical Observability vs Business Observability</h2>
+                    <div class="comparison-grid">
+                        <div class="comparison-box">
+                            <h3>Technical Observability<br><small style="color: var(--color-text-tertiary); font-weight: normal;">(What You Have)</small></h3>
+                            <div class="signal-list">Credit Check Service
+├─ SIG010: Success Rate <span class="signal-warning">99.2% ⚠️</span> (Target: 99.5%)
+├─ SIG011: Valid Scores 98.8%
+├─ SIG012: Response Time 250ms
+└─ SIG013: Bureau Connection <span class="signal-ok">OK ✓</span>
+
+<strong>You know it's degraded.</strong>
+<strong style="color: var(--color-text-tertiary);">But what's the business impact?</strong></div>
+                        </div>
+                        <div class="comparison-box enhanced">
+                            <h3>Business Observability<br><small style="color: var(--color-text-tertiary); font-weight: normal;">(Technical + Business Context)</small></h3>
+                            <div class="signal-list">Credit Check Service
+├─ <strong>Technical Health (4 signals)</strong>
+│   ├─ SIG010: Success Rate <span class="signal-warning">99.2% ⚠️</span>
+│   ├─ SIG011: Valid Scores 98.8%
+│   ├─ SIG012: Response Time 250ms
+│   └─ SIG013: Bureau Connection <span class="signal-ok">OK ✓</span>
+│
+└─ <strong>Business Impact (4 signals)</strong>
+    ├─ SIG023: <span class="highlight">10 customers</span> blocked
+    ├─ SIG024: <span class="highlight">$4.8M revenue</span> at risk
+    ├─ SIG025: <span class="highlight">FCRA violations</span> in 3 hrs
+    └─ SIG026: <span class="highlight">15 manual</span> interventions
+
+<strong>8 signals = Complete visibility</strong></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Semantic Flow Section -->
+                <div class="landing-section">
+                    <h2>How BOS Connects Technical Signals to Business Value</h2>
+                    <div class="semantic-flow">
+                        <div class="flow-diagram">
+                            <span class="flow-item">[Stakeholder]</span> → has an → <span class="flow-item">[Expectation]</span><br>
+                            ...which, if broken, causes an → <span class="flow-item">[Impact]</span><br>
+                            ...which is detected by → <span class="flow-item">[Telemetry]</span><br>
+                            ...which creates an actionable → <span class="flow-item">[Signal]</span><br>
+                            ...which informs both a → <span class="flow-item">[Playbook]</span> and a <span class="flow-item">[Dashboard]</span>
+                        </div>
+                        <div class="flow-example">
+                            <strong>Example:</strong><br>
+                            <strong>Loan officers</strong> (stakeholder)<br>
+                            → expect credit scores within 30 seconds (expectation)<br>
+                            → loan approval delays impact customers (impact)<br>
+                            → query credit_check_requests table (telemetry)<br>
+                            → <strong>SIG010: credit-check-success-rate</strong> (signal)<br>
+                            → Alert playbook + Executive dashboard (action)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Three Roles Section -->
+                <div class="landing-section">
+                    <h2>How the Three Roles Work Together</h2>
+                    <div class="role-cards">
+                        <div class="role-card">
+                            <div class="role-number">1</div>
+                            <h4>Product Owner</h4>
+                            <p style="font-size: var(--font-size-sm); color: var(--color-text-secondary); margin-bottom: var(--spacing-md);">Defines Business Context</p>
+                            <ul>
+                                <li>Who are the stakeholders?</li>
+                                <li>What do they expect?</li>
+                                <li>What's the impact if expectations fail?</li>
+                                <li>What's the business value?</li>
+                            </ul>
+                        </div>
+                        <div class="role-card">
+                            <div class="role-number">2</div>
+                            <h4>Developer</h4>
+                            <p style="font-size: var(--font-size-sm); color: var(--color-text-secondary); margin-bottom: var(--spacing-md);">Implements Measurement</p>
+                            <ul>
+                                <li>Write the query (SQL/Splunk)</li>
+                                <li>Instrument the signal</li>
+                                <li>Validate against business criteria</li>
+                                <li>Deploy to monitoring platform</li>
+                            </ul>
+                        </div>
+                        <div class="role-card">
+                            <div class="role-number">3</div>
+                            <h4>Platform Operations</h4>
+                            <p style="font-size: var(--font-size-sm); color: var(--color-text-secondary); margin-bottom: var(--spacing-md);">Sees Unified View</p>
+                            <ul>
+                                <li>Technical health (is it working?)</li>
+                                <li>Business impact (who's affected?)</li>
+                                <li>Executive reporting (revenue, compliance)</li>
+                                <li>Business-driven prioritization</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bridge Message Section -->
+                <div class="landing-section">
+                    <div class="bridge-message">
+                        <h3>BOS Extends Your Observability Platform</h3>
+                        <p>Business Observability is not a replacement for technical observability. It's an extension that connects your existing platform to business outcomes.</p>
+                        <div class="bridge-formula">Your Technical Observability Platform
+  + Business Context (stakeholder expectations)
+  + Business Impact Signals (customers, revenue, compliance)
+  + Semantic Model (connects tech → business)
+  + Executive Reporting (answers "so what?")
+  ─────────────────────────────────────────────
+  = Business Observability System</div>
+                        <p><strong>BOS is a bridge, not a replacement:</strong></p>
+                        <ul class="bridge-points">
+                            <li>Builds on your Prometheus/Grafana/Splunk infrastructure</li>
+                            <li>Adds business context layer on top of technical metrics</li>
+                            <li>Answers executive questions without recreating your platform</li>
+                            <li>Connects SRE dashboards ↔ C-Suite reporting</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Call to Action -->
+                <div class="landing-cta">
+                    <h2>Ready to add business context to your observability?</h2>
+                    <button class="btn btn-primary btn-large" id="btnExploreBOS">Explore Examples →</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Header -->
         <div class="page-header">
             <h1>Add Service to BOS</h1>
@@ -1646,6 +2206,78 @@
                                     </div>
                                 </div>
 
+                                <!-- User Stories Section -->
+                                <div class="user-stories-section">
+                                    <h4>📋 Generated User Stories</h4>
+                                    <p>Based on your BOS entry, these user stories will be created in Jira:</p>
+
+                                    <div class="story-card">
+                                        <div class="story-header">
+                                            <span class="story-id">BOS-001</span>
+                                            <span class="story-persona developer">Developer</span>
+                                        </div>
+                                        <h5>Instrument <span class="story-dynamic" id="storySignalName">[signal-name]</span> Signal</h5>
+                                        <div class="story-details">
+                                            <p><strong>As a:</strong> Developer</p>
+                                            <p><strong>I need to:</strong> Instrument the <span class="story-dynamic" id="storySignalName2">[signal-name]</span> signal for <span class="story-dynamic" id="storyServiceName">[service-name]</span></p>
+                                            <p><strong>So that:</strong> We can measure service health and detect degradation</p>
+                                        </div>
+                                        <div class="acceptance-criteria">
+                                            <strong>Acceptance Criteria:</strong>
+                                            <ul>
+                                                <li>Query returns data matching business criteria definition</li>
+                                                <li>Signal updates every <span class="story-dynamic" id="storyTimeWindow">[time-window]</span></li>
+                                                <li>Metric visible in Grafana with proper labels</li>
+                                                <li>Data validated against test dataset</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="story-card">
+                                        <div class="story-header">
+                                            <span class="story-id">BOS-002</span>
+                                            <span class="story-persona sre">SRE</span>
+                                        </div>
+                                        <h5>Create Dashboard for <span class="story-dynamic" id="storyServiceName2">[service-name]</span></h5>
+                                        <div class="story-details">
+                                            <p><strong>As a:</strong> SRE</p>
+                                            <p><strong>I need to:</strong> Create Grafana dashboard displaying <span class="story-dynamic" id="storySignalName3">[signal-name]</span> and business impact</p>
+                                            <p><strong>So that:</strong> Teams can monitor service health in real-time</p>
+                                        </div>
+                                        <div class="acceptance-criteria">
+                                            <strong>Acceptance Criteria:</strong>
+                                            <ul>
+                                                <li>Dashboard shows current value vs. target</li>
+                                                <li>Status indicator (OK/WARNING/CRITICAL) visible</li>
+                                                <li>Business impact metrics included</li>
+                                                <li>Links to runbook and escalation procedures</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="story-card">
+                                        <div class="story-header">
+                                            <span class="story-id">BOS-003</span>
+                                            <span class="story-persona po">Product Owner</span>
+                                        </div>
+                                        <h5>Configure Alert Thresholds for <span class="story-dynamic" id="storySignalName4">[signal-name]</span></h5>
+                                        <div class="story-details">
+                                            <p><strong>As a:</strong> Product Owner</p>
+                                            <p><strong>I need to:</strong> Define when to alert teams based on signal degradation</p>
+                                            <p><strong>So that:</strong> We respond to issues before customers are impacted</p>
+                                        </div>
+                                        <div class="acceptance-criteria">
+                                            <strong>Acceptance Criteria:</strong>
+                                            <ul>
+                                                <li>Warning threshold set (e.g., 95% of target)</li>
+                                                <li>Critical threshold set (e.g., 90% of target)</li>
+                                                <li>Alert routing configured to correct team</li>
+                                                <li>Notification channels defined (Slack, PagerDuty, email)</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="preview-next-steps">
                                     <h4>📋 Next Steps After Submission</h4>
                                     <ul>
@@ -1658,13 +2290,13 @@
 
                                 <div class="form-actions">
                                     <div class="progress-indicator">
-                                        <span>Step 4 of 4</span>
+                                        <span>Step 5 of 5</span>
                                         <div class="progress-bar">
                                             <div class="progress-fill" style="width: 100%;"></div>
                                         </div>
                                     </div>
                                     <div style="display: flex; gap: var(--spacing-md);">
-                                        <button type="button" class="btn btn-secondary" id="btnBackToSignal">
+                                        <button type="button" class="btn btn-secondary" id="btnBackToImpactSignals">
                                             ← Back to Edit
                                         </button>
                                         <button type="submit" class="btn btn-primary">
@@ -1889,6 +2521,11 @@ WHERE rn = 1 AND created_at >= CURRENT_DATE - 30`,
 
         // ===== EVENT LISTENERS =====
         function initializeEventListeners() {
+            // Landing screen button
+            document.getElementById('btnExploreBOS').addEventListener('click', function() {
+                document.getElementById('landingScreen').classList.remove('visible');
+            });
+
             // Gallery view buttons
             document.querySelectorAll('[data-action="view"]').forEach(btn => {
                 btn.addEventListener('click', function() {
@@ -2132,6 +2769,10 @@ WHERE rn = 1 AND created_at >= CURRENT_DATE - 30`,
                 switchTab('preview');
             });
 
+            document.getElementById('btnBackToImpactSignals').addEventListener('click', () => {
+                switchTab('impact-signals');
+            });
+
             // Form submission
             document.getElementById('addServiceForm').addEventListener('submit', function(e) {
                 e.preventDefault();
@@ -2242,6 +2883,19 @@ WHERE rn = 1 AND created_at >= CURRENT_DATE - 30`,
             document.getElementById('previewTechnicalCriteria').textContent = technicalCriteria || '(Not yet entered)';
             document.getElementById('previewSLO').textContent = sloTarget && sloRationale ? `${sloTarget} - ${sloRationale}` : '(Not yet entered)';
             document.getElementById('previewTimeWindow').textContent = timeWindow ? formatTimeWindow(timeWindow) : '(Not yet entered)';
+
+            // Update user story dynamic placeholders
+            const storySignalDisplay = signalName || '[signal-name]';
+            const storyServiceDisplay = serviceName || '[service-name]';
+            const storyTimeWindowDisplay = timeWindow ? formatTimeWindow(timeWindow) : '[time-window]';
+
+            document.getElementById('storySignalName').textContent = storySignalDisplay;
+            document.getElementById('storySignalName2').textContent = storySignalDisplay;
+            document.getElementById('storySignalName3').textContent = storySignalDisplay;
+            document.getElementById('storySignalName4').textContent = storySignalDisplay;
+            document.getElementById('storyServiceName').textContent = storyServiceDisplay;
+            document.getElementById('storyServiceName2').textContent = storyServiceDisplay;
+            document.getElementById('storyTimeWindow').textContent = storyTimeWindowDisplay;
 
             // Update completion badge
             // Performance Target and Rationale are optional (Year 1 maturity)
