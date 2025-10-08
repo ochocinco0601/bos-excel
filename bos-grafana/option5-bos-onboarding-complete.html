@@ -1790,6 +1790,176 @@
         .business-principle p:last-child {
             margin-bottom: 0;
         }
+
+        /* ===== INCIDENT RESPONSE COMPARISON ===== */
+        .incident-response-comparison {
+            margin-bottom: var(--spacing-2xl);
+            padding: var(--spacing-2xl) 0;
+        }
+
+        .incident-response-comparison h2 {
+            font-size: 1.75rem;
+            color: var(--color-brand-primary);
+            margin-bottom: var(--spacing-xl);
+            text-align: center;
+        }
+
+        .response-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .response-column {
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            border: 2px solid;
+        }
+
+        .response-column.without-bos {
+            background: #FEF3C7;
+            border-color: var(--color-warning);
+        }
+
+        .response-column.with-bos {
+            background: #ECFDF5;
+            border-color: var(--color-success);
+        }
+
+        .response-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid;
+        }
+
+        .response-column.without-bos .response-header {
+            border-bottom-color: var(--color-warning);
+        }
+
+        .response-column.with-bos .response-header {
+            border-bottom-color: var(--color-success);
+        }
+
+        .response-header .icon {
+            font-size: 1.5rem;
+        }
+
+        .response-header h3 {
+            font-size: 1.125rem;
+            color: var(--color-text-primary);
+            font-weight: var(--font-weight-bold);
+        }
+
+        .response-timeline {
+            margin-bottom: 20px;
+        }
+
+        .timeline-step {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding: 12px;
+            background: white;
+            border-radius: var(--radius-md);
+            border-left: 3px solid;
+        }
+
+        .response-column.without-bos .timeline-step {
+            border-left-color: var(--color-warning);
+        }
+
+        .response-column.with-bos .timeline-step {
+            border-left-color: var(--color-success);
+        }
+
+        .timeline-step .time {
+            font-family: var(--font-monospace);
+            font-size: 0.8125rem;
+            font-weight: var(--font-weight-bold);
+            color: var(--color-text-primary);
+            min-width: 60px;
+            flex-shrink: 0;
+        }
+
+        .timeline-step .event {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+        }
+
+        .exec-questions {
+            margin-top: 8px;
+            padding-left: 12px;
+        }
+
+        .exec-questions li {
+            font-size: 0.8125rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 4px;
+            list-style-type: disc;
+        }
+
+        .signal-types {
+            margin-top: 8px;
+            padding: 8px 12px;
+            background: #F0F9FF;
+            border-radius: var(--radius-sm);
+            font-size: 0.8125rem;
+            line-height: 1.7;
+        }
+
+        .signal-types strong {
+            color: var(--color-text-primary);
+        }
+
+        .signal-types .signal-type {
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .response-cost,
+        .response-benefit {
+            padding: 12px;
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            font-weight: var(--font-weight-semibold);
+            text-align: center;
+        }
+
+        .response-cost {
+            background: white;
+            color: #B45309;
+            border: 2px solid #FCD34D;
+        }
+
+        .response-benefit {
+            background: white;
+            color: #047857;
+            border: 2px solid #6EE7B7;
+        }
+
+        .comparison-insight {
+            margin-top: 24px;
+            padding: 16px;
+            background: #EFF6FF;
+            border: 2px solid var(--color-info);
+            border-radius: var(--radius-lg);
+            text-align: center;
+            font-size: 0.9375rem;
+            color: var(--color-text-secondary);
+            line-height: 1.7;
+        }
+
+        .comparison-insight strong {
+            color: var(--color-info);
+        }
     </style>
 </head>
 <body>
@@ -1825,6 +1995,107 @@
                     <p>We instrument what we build (APIs, databases, queues) but typically not what stakeholders expect (outcomes, timelines, business impact).</p>
                     <p>And each team builds their own dashboards - no standard approach, no way to navigate across 1000s of services.</p>
                     <p>BOS provides a standard pattern: business expectations become as measurable, visible, and discoverable as technical health.</p>
+                </div>
+
+                <!-- Incident Response Comparison -->
+                <div class="incident-response-comparison">
+                    <h2>Incident Response Comparison</h2>
+
+                    <div class="response-grid">
+                        <!-- LEFT: Without BOS -->
+                        <div class="response-column without-bos">
+                            <div class="response-header">
+                                <span class="icon">⚠️</span>
+                                <h3>Without Business Impact Instrumentation</h3>
+                            </div>
+
+                            <div class="response-timeline">
+                                <div class="timeline-step">
+                                    <div class="time">T+0 min</div>
+                                    <div class="event">
+                                        <strong>Alert fires:</strong> "Payment service degraded - 2% error rate"
+                                    </div>
+                                </div>
+
+                                <div class="timeline-step">
+                                    <div class="time">T+5 min</div>
+                                    <div class="event">
+                                        <strong>Assemble cross-functional team</strong>
+                                        <ul class="exec-questions">
+                                            <li>Support team joins to investigate customer impact</li>
+                                            <li>Development team joins to analyze technical cause</li>
+                                            <li>Product SMEs join to assess business consequences</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="timeline-step">
+                                    <div class="time">T+60+ min</div>
+                                    <div class="event">
+                                        <strong>Finally answer executive questions:</strong>
+                                        <ul class="exec-questions">
+                                            <li>How many customers are blocked?</li>
+                                            <li>How much money is at risk?</li>
+                                            <li>Which stakeholders need notification?</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="response-cost">
+                                <strong>Cost:</strong> Hour+ of SME time, every incident
+                            </div>
+                        </div>
+
+                        <!-- RIGHT: With BOS -->
+                        <div class="response-column with-bos">
+                            <div class="response-header">
+                                <span class="icon">✓</span>
+                                <h3>With BOS Pre-Instrumentation</h3>
+                            </div>
+
+                            <div class="response-timeline">
+                                <div class="timeline-step">
+                                    <div class="time">T+0 min</div>
+                                    <div class="event">
+                                        <strong>Alert fires:</strong> "Payment service degraded - 2% error rate"
+                                    </div>
+                                </div>
+
+                                <div class="timeline-step">
+                                    <div class="time">T+0 min</div>
+                                    <div class="event">
+                                        <strong>Dashboard shows all three signal types immediately:</strong>
+                                        <div class="signal-types">
+                                            <span class="signal-type"><strong>Technical Health:</strong> 2% error rate (triggered alert)</span>
+                                            <span class="signal-type"><strong>Business Health:</strong> 99.2% vs 99.5% target (below SLO)</span>
+                                            <span class="signal-type"><strong>Business Impact:</strong> 10 customers affected, $4.8M at risk</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="timeline-step">
+                                    <div class="time">T+2 min</div>
+                                    <div class="event">
+                                        <strong>Questions already answered, response coordinated</strong>
+                                        <ul class="exec-questions">
+                                            <li>Customer impact: 10 blocked (visible immediately)</li>
+                                            <li>Financial exposure: $4.8M (visible immediately)</li>
+                                            <li>Stakeholder notifications: Triggered automatically</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="response-benefit">
+                                <strong>Benefit:</strong> Hour+ saved, every incident
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="comparison-insight">
+                        <strong>The three signal types work together:</strong> Technical health triggers the alert, Business Health shows outcome degradation, Business Impact quantifies consequences. All visible immediately - no manual investigation required.
+                    </div>
                 </div>
 
                 <!-- Comparison Section - V4 Integrated -->
