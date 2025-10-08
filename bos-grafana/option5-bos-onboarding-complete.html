@@ -1807,21 +1807,24 @@
                 <!-- Traditional Observability Gap -->
                 <div class="observability-gap">
                     <h4>The Traditional Observability Gap</h4>
-                    <p>Our monitoring alerts us: "Payment service degraded - 2% error rate"</p>
+                    <p>Alert: "Payment service degraded - 2% error rate"</p>
                     <div class="scenario"><strong>Executives immediately ask:</strong>
 - How many customers are blocked?
 - How much money is at risk?
 - Do we need to escalate now or wait?
 - Which business stakeholders need notification?</div>
-                    <p>Our first responders spend 15 minutes investigating business impact while the incident continues. This happens every single incident.</p>
-                    <p>BOS pre-instruments business impact signals, making them immediately visible on dashboards - just like response times and error rates.</p>
+                    <p>Without business impact instrumentation, we assemble a cross-functional team - support, development, and product SMEs - who spend the next hour+ manually calculating these answers. The incident continues. The questions remain unanswered.</p>
+                    <p>This investigation repeats every incident - unless business impact is already pre-instrumented.</p>
+                    <p>BOS pre-instruments business impact signals, making them immediately visible - just like response times and error rates.</p>
                 </div>
 
                 <!-- Business Principle -->
                 <div class="business-principle">
                     <h4>The BOS Approach</h4>
-                    <p>Product requirements capture functional specifications. But business requirements - stakeholder expectations, compliance deadlines, and operational efficiency targets - often remain implicit assumptions until an incident forces manual investigation of who's affected, how much money is at risk, and which executives need notification.</p>
-                    <p>BOS makes these implicit business requirements explicit, measurable, and operationally actionable.</p>
+                    <p>Why does this investigation keep happening?</p>
+                    <p>We instrument what we build (APIs, databases, queues) but typically not what stakeholders expect (outcomes, timelines, business impact).</p>
+                    <p>And each team builds their own dashboards - no standard approach, no way to navigate across 1000s of services.</p>
+                    <p>BOS provides a standard pattern: business expectations become as measurable, visible, and discoverable as technical health.</p>
                 </div>
 
                 <!-- Comparison Section - V4 Integrated -->
