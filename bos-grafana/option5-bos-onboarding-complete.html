@@ -1182,6 +1182,99 @@
             margin-bottom: var(--spacing-xs);
         }
 
+        /* ===== GLOSSARY DRAWER ===== */
+        .glossary-drawer {
+            position: fixed;
+            top: 0;
+            right: -500px;
+            width: var(--width-drawer);
+            height: 100%;
+            background: var(--color-bg-primary);
+            box-shadow: var(--shadow-drawer);
+            z-index: var(--z-index-drawer);
+            transition: right var(--transition-slow);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .glossary-drawer.visible {
+            right: 0;
+        }
+
+        .glossary-search {
+            padding: var(--spacing-md);
+            background: var(--color-gray-50);
+            border-bottom: var(--border-width-default) solid var(--color-border-light);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .glossary-search-input {
+            width: 100%;
+            padding: var(--spacing-md);
+            font-size: var(--font-size-sm);
+            border: var(--border-width-default) solid var(--color-border-default);
+            border-radius: var(--radius-md);
+            font-family: var(--font-primary);
+            transition: border-color var(--transition-base);
+        }
+
+        .glossary-search-input:focus {
+            outline: none;
+            border-color: var(--color-border-focus);
+        }
+
+        .glossary-section {
+            padding: var(--spacing-lg) var(--spacing-lg) var(--spacing-md);
+            border-bottom: var(--border-width-default) solid var(--color-border-light);
+        }
+
+        .glossary-section:last-child {
+            border-bottom: none;
+        }
+
+        .glossary-section h3 {
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-brand-primary);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .glossary-term {
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-lg);
+            border-bottom: var(--border-width-default) solid var(--color-gray-200);
+        }
+
+        .glossary-term:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .term-name {
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-text-primary);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .term-dual {
+            font-size: var(--font-size-xs);
+            color: var(--color-info);
+            font-style: italic;
+            margin-bottom: var(--spacing-sm);
+            font-weight: var(--font-weight-medium);
+        }
+
+        .term-definition {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            line-height: var(--line-height-relaxed);
+        }
+
         /* ===== LANDING SCREEN ===== */
         .landing-screen {
             position: fixed;
@@ -1272,51 +1365,195 @@
             margin-bottom: var(--spacing-md);
         }
 
+        /* Two-Column Comparison Grid - V4 COMPACT */
         .comparison-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: var(--spacing-xl);
-            margin-top: var(--spacing-xl);
+            gap: 16px;
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
-        .comparison-box {
+        .comparison-column {
             background: var(--color-bg-secondary);
             border: 2px solid var(--color-border-default);
             border-radius: var(--radius-lg);
-            padding: var(--spacing-xl);
+            padding: 10px;
         }
 
-        .comparison-box.enhanced {
-            background: #F0FDF4;
-            border-color: var(--color-success);
+        .comparison-column h3 {
+            font-size: 1.125rem;
+            margin-bottom: 6px;
+            color: var(--color-text-primary);
         }
 
-        .comparison-box h3 {
-            margin-top: 0;
-            margin-bottom: var(--spacing-lg);
+        .subtitle {
+            font-size: 0.8125rem;
+            color: var(--color-text-tertiary);
+            margin-bottom: 14px;
         }
 
         .signal-list {
             font-family: var(--font-monospace);
-            font-size: var(--font-size-sm);
+            font-size: 0.8125rem;
             color: var(--color-text-primary);
-            line-height: 1.8;
+            line-height: 1.4;
             white-space: pre-wrap;
         }
 
-        .signal-list .signal-warning {
+        .signal-warning {
             color: #D97706;
         }
 
-        .signal-list .signal-ok {
+        .signal-ok {
             color: var(--color-success);
         }
 
-        .signal-list .highlight {
+        .highlight-text {
             background: #FEF3C7;
-            padding: 2px 4px;
+            padding: 1px 3px;
+            border-radius: 2px;
+            font-weight: 600;
+        }
+
+        .tells-us {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--color-gray-200);
+            font-size: 0.8125rem;
+        }
+
+        .tells-us strong {
+            color: var(--color-text-primary);
+        }
+
+        .bos-adds-green {
+            color: var(--color-success);
+            font-weight: 600;
+        }
+
+        .bos-adds-blue {
+            color: var(--color-info);
+            font-weight: 600;
+        }
+
+        /* Signal type definitions */
+        .signal-type-note {
+            font-size: 0.75rem;
+            color: var(--color-text-tertiary);
+            font-style: italic;
+            margin-top: 4px;
+        }
+
+        /* De-emphasized traditional signals */
+        .deemphasized {
+            opacity: 0.4;
+            font-size: 0.75rem;
+        }
+
+        /* Stakeholder context box */
+        .stakeholder-context {
+            background: #F0FDF4;
+            border-left: 3px solid var(--color-success);
+            padding: 6px 8px;
+            margin-bottom: 8px;
+            font-size: 0.8125rem;
             border-radius: 3px;
-            font-weight: var(--font-weight-semibold);
+        }
+
+        .stakeholder-context strong {
+            color: var(--color-success);
+        }
+
+        /* BOS Layers - COMPACT */
+        .bos-layer {
+            margin-top: 8px;
+            padding: 6px;
+            border-radius: var(--radius-md);
+            border: 2px solid;
+        }
+
+        .bos-layer.business-health {
+            background: #ECFDF5;
+            border-color: var(--color-success);
+        }
+
+        .bos-layer.business-impact {
+            background: #EFF6FF;
+            border-color: var(--color-info);
+        }
+
+        .layer-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--color-success);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.6875rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .layer-label.impact {
+            background: var(--color-info);
+        }
+
+        /* Dimension labels */
+        .dimension {
+            color: var(--color-text-tertiary);
+            font-size: 0.75rem;
+            font-style: italic;
+        }
+
+        /* Bridge Box */
+        .bridge-box {
+            margin-top: 16px;
+            padding: 10px;
+            background: linear-gradient(90deg, var(--color-gray-100) 0%, rgba(16, 185, 129, 0.1) 100%);
+            border: 2px dashed var(--color-success);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .bridge-box-content {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        .bridge-arrow {
+            font-size: 1.5rem;
+            color: var(--color-success);
+            font-weight: bold;
+        }
+
+        /* Summary Bar */
+        .summary-bar {
+            margin-top: 16px;
+            padding: 8px;
+            background: linear-gradient(135deg, #FAF5FF 0%, #EFF6FF 100%);
+            border: 2px solid var(--color-purple);
+            border-radius: var(--radius-lg);
+            text-align: center;
+        }
+
+        .summary-bar strong {
+            font-size: 1.125rem;
+            color: var(--color-purple);
+        }
+
+        .summary-bar .detail {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            margin-top: 4px;
         }
 
         .semantic-flow {
@@ -1460,6 +1697,99 @@
             border-radius: var(--radius-md);
             font-weight: var(--font-weight-semibold);
         }
+
+        /* BOS Title/Branding */
+        .bos-title {
+            font-size: 3rem;
+            color: var(--color-brand-primary);
+            font-weight: var(--font-weight-bold);
+            letter-spacing: -0.02em;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .bos-subtitle {
+            font-size: 1.25rem;
+            color: var(--color-text-secondary);
+            font-weight: var(--font-weight-medium);
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .value-proposition {
+            font-size: var(--font-size-lg);
+            color: var(--color-text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* Traditional Observability Gap */
+        .observability-gap {
+            background: #FEF2F2;
+            border-left: 4px solid var(--color-warning);
+            padding: var(--spacing-xl);
+            max-width: 900px;
+            margin: 0 auto var(--spacing-2xl);
+            border-radius: var(--radius-md);
+        }
+
+        .observability-gap h4 {
+            color: var(--color-warning);
+            font-size: var(--font-size-lg);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .observability-gap p {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            line-height: var(--line-height-relaxed);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .observability-gap .scenario {
+            background: white;
+            padding: var(--spacing-md);
+            border-radius: var(--radius-sm);
+            margin: var(--spacing-md) 0;
+            font-family: var(--font-monospace);
+            font-size: var(--font-size-sm);
+            line-height: 1.8;
+        }
+
+        .observability-gap .scenario strong {
+            color: var(--color-text-primary);
+        }
+
+        .observability-gap p:last-child {
+            margin-bottom: 0;
+            font-weight: var(--font-weight-semibold);
+        }
+
+        /* Business Principle Callout */
+        .business-principle {
+            background: var(--color-gray-50);
+            border-left: 4px solid var(--color-brand-primary);
+            padding: var(--spacing-xl);
+            max-width: 900px;
+            margin: 0 auto var(--spacing-2xl);
+            border-radius: var(--radius-md);
+        }
+
+        .business-principle h4 {
+            color: var(--color-brand-primary);
+            font-size: var(--font-size-lg);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .business-principle p {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            line-height: var(--line-height-relaxed);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .business-principle p:last-child {
+            margin-bottom: 0;
+        }
     </style>
 </head>
 <body>
@@ -1469,87 +1799,113 @@
             <div class="landing-content">
                 <!-- Hero Section -->
                 <div class="landing-hero">
-                    <h1>Your observability platform tells you WHAT is broken.<br>But can you answer these executive questions?</h1>
-                    <div class="executive-questions">
-                        <div class="exec-question">"How many customers are impacted?"</div>
-                        <div class="exec-question">"What's the revenue at risk?"</div>
-                        <div class="exec-question">"Are we violating compliance deadlines?"</div>
-                        <div class="exec-question">"Which stakeholder expectations are we breaking?"</div>
-                    </div>
+                    <h1 class="bos-title">Business Observability System (BOS)</h1>
+                    <p class="bos-subtitle">Connecting Technical Health to Business Outcomes</p>
+                    <p class="value-proposition">Transform stakeholder expectations into measurable business outcomes alongside our technical observability.</p>
                 </div>
 
-                <!-- Logic Model Section -->
-                <div class="landing-section">
-                    <h2>The BOS Principle</h2>
-                    <p style="max-width: 900px; margin: 0 auto; text-align: center; font-size: 1.125rem; font-style: italic;">
-                        "A problem is only solved if the intended outcome is achieved. Achieving an outcome requires knowing what that outcome is. Knowing if the outcome was achieved requires explicit validation. Validation requires instrumentation and measurement."
-                    </p>
-                    <p style="max-width: 900px; margin: var(--spacing-lg) auto 0; text-align: center; font-weight: var(--font-weight-semibold);">
-                        <strong>Therefore:</strong> If you want to know whether a business problem is solved, you must treat the business goal as a requirement and build in validation.
-                    </p>
+                <!-- Traditional Observability Gap -->
+                <div class="observability-gap">
+                    <h4>The Traditional Observability Gap</h4>
+                    <p>Our monitoring alerts us: "Payment service degraded - 2% error rate"</p>
+                    <div class="scenario"><strong>Executives immediately ask:</strong>
+- How many customers are blocked?
+- How much money is at risk?
+- Do we need to escalate now or wait?
+- Which business stakeholders need notification?</div>
+                    <p>Our first responders spend 15 minutes investigating business impact while the incident continues. This happens every single incident.</p>
+                    <p>BOS instruments business impact once, making it visible always - eliminating manual investigation during critical response time.</p>
                 </div>
 
-                <!-- Comparison Section -->
+                <!-- Business Principle -->
+                <div class="business-principle">
+                    <h4>The BOS Approach</h4>
+                    <p>Product requirements capture functional specifications. But business requirements - stakeholder expectations, compliance deadlines, and operational efficiency targets - often remain implicit assumptions until an incident forces manual investigation of who's affected, how much money is at risk, and which executives need notification.</p>
+                    <p>BOS makes these implicit business requirements explicit, measurable, and operationally actionable.</p>
+                </div>
+
+                <!-- Comparison Section - V4 Integrated -->
                 <div class="landing-section">
-                    <h2>Technical Observability vs Business Observability</h2>
+                    <h2>Traditional Observability plus Business Observability</h2>
+
                     <div class="comparison-grid">
-                        <div class="comparison-box">
-                            <h3>Technical Observability<br><small style="color: var(--color-text-tertiary); font-weight: normal;">(What You Have)</small></h3>
-                            <div class="signal-list">Credit Check Service
-├─ SIG010: Success Rate <span class="signal-warning">99.2% ⚠️</span> (Target: 99.5%)
-├─ SIG011: Valid Scores 98.8%
-├─ SIG012: Response Time 250ms
-└─ SIG013: Bureau Connection <span class="signal-ok">OK ✓</span>
+                        <!-- LEFT: Traditional Observability -->
+                        <div class="comparison-column">
+                            <h3>Traditional Observability</h3>
+                            <p class="subtitle">Technical Health Signals</p>
 
-<strong>You know it's degraded.</strong>
-<strong style="color: var(--color-text-tertiary);">But what's the business impact?</strong></div>
+                            <div class="tells-us" style="margin-top: 0; padding-top: 0; border-top: none;">
+                                <strong>Tells us:</strong> Is the service working?<br>
+                                <span class="bos-adds-green">BOS adds:</span> Business outcome measurement<br>
+                                <span class="bos-adds-blue">BOS adds:</span> Consequence quantification
+                            </div>
+
+                            <div class="signal-list" style="margin-top: 14px;"><strong>Credit Check Service</strong>
+
+├─ Response Time 250ms
+├─ Bureau Connection <span class="signal-ok">OK ✓</span>
+├─ Valid Score Rate 98.8%
+└─ Field Validation 99.5%</div>
+
+                            <!-- Bridge Box -->
+                            <div class="bridge-box">
+                                <div class="bridge-box-content">Technical signals</div>
+                                <div class="bridge-arrow">→</div>
+                            </div>
                         </div>
-                        <div class="comparison-box enhanced">
-                            <h3>Business Observability<br><small style="color: var(--color-text-tertiary); font-weight: normal;">(Technical + Business Context)</small></h3>
-                            <div class="signal-list">Credit Check Service
-├─ <strong>Technical Health (4 signals)</strong>
-│   ├─ SIG010: Success Rate <span class="signal-warning">99.2% ⚠️</span>
-│   ├─ SIG011: Valid Scores 98.8%
-│   ├─ SIG012: Response Time 250ms
-│   └─ SIG013: Bureau Connection <span class="signal-ok">OK ✓</span>
-│
-└─ <strong>Business Impact (4 signals)</strong>
-    ├─ SIG023: <span class="highlight">10 customers</span> blocked
-    ├─ SIG024: <span class="highlight">$4.8M revenue</span> at risk
-    ├─ SIG025: <span class="highlight">FCRA violations</span> in 3 hrs
-    └─ SIG026: <span class="highlight">15 manual</span> interventions
 
-<strong>8 signals = Complete visibility</strong></div>
+                        <!-- RIGHT: Business Observability -->
+                        <div class="comparison-column">
+                            <h3>Business Observability</h3>
+                            <p class="subtitle">Traditional + BOS Adds Two Signal Types</p>
+
+                            <!-- Layer 1: Business Health -->
+                            <div class="bos-layer business-health">
+                                <span class="layer-label">🆕 BOS Adds: Business Health</span>
+
+                                <!-- Stakeholder Context -->
+                                <div class="stakeholder-context">
+                                    <strong>Stakeholder:</strong> Loan officers expect credit scores within 30 seconds
+                                </div>
+
+                                <div class="signal-list"><strong>Expectation becomes KPI:</strong>
+
+Credit Check Success Rate
+├─ Current: <span class="signal-warning">99.2% ⚠️</span>
+├─ Target: 99.5%
+└─ Formula: successful / total</div>
+                                <div class="tells-us" style="border-top-color: #A7F3D0;">
+                                    <strong>Tells us:</strong> Is the business outcome being achieved right now?
+                                </div>
+                            </div>
+
+                            <!-- Layer 2: Business Impact -->
+                            <div class="bos-layer business-impact">
+                                <span class="layer-label impact">🆕 BOS Adds: Business Impact</span>
+                                <div class="signal-list"><strong>Consequences (4 dimensions):</strong>
+
+├─ <span class="dimension">(Customer)</span>: <span class="highlight-text">10 customers</span> blocked
+├─ <span class="dimension">(Financial)</span>: <span class="highlight-text">$4.8M in blocked</span> transactions
+├─ <span class="dimension">(Compliance)</span>: <span class="highlight-text">FCRA violations</span> in 3hrs
+└─ <span class="dimension">(Operations)</span>: <span class="highlight-text">15 manual</span> interventions</div>
+                                <div class="tells-us" style="border-top-color: #BFDBFE;">
+                                    <strong>Tells us:</strong> Who's affected, how much, what dimension
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Semantic Flow Section -->
-                <div class="landing-section">
-                    <h2>How BOS Connects Technical Signals to Business Value</h2>
-                    <div class="semantic-flow">
-                        <div class="flow-diagram">
-                            <span class="flow-item">[Stakeholder]</span> → has an → <span class="flow-item">[Expectation]</span><br>
-                            ...which, if broken, causes an → <span class="flow-item">[Impact]</span><br>
-                            ...which is detected by → <span class="flow-item">[Telemetry]</span><br>
-                            ...which creates an actionable → <span class="flow-item">[Signal]</span><br>
-                            ...which informs both a → <span class="flow-item">[Playbook]</span> and a <span class="flow-item">[Dashboard]</span>
-                        </div>
-                        <div class="flow-example">
-                            <strong>Example:</strong><br>
-                            <strong>Loan officers</strong> (stakeholder)<br>
-                            → expect credit scores within 30 seconds (expectation)<br>
-                            → loan approval delays impact customers (impact)<br>
-                            → query credit_check_requests table (telemetry)<br>
-                            → <strong>SIG010: credit-check-success-rate</strong> (signal)<br>
-                            → Alert playbook + Executive dashboard (action)
-                        </div>
+                    <!-- Summary Bar -->
+                    <div class="summary-bar">
+                        <strong>Traditional Observability + Business Observability = Complete Business Observability</strong>
+                        <div class="detail">System/Process signals + Business Health signals + Business Impact signals = Complete visibility (mechanism + outcome + consequence)</div>
+                        <div class="detail" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(139, 92, 246, 0.2);">Every service has stakeholders with expectations and business consequences when those expectations aren't met. BOS is a systematic pattern, not a custom solution.</div>
                     </div>
                 </div>
 
                 <!-- Three Roles Section -->
                 <div class="landing-section">
-                    <h2>How the Three Roles Work Together</h2>
+                    <h2>How Our Teams Work Together</h2>
                     <div class="role-cards">
                         <div class="role-card">
                             <div class="role-number">1</div>
@@ -1580,38 +1936,16 @@
                             <ul>
                                 <li>Technical health (is it working?)</li>
                                 <li>Business impact (who's affected?)</li>
-                                <li>Executive reporting (revenue, compliance)</li>
+                                <li>Executive reporting (financial impact, compliance)</li>
                                 <li>Business-driven prioritization</li>
                             </ul>
                         </div>
                     </div>
                 </div>
 
-                <!-- Bridge Message Section -->
-                <div class="landing-section">
-                    <div class="bridge-message">
-                        <h3>BOS Extends Your Observability Platform</h3>
-                        <p>Business Observability is not a replacement for technical observability. It's an extension that connects your existing platform to business outcomes.</p>
-                        <div class="bridge-formula">Your Technical Observability Platform
-  + Business Context (stakeholder expectations)
-  + Business Impact Signals (customers, revenue, compliance)
-  + Semantic Model (connects tech → business)
-  + Executive Reporting (answers "so what?")
-  ─────────────────────────────────────────────
-  = Business Observability System</div>
-                        <p><strong>BOS is a bridge, not a replacement:</strong></p>
-                        <ul class="bridge-points">
-                            <li>Builds on your Prometheus/Grafana/Splunk infrastructure</li>
-                            <li>Adds business context layer on top of technical metrics</li>
-                            <li>Answers executive questions without recreating your platform</li>
-                            <li>Connects SRE dashboards ↔ C-Suite reporting</li>
-                        </ul>
-                    </div>
-                </div>
-
                 <!-- Call to Action -->
                 <div class="landing-cta">
-                    <h2>Ready to add business context to your observability?</h2>
+                    <h2>Ready to add business context to our observability?</h2>
                     <button class="btn btn-primary btn-large" id="btnExploreBOS">Explore Examples →</button>
                 </div>
             </div>
@@ -1621,7 +1955,9 @@
         <div class="page-header">
             <h1>Add Service to BOS</h1>
             <div class="header-right">
+                <button class="back-to-gallery" id="backToOverview" aria-label="Back to overview" style="display: none;">← Back to Overview</button>
                 <button class="back-to-gallery" id="backToGallery" aria-label="Back to examples">← Back to Examples</button>
+                <button class="help-icon" id="glossaryIcon" aria-label="Open glossary drawer">📖</button>
                 <button class="help-icon" id="helpIcon" aria-label="Open help drawer">ℹ️</button>
             </div>
         </div>
@@ -1712,7 +2048,11 @@
                 </button>
                 <button class="tab" data-tab="preview" id="tabPreview">
                     <span class="tab-status" id="statusPreview">5</span>
-                    <span>Preview & Submit</span>
+                    <span>Preview</span>
+                </button>
+                <button class="tab" data-tab="user-stories" id="tabUserStories">
+                    <span class="tab-status" id="statusUserStories">6</span>
+                    <span>User Stories</span>
                 </button>
             </div>
 
@@ -2091,7 +2431,7 @@
                                         ← Back
                                     </button>
                                     <button type="button" class="btn btn-primary" id="btnNextToPreview">
-                                        Next: Preview & Submit →
+                                        Next: Preview →
                                     </button>
                                 </div>
                             </div>
@@ -2206,78 +2546,6 @@
                                     </div>
                                 </div>
 
-                                <!-- User Stories Section -->
-                                <div class="user-stories-section">
-                                    <h4>📋 Generated User Stories</h4>
-                                    <p>Based on your BOS entry, these user stories will be created in Jira:</p>
-
-                                    <div class="story-card">
-                                        <div class="story-header">
-                                            <span class="story-id">BOS-001</span>
-                                            <span class="story-persona developer">Developer</span>
-                                        </div>
-                                        <h5>Instrument <span class="story-dynamic" id="storySignalName">[signal-name]</span> Signal</h5>
-                                        <div class="story-details">
-                                            <p><strong>As a:</strong> Developer</p>
-                                            <p><strong>I need to:</strong> Instrument the <span class="story-dynamic" id="storySignalName2">[signal-name]</span> signal for <span class="story-dynamic" id="storyServiceName">[service-name]</span></p>
-                                            <p><strong>So that:</strong> We can measure service health and detect degradation</p>
-                                        </div>
-                                        <div class="acceptance-criteria">
-                                            <strong>Acceptance Criteria:</strong>
-                                            <ul>
-                                                <li>Query returns data matching business criteria definition</li>
-                                                <li>Signal updates every <span class="story-dynamic" id="storyTimeWindow">[time-window]</span></li>
-                                                <li>Metric visible in Grafana with proper labels</li>
-                                                <li>Data validated against test dataset</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-
-                                    <div class="story-card">
-                                        <div class="story-header">
-                                            <span class="story-id">BOS-002</span>
-                                            <span class="story-persona sre">SRE</span>
-                                        </div>
-                                        <h5>Create Dashboard for <span class="story-dynamic" id="storyServiceName2">[service-name]</span></h5>
-                                        <div class="story-details">
-                                            <p><strong>As a:</strong> SRE</p>
-                                            <p><strong>I need to:</strong> Create Grafana dashboard displaying <span class="story-dynamic" id="storySignalName3">[signal-name]</span> and business impact</p>
-                                            <p><strong>So that:</strong> Teams can monitor service health in real-time</p>
-                                        </div>
-                                        <div class="acceptance-criteria">
-                                            <strong>Acceptance Criteria:</strong>
-                                            <ul>
-                                                <li>Dashboard shows current value vs. target</li>
-                                                <li>Status indicator (OK/WARNING/CRITICAL) visible</li>
-                                                <li>Business impact metrics included</li>
-                                                <li>Links to runbook and escalation procedures</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-
-                                    <div class="story-card">
-                                        <div class="story-header">
-                                            <span class="story-id">BOS-003</span>
-                                            <span class="story-persona po">Product Owner</span>
-                                        </div>
-                                        <h5>Configure Alert Thresholds for <span class="story-dynamic" id="storySignalName4">[signal-name]</span></h5>
-                                        <div class="story-details">
-                                            <p><strong>As a:</strong> Product Owner</p>
-                                            <p><strong>I need to:</strong> Define when to alert teams based on signal degradation</p>
-                                            <p><strong>So that:</strong> We respond to issues before customers are impacted</p>
-                                        </div>
-                                        <div class="acceptance-criteria">
-                                            <strong>Acceptance Criteria:</strong>
-                                            <ul>
-                                                <li>Warning threshold set (e.g., 95% of target)</li>
-                                                <li>Critical threshold set (e.g., 90% of target)</li>
-                                                <li>Alert routing configured to correct team</li>
-                                                <li>Notification channels defined (Slack, PagerDuty, email)</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div class="preview-next-steps">
                                     <h4>📋 Next Steps After Submission</h4>
                                     <ul>
@@ -2290,19 +2558,111 @@
 
                                 <div class="form-actions">
                                     <div class="progress-indicator">
-                                        <span>Step 5 of 5</span>
+                                        <span>Step 5 of 6</span>
                                         <div class="progress-bar">
-                                            <div class="progress-fill" style="width: 100%;"></div>
+                                            <div class="progress-fill" style="width: 90%;"></div>
                                         </div>
                                     </div>
                                     <div style="display: flex; gap: var(--spacing-md);">
                                         <button type="button" class="btn btn-secondary" id="btnBackToImpactSignals">
                                             ← Back to Edit
                                         </button>
-                                        <button type="submit" class="btn btn-primary">
-                                            ✓ Submit Service to BOS
+                                        <button type="button" class="btn btn-primary" id="btnNextToUserStories">
+                                            Next: User Stories →
                                         </button>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 6: User Stories -->
+                        <div class="tab-content" id="contentUserStories">
+                            <!-- User Stories Section -->
+                            <div class="user-stories-section">
+                                <h4>📋 Generated User Stories</h4>
+                                <p>Based on your BOS entry, these user stories will be created in Jira for the development team:</p>
+
+                                <div class="story-card">
+                                    <div class="story-header">
+                                        <span class="story-id">BOS-001</span>
+                                        <span class="story-persona developer">Developer</span>
+                                    </div>
+                                    <h5>Instrument <span class="story-dynamic" id="storySignalName">[signal-name]</span> Signal</h5>
+                                    <div class="story-details">
+                                        <p><strong>As a:</strong> Developer</p>
+                                        <p><strong>I need to:</strong> Instrument the <span class="story-dynamic" id="storySignalName2">[signal-name]</span> signal for <span class="story-dynamic" id="storyServiceName">[service-name]</span></p>
+                                        <p><strong>So that:</strong> We can measure service health and detect degradation</p>
+                                    </div>
+                                    <div class="acceptance-criteria">
+                                        <strong>Acceptance Criteria:</strong>
+                                        <ul>
+                                            <li>Query returns data matching business criteria definition</li>
+                                            <li>Signal updates every <span class="story-dynamic" id="storyTimeWindow">[time-window]</span></li>
+                                            <li>Metric visible in Grafana with proper labels</li>
+                                            <li>Data validated against test dataset</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="story-card">
+                                    <div class="story-header">
+                                        <span class="story-id">BOS-002</span>
+                                        <span class="story-persona sre">SRE</span>
+                                    </div>
+                                    <h5>Create Dashboard for <span class="story-dynamic" id="storyServiceName2">[service-name]</span></h5>
+                                    <div class="story-details">
+                                        <p><strong>As a:</strong> SRE</p>
+                                        <p><strong>I need to:</strong> Create Grafana dashboard displaying <span class="story-dynamic" id="storySignalName3">[signal-name]</span> and business impact</p>
+                                        <p><strong>So that:</strong> Teams can monitor service health in real-time</p>
+                                    </div>
+                                    <div class="acceptance-criteria">
+                                        <strong>Acceptance Criteria:</strong>
+                                        <ul>
+                                            <li>Dashboard shows current value vs. target</li>
+                                            <li>Status indicator (OK/WARNING/CRITICAL) visible</li>
+                                            <li>Business impact metrics included</li>
+                                            <li>Links to runbook and escalation procedures</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="story-card">
+                                    <div class="story-header">
+                                        <span class="story-id">BOS-003</span>
+                                        <span class="story-persona po">Product Owner</span>
+                                    </div>
+                                    <h5>Configure Alert Thresholds for <span class="story-dynamic" id="storySignalName4">[signal-name]</span></h5>
+                                    <div class="story-details">
+                                        <p><strong>As a:</strong> Product Owner</p>
+                                        <p><strong>I need to:</strong> Define when to alert teams based on signal degradation</p>
+                                        <p><strong>So that:</strong> We respond to issues before customers are impacted</p>
+                                    </div>
+                                    <div class="acceptance-criteria">
+                                        <strong>Acceptance Criteria:</strong>
+                                        <ul>
+                                            <li>Warning threshold set (e.g., 95% of target)</li>
+                                            <li>Critical threshold set (e.g., 90% of target)</li>
+                                            <li>Alert routing configured to correct team</li>
+                                            <li>Notification channels defined (Slack, PagerDuty, email)</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <div class="progress-indicator">
+                                    <span>Step 6 of 6</span>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 100%;"></div>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: var(--spacing-md);">
+                                    <button type="button" class="btn btn-secondary" id="btnBackToPreview">
+                                        ← Back to Preview
+                                    </button>
+                                    <button type="submit" class="btn btn-primary">
+                                        ✓ Submit Service to BOS
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -2395,6 +2755,142 @@
 
             <h3>Need Help?</h3>
             <p>Contact the BOS Platform team for assistance with signal definitions, query writing, or accessing monitoring data sources.</p>
+        </div>
+    </div>
+
+    <!-- Glossary Drawer -->
+    <div class="glossary-drawer" id="glossaryDrawer">
+        <div class="drawer-header">
+            <h2>BOS Glossary</h2>
+            <button class="close-btn" id="glossaryCloseBtn" aria-label="Close glossary drawer">×</button>
+        </div>
+        <div class="drawer-content">
+            <!-- Search Box -->
+            <div class="glossary-search">
+                <input type="text" id="glossarySearch" placeholder="Search terms..." class="glossary-search-input" />
+            </div>
+
+            <!-- Core Concepts Section -->
+            <div class="glossary-section">
+                <h3>Core Concepts</h3>
+                <div class="glossary-term">
+                    <div class="term-name">Business Observability</div>
+                    <div class="term-definition">
+                        Monitoring and measuring business health through stakeholder expectations, business impact, and outcomes—not just technical metrics.
+                    </div>
+                </div>
+                <div class="glossary-term">
+                    <div class="term-name">Business Health Signal</div>
+                    <div class="term-dual">↔ Business SLI (Service Level Indicator)</div>
+                    <div class="term-definition">
+                        A measurement that answers "Is the service delivering business value?" Examples: customers affected, revenue at risk, compliance violations.
+                    </div>
+                </div>
+                <div class="glossary-term">
+                    <div class="term-name">Technical Health Signal</div>
+                    <div class="term-dual">↔ Traditional SLI</div>
+                    <div class="term-definition">
+                        A measurement of technical performance. Examples: success rate, response time, error rate, availability.
+                    </div>
+                </div>
+                <div class="glossary-term">
+                    <div class="term-name">Stakeholder</div>
+                    <div class="term-definition">
+                        Anyone who depends on the service to achieve an outcome. Examples: customers, loan officers, compliance teams, partner systems.
+                    </div>
+                </div>
+                <div class="glossary-term">
+                    <div class="term-name">Expectation</div>
+                    <div class="term-definition">
+                        What stakeholders need the service to accomplish. Example: "Home buyers expect wire transfers to complete on their scheduled closing date."
+                    </div>
+                </div>
+            </div>
+
+            <!-- Measurements & Targets Section -->
+            <div class="glossary-section">
+                <h3>Measurements & Targets</h3>
+                <div class="glossary-term">
+                    <div class="term-name">Business Criteria</div>
+                    <div class="term-definition">
+                        Plain-language description of what you're measuring and why it matters. Written for product owners and business stakeholders.
+                    </div>
+                </div>
+                <div class="glossary-term">
+                    <div class="term-name">Technical Criteria</div>
+                    <div class="term-dual">↔ SLI Query</div>
+                    <div class="term-definition">
+                        The actual query, calculation, or logic that produces the measurement. Written by developers, executed by monitoring systems.
+                    </div>
+                </div>
+                <div class="glossary-term">
+                    <div class="term-name">Performance Target</div>
+                    <div class="term-dual">↔ SLO (Service Level Objective)</div>
+                    <div class="term-definition">
+                        The threshold that indicates acceptable performance. Example: "99.5% of transfers complete successfully."
+                    </div>
+                </div>
+                <div class="glossary-term">
+                    <div class="term-name">Time Window</div>
+                    <div class="term-definition">
+                        How often the signal is measured. Examples: 24h (daily), 1h (hourly), 7d (weekly).
+                    </div>
+                </div>
+                <div class="glossary-term">
+                    <div class="term-name">Success Baseline</div>
+                    <div class="term-definition">
+                        What "normal" looks like when the service is healthy. Describes expected performance in business terms.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Business Impact Section -->
+            <div class="glossary-section">
+                <h3>Business Impact</h3>
+                <div class="glossary-term">
+                    <div class="term-name">Impact Category</div>
+                    <div class="term-dual">↔ Business Impact Dimension</div>
+                    <div class="term-definition">
+                        The type of business consequence when service fails. Four categories: Customer Experience, Financial, Legal/Risk, Operational.
+                    </div>
+                </div>
+                <div class="glossary-term">
+                    <div class="term-name">Business Consequence</div>
+                    <div class="term-definition">
+                        What happens to stakeholders when the service degrades or fails. Example: "Home closings are delayed, customers cannot move in on schedule."
+                    </div>
+                </div>
+                <div class="glossary-term">
+                    <div class="term-name">Financial Impact</div>
+                    <div class="term-definition">
+                        The monetary cost of service degradation. Includes operational overhead, customer remediation, and potential penalties.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technical Terms Section -->
+            <div class="glossary-section">
+                <h3>Technical Terms</h3>
+                <div class="glossary-term">
+                    <div class="term-name">Signal Status</div>
+                    <div class="term-definition">
+                        The current state of a signal: OK (meeting target), WARNING (approaching threshold), CRITICAL (below threshold).
+                    </div>
+                </div>
+                <div class="glossary-term">
+                    <div class="term-name">Dashboard</div>
+                    <div class="term-definition">
+                        Visual display of signal status, trends, and business impact. Used for monitoring and incident response.
+                    </div>
+                </div>
+                <div class="glossary-term">
+                    <div class="term-name">Playbook</div>
+                    <div class="term-dual">↔ Runbook</div>
+                    <div class="term-definition">
+                        Step-by-step response procedures when a signal indicates degradation. Includes escalation paths and remediation steps.
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -2510,12 +3006,17 @@ WHERE rn = 1 AND created_at >= CURRENT_DATE - 30`,
         const closeBtn = document.getElementById('closeBtn');
         const overlay = document.getElementById('overlay');
         const drawer = document.getElementById('drawer');
+        const glossaryIcon = document.getElementById('glossaryIcon');
+        const glossaryDrawer = document.getElementById('glossaryDrawer');
+        const glossaryCloseBtn = document.getElementById('glossaryCloseBtn');
+        const glossarySearch = document.getElementById('glossarySearch');
 
         // ===== INITIALIZATION =====
         document.addEventListener('DOMContentLoaded', function() {
             initializeEventListeners();
             initializeTabNavigation();
             initializeHelpDrawer();
+            initializeGlossaryDrawer();
             initializeQualityChecklist();
         });
 
@@ -2524,6 +3025,9 @@ WHERE rn = 1 AND created_at >= CURRENT_DATE - 30`,
             // Landing screen button
             document.getElementById('btnExploreBOS').addEventListener('click', function() {
                 document.getElementById('landingScreen').classList.remove('visible');
+                galleryView.style.display = 'block';
+                // Show "Back to Overview" button when entering gallery view
+                document.getElementById('backToOverview').style.display = 'inline-block';
             });
 
             // Gallery view buttons
@@ -2541,7 +3045,8 @@ WHERE rn = 1 AND created_at >= CURRENT_DATE - 30`,
 
             document.getElementById('startFresh').addEventListener('click', startFresh);
 
-            // Back to gallery button
+            // Back buttons
+            document.getElementById('backToOverview').addEventListener('click', showLandingScreen);
             document.getElementById('backToGallery').addEventListener('click', showGalleryView);
 
             // Example modal
@@ -2658,6 +3163,11 @@ WHERE rn = 1 AND created_at >= CURRENT_DATE - 30`,
                 indicator.textContent = '(from template)';
             });
 
+            // Mark tabs as completed (templates fill tabs 1-3)
+            markTabCompleted('business-context');
+            markTabCompleted('impact-definition');
+            markTabCompleted('signal-definition');
+
             // Switch to form view
             showFormView();
         }
@@ -2683,11 +3193,26 @@ WHERE rn = 1 AND created_at >= CURRENT_DATE - 30`,
             formView.classList.add('active');
             currentView = 'form';
 
-            // Show back to gallery button
-            document.getElementById('backToGallery').classList.add('visible');
+            // Show "Back to Examples", hide "Back to Overview"
+            document.getElementById('backToGallery').style.display = 'inline-block';
+            document.getElementById('backToOverview').style.display = 'none';
 
             // Focus first field
             document.getElementById('serviceName').focus();
+        }
+
+        function showLandingScreen() {
+            const landingScreen = document.getElementById('landingScreen');
+            landingScreen.classList.add('visible');
+            galleryView.style.display = 'none';
+            formView.classList.remove('active');
+
+            // Hide both back buttons on landing screen
+            document.getElementById('backToOverview').style.display = 'none';
+            document.getElementById('backToGallery').style.display = 'none';
+
+            // Scroll landing screen element to top (it has overflow-y: auto)
+            landingScreen.scrollTop = 0;
         }
 
         function showGalleryView() {
@@ -2695,8 +3220,9 @@ WHERE rn = 1 AND created_at >= CURRENT_DATE - 30`,
             galleryView.style.display = 'block';
             currentView = 'gallery';
 
-            // Hide back to gallery button
-            document.getElementById('backToGallery').classList.remove('visible');
+            // Show "Back to Overview", hide "Back to Examples"
+            document.getElementById('backToOverview').style.display = 'inline-block';
+            document.getElementById('backToGallery').style.display = 'none';
 
             // Reset form to Tab 1
             switchTab('business-context');
@@ -2771,6 +3297,15 @@ WHERE rn = 1 AND created_at >= CURRENT_DATE - 30`,
 
             document.getElementById('btnBackToImpactSignals').addEventListener('click', () => {
                 switchTab('impact-signals');
+            });
+
+            document.getElementById('btnNextToUserStories').addEventListener('click', () => {
+                updatePreview(); // Update dynamic placeholders in user stories
+                switchTab('user-stories');
+            });
+
+            document.getElementById('btnBackToPreview').addEventListener('click', () => {
+                switchTab('preview');
             });
 
             // Form submission
@@ -2937,6 +3472,56 @@ WHERE rn = 1 AND created_at >= CURRENT_DATE - 30`,
         function closeDrawer() {
             drawer.classList.remove('visible');
             overlay.classList.remove('visible');
+        }
+
+        // ===== GLOSSARY DRAWER =====
+        function initializeGlossaryDrawer() {
+            glossaryIcon.addEventListener('click', toggleGlossaryDrawer);
+            glossaryCloseBtn.addEventListener('click', closeGlossaryDrawer);
+            overlay.addEventListener('click', closeGlossaryDrawer);
+            glossarySearch.addEventListener('input', filterGlossaryTerms);
+        }
+
+        function toggleGlossaryDrawer() {
+            glossaryDrawer.classList.toggle('visible');
+            overlay.classList.toggle('visible');
+        }
+
+        function closeGlossaryDrawer() {
+            glossaryDrawer.classList.remove('visible');
+            overlay.classList.remove('visible');
+        }
+
+        function filterGlossaryTerms() {
+            const searchTerm = glossarySearch.value.toLowerCase();
+            const terms = document.querySelectorAll('.glossary-term');
+
+            terms.forEach(term => {
+                const termName = term.querySelector('.term-name').textContent.toLowerCase();
+                const termDual = term.querySelector('.term-dual')?.textContent.toLowerCase() || '';
+                const termDefinition = term.querySelector('.term-definition').textContent.toLowerCase();
+
+                const matches = termName.includes(searchTerm) ||
+                               termDual.includes(searchTerm) ||
+                               termDefinition.includes(searchTerm);
+
+                if (matches || searchTerm === '') {
+                    term.style.display = 'block';
+                } else {
+                    term.style.display = 'none';
+                }
+            });
+
+            // Hide sections if all terms are hidden
+            const sections = document.querySelectorAll('.glossary-section');
+            sections.forEach(section => {
+                const visibleTerms = section.querySelectorAll('.glossary-term[style="display: block"], .glossary-term:not([style*="display"])');
+                if (visibleTerms.length === 0 && searchTerm !== '') {
+                    section.style.display = 'none';
+                } else {
+                    section.style.display = 'block';
+                }
+            });
         }
 
         // ===== FORM SUBMISSION =====
