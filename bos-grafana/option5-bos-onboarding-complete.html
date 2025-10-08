@@ -95,6 +95,10 @@
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: var(--font-primary);
             background-color: var(--color-bg-secondary);
@@ -1295,9 +1299,72 @@
             pointer-events: all;
         }
 
+        /* ===== STICKY SIDEBAR NAVIGATION ===== */
+        .sidebar-nav {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 220px;
+            height: 100vh;
+            background: var(--color-gray-50);
+            border-right: 1px solid var(--color-gray-200);
+            padding: 24px 0;
+            overflow-y: auto;
+            z-index: 2001;
+        }
+
+        .nav-logo {
+            padding: 0 20px 20px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid var(--color-gray-200);
+        }
+
+        .nav-logo h3 {
+            font-size: 1rem;
+            color: var(--color-brand-primary);
+            font-weight: var(--font-weight-bold);
+            margin-bottom: 4px;
+        }
+
+        .nav-logo p {
+            font-size: 0.6875rem;
+            color: var(--color-text-tertiary);
+            line-height: 1.3;
+        }
+
+        .nav-items {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 2px;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 12px 20px;
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            border-left: 4px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            background: var(--color-gray-100);
+            color: var(--color-text-primary);
+        }
+
+        .nav-link.active {
+            background: rgba(215, 30, 40, 0.05);
+            border-left-color: var(--color-brand-primary);
+            color: var(--color-brand-primary);
+            font-weight: var(--font-weight-semibold);
+        }
+
         .landing-content {
             max-width: 1200px;
-            margin: 0 auto;
+            margin: 0 auto 0 240px; /* Left margin for sidebar */
             padding: var(--spacing-2xl);
         }
 
@@ -1960,21 +2027,88 @@
         .comparison-insight strong {
             color: var(--color-info);
         }
+
+        /* ===== RESPONSIVE DESIGN FOR SIDEBAR NAV ===== */
+        @media (max-width: 768px) {
+            .sidebar-nav {
+                position: relative;
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--color-gray-200);
+            }
+
+            .nav-items {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 4px;
+                padding: 0 12px 12px;
+            }
+
+            .nav-item {
+                margin-bottom: 0;
+            }
+
+            .nav-link {
+                padding: 8px 12px;
+                border-left: none;
+                border-bottom: 3px solid transparent;
+                font-size: 0.8125rem;
+            }
+
+            .nav-link.active {
+                border-left: none;
+                border-bottom-color: var(--color-brand-primary);
+            }
+
+            .landing-content {
+                margin-left: 0;
+                padding: var(--spacing-lg);
+            }
+        }
     </style>
 </head>
 <body>
     <div class="page-wrapper">
         <!-- Landing Screen -->
         <div id="landingScreen" class="landing-screen visible">
+            <!-- Sticky Sidebar Navigation -->
+            <nav class="sidebar-nav">
+                <div class="nav-logo">
+                    <h3>BOS</h3>
+                    <p>Business Observability System</p>
+                </div>
+                <ul class="nav-items">
+                    <li class="nav-item">
+                        <a href="#overview" class="nav-link active">Overview</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#problem" class="nav-link">The Problem</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#solution" class="nav-link">The Solution</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#incident-response" class="nav-link">Incident Response</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#how-it-works" class="nav-link">How It Works</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#team-roles" class="nav-link">Team Roles</a>
+                    </li>
+                </ul>
+            </nav>
+
             <div class="landing-content">
                 <!-- Hero Section -->
-                <div class="landing-hero">
+                <div id="overview" class="landing-hero">
                     <h1 class="bos-title">Business Observability System (BOS)</h1>
                     <p class="bos-subtitle">Connecting Technical Health to Business Outcomes</p>
                 </div>
 
                 <!-- Traditional Observability Gap -->
-                <div class="observability-gap">
+                <div id="problem" class="observability-gap">
                     <h4>The Traditional Observability Gap</h4>
                     <p>Alert: "Payment service degraded - 2% error rate"</p>
                     <div class="scenario"><strong>Executives immediately ask:</strong>
@@ -1988,7 +2122,7 @@
                 </div>
 
                 <!-- Business Principle -->
-                <div class="business-principle">
+                <div id="solution" class="business-principle">
                     <h4>The BOS Approach</h4>
                     <p>Why does this investigation keep happening?</p>
                     <p>We instrument what we build (APIs, databases, queues) but typically not what stakeholders expect (outcomes, timelines, business impact).</p>
@@ -1997,7 +2131,7 @@
                 </div>
 
                 <!-- Incident Response Comparison -->
-                <div class="incident-response-comparison">
+                <div id="incident-response" class="incident-response-comparison">
                     <h2>Incident Response Comparison</h2>
 
                     <div class="response-grid">
@@ -2098,7 +2232,7 @@
                 </div>
 
                 <!-- Comparison Section - V4 Integrated -->
-                <div class="landing-section">
+                <div id="how-it-works" class="landing-section">
                     <h2>Traditional Observability plus Business Observability</h2>
 
                     <div class="comparison-grid">
@@ -2178,7 +2312,7 @@ Credit Check Success Rate
                 </div>
 
                 <!-- Three Roles Section -->
-                <div class="landing-section">
+                <div id="team-roles" class="landing-section">
                     <h2>How Our Teams Work Together</h2>
                     <div class="role-cards">
                         <div class="role-card">
@@ -3292,6 +3426,7 @@ WHERE rn = 1 AND created_at >= CURRENT_DATE - 30`,
             initializeHelpDrawer();
             initializeGlossaryDrawer();
             initializeQualityChecklist();
+            initializeStickyNav();
         });
 
         // ===== EVENT LISTENERS =====
@@ -3801,6 +3936,82 @@ WHERE rn = 1 AND created_at >= CURRENT_DATE - 30`,
         // ===== FORM SUBMISSION =====
         function handleFormSubmit() {
             alert('✅ Service submitted successfully!\n\nThis is a mockup. In the real system, this would:\n1. Validate your data\n2. Create the service entry\n3. Generate the signal definition\n4. Redirect you to add more signals or configure additional details');
+        }
+
+        // ===== STICKY NAVIGATION (LANDING SCREEN ONLY) =====
+        function initializeStickyNav() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('#overview, #problem, #solution, #incident-response, #how-it-works, #team-roles');
+
+            // Smooth scroll on navigation click
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+
+                    if (targetSection) {
+                        targetSection.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+
+                        // Update URL hash
+                        history.pushState(null, null, targetId);
+                    }
+                });
+            });
+
+            // Intersection Observer for auto-highlighting current section
+            const observerOptions = {
+                root: null,
+                rootMargin: '-20% 0px -70% 0px',
+                threshold: 0
+            };
+
+            const observerCallback = (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const sectionId = entry.target.getAttribute('id');
+
+                        // Remove active class from all links
+                        navLinks.forEach(link => link.classList.remove('active'));
+
+                        // Add active class to corresponding link
+                        const activeLink = document.querySelector(`.nav-link[href="#${sectionId}"]`);
+                        if (activeLink) {
+                            activeLink.classList.add('active');
+                        }
+
+                        // Update URL hash without scrolling
+                        if (history.replaceState) {
+                            history.replaceState(null, null, `#${sectionId}`);
+                        }
+                    }
+                });
+            };
+
+            const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+            // Observe all sections with IDs
+            sections.forEach(section => {
+                if (section.id) {
+                    observer.observe(section);
+                }
+            });
+
+            // Jump to section if URL has hash on page load
+            if (window.location.hash) {
+                setTimeout(() => {
+                    const targetSection = document.querySelector(window.location.hash);
+                    if (targetSection) {
+                        targetSection.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }, 100);
+            }
         }
 
         // ===== UTILITY FUNCTIONS =====
